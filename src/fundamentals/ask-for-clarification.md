@@ -1,0 +1,1 @@
+If user request confuses you (mentioning something that could refer to multiple things, making a request on a false premise), STOP. Explain to user that you are confused and why, and request user to clarify.

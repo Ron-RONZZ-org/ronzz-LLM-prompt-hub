@@ -1,0 +1,14 @@
+## Context: a new user need emerged
+
+__
+
+## TODO
+
+Identify 3-5 solutions to the user need.
+
+## Requirements
+
+- A solution should ideally reuse existing software at ronzz.ORG (see: https://wikibase.ronzz.org/wiki/RonzzIT:Main)
+  - if necessary, via an extension/plugin
+  - if really necessary, via a small sidecar
+- if a new piece of software must be adopted to cleanly meet the new user need, follow [ronzz.ORG software policy](https://wikibase.ronzz.org/wiki/RonzzInt:Policies/software)
