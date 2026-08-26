@@ -1,0 +1,12 @@
+- **Use absolute paths for destructive commands** (`rm -rf`, `mv`, `chmod -R`). Relative paths are ambiguous — the working directory may not be what you think. Always write `rm -rf /absolute/path/to/target` to remove all doubt.
+- When the shell tool's timeout expires, **the entire shell session (and all child processes) is killed**.
+  - `command &`, `nohup command &`, and chaining do **not** survive a timeout.
+  - **Use `setsid` to detach long-running processes** from the shell session entirely.
+- **Set generous timeouts for network operations.** Downloads, package installs, `curl`, `npm install`, `pip install`, and large file transfers are often slow. Always pass an explicit `timeout`, scaled to the expected payload. Rule of thumb: **5 minutes per 100 MB** for network downloads. Never use tight defaults (15–30s) for network I/O — use at minimum 180s and scale up.
+- **Spinning up long-running dev servers:**
+  - Use `setsid` to detach the process so it survives the shell tool's timeout
+  - **Record the PID on start** — Save the PID so cleanup can kill by recorded PID instead of port-based guessing
+  - **Restart the server if you rebuild the frontend** — the server may cache built files in memory; after a rebuild, kill the old server (by recorded PID) and start a new one
+  - **Check `dmesg -T` for OOM kills** if the dev server crashes without error output
+- **Worktree checklist** — Git worktrees do NOT share `node_modules` or `.venv` with the original repo. When entering a worktree: check `ls -la node_modules/` (empty? → install or relink), verify which Python is active, set PATH to the repo's required Node version if needed. Always invoke tests with the **parent checkout's** interpreter, not a worktree-local one.
+- **Container tooling writes root-owned files**: composer/npm/pip run inside a Docker container create root-owned files in bind-mounted worktrees — chown right after, or the eventual worktree removal will fail on them.

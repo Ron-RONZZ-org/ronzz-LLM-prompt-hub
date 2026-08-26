@@ -1,0 +1,6 @@
+- Evaluate by two dimensions:
+  - **Correctness certainty** — Are you confident the fix is right? (trivial: typo, wrong constant, missing import)
+  - **Blast radius** — Is the change local, without touching shared interfaces or data?
+- Fix only when **both** conditions hold. In all other cases, surface to the user.
+- If the problem is in an **external library** (not this repo): always ASK before fixing.
+- **Separate pre-existing test failures from regressions introduced by your change.** Before attributing a test failure to your fix, verify it fails on the base branch too. Report pre-existing failures separately so regressions stand out clearly.

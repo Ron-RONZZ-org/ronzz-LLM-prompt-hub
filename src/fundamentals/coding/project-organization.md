@@ -1,0 +1,1 @@
+- **Prefer symlinks over flattened copies for dependent source directories.** A flattened copy rots independently of its origin and can accumulate stale artifacts (e.g., `node_modules/`) that cause hard-to-debug runtime issues. A symlink guarantees the consumer always sees the source of truth.

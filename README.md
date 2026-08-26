@@ -8,7 +8,8 @@ snippets.
 
 | Path | What it is |
 |---|---|
-| `src/fundamentals/` | Shared behaviour fragments + org policy (`org-context.md`, `credential-policy.md`, `gh-over-forge.md`, …). Define each rule here, once. Not standalone prompts. |
+| `src/fundamentals/` | Shared behaviour fragments + org policy (`org-context.md`, `credential-policy.md`, `forge-posture.md`, …). Define each rule here, once. Not standalone prompts. |
+| `src/fundamentals/coding/` | Software-development snippets (git, worktree, forge ops, testing, …) — reusable by any LLM code client, not just opencode. |
 | `src/<scenario>-prompts/` | Scenario prompts (`Help-Contributing.md`, system prompts, …). The files people actually work with. |
 | `src/opencode/` | **Sources for the opencode agent config**: `AGENTS.md`, `agents/copilot.md`, `opencode.jsonc`, plugins, proxy. Built (with the same `{{include:}}` mechanism) into `dist/opencode/`. |
 | `dist/` | **Generated** flat prompts (`*.prompt.md`) **and** the generated opencode config tree (`opencode/`). Never hand-edit — rebuilt with `build-prompts.py`. |

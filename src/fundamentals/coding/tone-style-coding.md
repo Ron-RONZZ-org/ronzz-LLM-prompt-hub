@@ -1,0 +1,2 @@
+- Reference code locations as `file_path:line_number`
+- **When asserting file identity (e.g., "these files are identical"), show the diff output or checksum** — not just a summary. `md5sum` or explicit `diff` output is verifiable; a claim like "SAME" is trust-me evidence.

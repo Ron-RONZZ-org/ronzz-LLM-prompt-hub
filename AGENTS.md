@@ -7,7 +7,8 @@ This repo is the shared prompt hub for ronzz.ORG. It holds two kinds of content:
 
 ## Working in this repo
 
-- **Organization context & policy**: `src/fundamentals/org-context.md`, `src/fundamentals/credential-policy.md`, `src/fundamentals/gh-over-forge.md` — extend these, never duplicate their content into a prompt.
+- **Organization context & policy**: `src/fundamentals/org-context.md`, `src/fundamentals/credential-policy.md`, `src/fundamentals/forge-posture.md` — extend these, never duplicate their content into a prompt.
+- **Software-dev conventions**: `src/fundamentals/coding/` (git, worktree, forge ops, testing, …) — shared by any LLM code client; keep them client-agnostic.
 - **NEVER edit `dist/`** — edit the source under `src/`, then rebuild: `python3 build-prompts.py`.
 - After any change, run `python3 build-prompts.py --check` to confirm `dist/` is consistent.
 - Follow the conventions in `README.md` (contributor conventions section).

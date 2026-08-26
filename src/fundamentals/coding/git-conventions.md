@@ -1,0 +1,6 @@
+- Commit with [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `docs:`, `chore:`, `test:`, `refactor:`
+- Mention relevant issues (`#N`) in commit messages
+- **One logical concern per commit.** If a refactor touches the same files as a feature, split into separate commits. Merging them makes review harder.
+- **Build before commit, not after.** Distinguish:
+  - **Individual package build** (<30s): run locally.
+  - **Full transitive build** (>30s — 3-5 min): delegate to CI (see CI First). A build failure caught after pushing wastes a round-trip.
