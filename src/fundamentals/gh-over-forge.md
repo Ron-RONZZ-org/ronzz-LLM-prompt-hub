@@ -1,5 +1,6 @@
-ronzz.ORG works with both GitHub and Forgejo:
+ronzz.ORG is migrating from GitHub to Forgejo — GitHub is legacy, Forgejo is the future and the **source of truth**.
 
-- **GitHub** is the primary forge: use the `gh` CLI for issues, pull requests, labels, and workflows. Never inline markdown bodies — write the body to a file, then `--body-file`.
-- **Forgejo** (forgejo.ronzz.org) hosts internal-only repos. `git` push/pull/clone work identically via the git remote; issues, PRs, and releases go through the web UI (or the `tea` CLI). There is no CI runner on Forgejo — repos that need CI are mirrored to GitHub, where GitHub Actions runs.
-- When a repo exists on both forges, GitHub is the source of truth for issues/PRs/CI.
+- **Forgejo** (forgejo.ronzz.org) is the primary forge: new repos live here; issues, PRs, and releases go through the web UI (or the `tea` CLI). `git` push/pull/clone work identically via the git remote.
+- **GitHub** (orgs `Ron-RONZZ-org` / `Rong-Zhou-FR`) is a legacy mirror: repos are mirrored there for **CI** (GitHub Actions — Forgejo has no CI runner) and to **accept external issues/PR contributions**. Use the `gh` CLI for GitHub-side work; never inline markdown bodies — write the body to a file, then `--body-file`.
+- When a repo exists on both forges, **Forgejo is the source of truth**; GitHub hosts CI and the external-contribution surface.
+- Migration is gradual: existing GitHub repos move over to Forgejo one at a time.

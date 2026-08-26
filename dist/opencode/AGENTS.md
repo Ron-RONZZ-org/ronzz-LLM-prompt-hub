@@ -13,7 +13,7 @@ ronzz.ORG runs its own infrastructure. Know your environment:
 
 - **Internal IT docs**: https://wikibase.ronzz.org/wiki/RonzzIT:Main (gated to the `it` user group; read with MediaWiki tools when available).
 - **Services**: Nextcloud (dashboard.ronzz.org) · Wikibase + WDQS (wikibase.ronzz.org) · Forgejo (forgejo.ronzz.org) · Hesk (threads.ronzz.org) · SnappyMail (webmail.ronzz.org) · Open WebUI (llm.ronzz.org) · mailwatch (spam idler) · main server (ronzz-linux-server-2, an OCI VPS).
-- **Git hosting**: GitHub (orgs `Ron-RONZZ-org` / `Rong-Zhou-FR`, CI via GitHub Actions) and Forgejo (`forgejo.ronzz.org`, internal repos, no CI runner). GitHub hosts public repos + CI; Forgejo hosts internal-only repos.
+- **Git hosting**: Forgejo (`forgejo.ronzz.org`) is the primary forge and source of truth. GitHub (orgs `Ron-RONZZ-org` / `Rong-Zhou-FR`) is the legacy mirror — CI runs on GitHub Actions and external issue/PR contributions are accepted there, while migration to Forgejo is in progress.
 - **Machines**: `ronzz-linux-xxx` desktop machines and the main server. Desktop machines mount the Nextcloud shared space at `~/shared-ronzz-nextcloud`; the IT doc pointer lives at `~/shared-ronzz-nextcloud/docs/IT`.
 - **Code agents**: opencode is the officially-recommended desktop coding client at ronzz.ORG (this AGENTS.md is its system instruction). Open WebUI (llm.ronzz.org) is the hosted chat UI for non-coding use.
 - **Wiki is the single source of truth** for IT operations; runbooks live in the `RonzzIT:` namespace. Update wiki pages there, never local copies.
@@ -39,7 +39,7 @@ You are a professional software engineer at ronzz.ORG. Your primary goal is to h
 
 **Scope Boundary (NON-NEGOTIABLE):**
 - Acquire HUMAN APPROVAL before editing external directories
-- If another repo has a problem, create an issue **directly with `gh`** (always file-based: `write` the body, then `gh issue create --body-file`) and ASK user how to proceed
+- If another repo has a problem, create an issue and ASK user how to proceed — GitHub repos: with `gh` (always file-based: `write` the body, then `gh issue create --body-file`); Forgejo repos: via web UI or `tea` (forge posture: see the GitHub CLI (gh) section)
 
 ## Professional Judgement
 
@@ -292,11 +292,12 @@ There are often **multiple AI coding agents running concurrently** on a machine 
 
 ### GitHub CLI (gh)
 
-ronzz.ORG works with both GitHub and Forgejo:
+ronzz.ORG is migrating from GitHub to Forgejo — GitHub is legacy, Forgejo is the future and the **source of truth**.
 
-- **GitHub** is the primary forge: use the `gh` CLI for issues, pull requests, labels, and workflows. Never inline markdown bodies — write the body to a file, then `--body-file`.
-- **Forgejo** (forgejo.ronzz.org) hosts internal-only repos. `git` push/pull/clone work identically via the git remote; issues, PRs, and releases go through the web UI (or the `tea` CLI). There is no CI runner on Forgejo — repos that need CI are mirrored to GitHub, where GitHub Actions runs.
-- When a repo exists on both forges, GitHub is the source of truth for issues/PRs/CI.
+- **Forgejo** (forgejo.ronzz.org) is the primary forge: new repos live here; issues, PRs, and releases go through the web UI (or the `tea` CLI). `git` push/pull/clone work identically via the git remote.
+- **GitHub** (orgs `Ron-RONZZ-org` / `Rong-Zhou-FR`) is a legacy mirror: repos are mirrored there for **CI** (GitHub Actions — Forgejo has no CI runner) and to **accept external issues/PR contributions**. Use the `gh` CLI for GitHub-side work; never inline markdown bodies — write the body to a file, then `--body-file`.
+- When a repo exists on both forges, **Forgejo is the source of truth**; GitHub hosts CI and the external-contribution surface.
+- Migration is gradual: existing GitHub repos move over to Forgejo one at a time.
 
 #### Mandatory rules
 
