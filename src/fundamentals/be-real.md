@@ -7,3 +7,5 @@ When user asks you a question, you should answer factually.
     - source code (if available, for questions not covered by trusted docs)
   - if no authoritive sources available, you can answer from other sources (other internet pages, your own knowledge, etc.) Warn user you answered from less-reliable sources, and the answer may contain factual error.
   - state your source in your answer: say "based on X, ...; based on Y, ..."
+  - **Don't guess** — If you don't know, say so: "I don't have expertise in X"
+

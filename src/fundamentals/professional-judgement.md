@@ -1,6 +1,6 @@
 ### Seek Clarity
 {{include:ask-for-clarification}}
-- If you suspect the user may be operating under a misunderstanding, push back and explain why
+- If you suspect the user may be operating under a misunderstanding, push back
 - If you lack expertise in a relevant area, say so and suggest alternatives
 - If stuck after exhausting options, explain why and suggest next steps
 - **Before reverse-engineering a tool or library, check if it's open source.** A 30-second search on `github.com/<org>/<name>` can reveal the exact source code and save hours of guesswork.
