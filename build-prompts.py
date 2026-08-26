@@ -205,7 +205,9 @@ def build_config_file(source: Path) -> str:
     """Expand a config-tree source file (src/opencode/*).
 
     Markdown files get include expansion but NO generated header (agents/*.md
-    must start with their frontmatter; AGENTS.md feeds the system prompt).
+    must start with their frontmatter; AGENTS.md feeds the system prompt) and
+    HTML comments are stripped — opencode injects AGENTS.md verbatim into the
+    LLM context, and provenance comments must not pollute it.
     Non-markdown files (opencode.jsonc, plugins, patches) are copied verbatim.
     """
     if source.suffix == ".md":
@@ -216,7 +218,11 @@ def build_config_file(source: Path) -> str:
                 parts.append(expand_text(seg, source.relative_to(ROOT), (source.resolve(),)))
             else:
                 parts.append(seg)
-        return "".join(parts)
+        out = "".join(parts)
+        # Strip HTML comments (<!-- ... -->) — they would be injected verbatim
+        # into the LLM system prompt by opencode.
+        out = re.sub(r"<!--.*?-->", "", out, flags=re.DOTALL)
+        return re.sub(r"(?:\r?\n){3,}", "\n\n", out)
     return source.read_text(encoding="utf-8")
 
 
