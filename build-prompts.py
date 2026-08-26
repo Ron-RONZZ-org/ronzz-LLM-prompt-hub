@@ -15,6 +15,12 @@ added automatically:
 The build expands those directives and writes a flat, self-contained prompt
 into `dist/`, mirroring `src/` with a `.prompt.md` suffix.
 
+`src/opencode/` is a second tree: it is built into `dist/opencode/` with exact
+filenames (AGENTS.md, agents/*.md, opencode.jsonc, plugins/…) so the output can
+be symlinked as `~/.config/opencode`. Markdown there is include-expanded (no
+generated header — agent files must start with frontmatter); other files are
+copied verbatim.
+
 Usage:
     python3 build-prompts.py            rebuild all prompts into dist/
     python3 build-prompts.py --check    exit 1 if any dist/ file is stale
@@ -32,6 +38,11 @@ ROOT = Path(__file__).resolve().parent
 SRC = ROOT / "src"
 FUNDAMENTALS = SRC / "fundamentals"
 DIST = ROOT / "dist"
+# Config tree: src/opencode/ is built into dist/opencode/ with exact filenames
+# (no .prompt.md suffix, no generated header) so the output can be symlinked
+# directly as ~/.config/opencode. Markdown files are include-expanded;
+# everything else (jsonc, ts, mjs, json, patches) is copied verbatim.
+CONFIG_SRC = SRC / "opencode"
 
 # {{include:path/without/extension}} — expanded
 INCLUDE_DIRECTIVE_RE = re.compile(r"\{\{include:([^{}]*)\}\}")
@@ -190,26 +201,59 @@ def build_file(source: Path) -> str:
     return GENERATED_HEADER.format(source=source.relative_to(ROOT)) + "".join(parts)
 
 
-def collect_sources() -> list[Path]:
-    """All buildable source files (scenario prompts under src/), sorted.
+def build_config_file(source: Path) -> str:
+    """Expand a config-tree source file (src/opencode/*).
 
-    Fundamentals fragments (`src/fundamentals/`) are excluded — they exist to
-    be pulled in via {{include:...}}, never built as standalone prompts.
+    Markdown files get include expansion but NO generated header (agents/*.md
+    must start with their frontmatter; AGENTS.md feeds the system prompt).
+    Non-markdown files (opencode.jsonc, plugins, patches) are copied verbatim.
+    """
+    if source.suffix == ".md":
+        text = source.read_text(encoding="utf-8")
+        parts: list[str] = []
+        for kind, seg in split_segments(text):
+            if kind == "text":
+                parts.append(expand_text(seg, source.relative_to(ROOT), (source.resolve(),)))
+            else:
+                parts.append(seg)
+        return "".join(parts)
+    return source.read_text(encoding="utf-8")
+
+
+def collect_prompt_sources() -> list[Path]:
+    """All buildable prompt source files (scenario prompts under src/), sorted.
+
+    Fundamentals fragments (`src/fundamentals/`) and the config tree
+    (`src/opencode/`) are excluded — they exist to be pulled in via
+    {{include:...}} / built as a config tree, never as standalone prompts.
     """
     if not SRC.is_dir():
         return []
     return sorted(
         p for p in SRC.rglob("*.md")
-        if FUNDAMENTALS not in p.parents
+        if FUNDAMENTALS not in p.parents and CONFIG_SRC not in p.parents
     )
 
 
-def output_for(source: Path) -> Path:
-    """dist/ mirrors src/ (the 'src/' prefix is dropped)."""
+def collect_config_sources() -> list[Path]:
+    """All config-tree source files under src/opencode/ (md + verbatim), sorted."""
+    if not CONFIG_SRC.is_dir():
+        return []
+    return sorted(p for p in CONFIG_SRC.rglob("*") if p.is_file())
+
+
+def output_for_prompt(source: Path) -> Path:
+    """dist/ mirrors src/ (the 'src/' prefix is dropped, .prompt.md appended)."""
     return DIST / source.relative_to(SRC).with_suffix(".prompt.md")
 
 
-def build(sources: list[Path], only: str | None = None) -> tuple[list[Path], list[Path]]:
+def output_for_config(source: Path) -> Path:
+    """dist/opencode/ mirrors src/opencode/ with exact filenames."""
+    return DIST / source.relative_to(SRC)
+
+
+def build(sources: list[Path], config_sources: list[Path],
+          only: str | None = None) -> tuple[list[Path], list[Path]]:
     written: list[Path] = []
     removed: list[Path] = []
     built: dict[Path, str] = {}
@@ -217,8 +261,12 @@ def build(sources: list[Path], only: str | None = None) -> tuple[list[Path], lis
         if only and only not in str(source.relative_to(ROOT)):
             continue
         built[source] = build_file(source)
+    for source in config_sources:
+        if only and only not in str(source.relative_to(ROOT)):
+            continue
+        built[source] = build_config_file(source)
     for source, content in built.items():
-        out = output_for(source)
+        out = output_for_config(source) if source in config_sources else output_for_prompt(source)
         needs_write = not out.exists() or out.read_text(encoding="utf-8") != content
         if needs_write:
             out.parent.mkdir(parents=True, exist_ok=True)
@@ -226,7 +274,7 @@ def build(sources: list[Path], only: str | None = None) -> tuple[list[Path], lis
             written.append(out)
     if not only:
         existing = set(DIST.rglob("*.prompt.md")) if DIST.exists() else set()
-        expected = {output_for(s) for s in built}
+        expected = {output_for_prompt(s) for s in built if s in sources}
         for orphan in sorted(existing - expected):
             orphan.unlink()
             removed.append(orphan)
@@ -237,10 +285,25 @@ def build(sources: list[Path], only: str | None = None) -> tuple[list[Path], lis
                 except OSError:
                     break
                 parent = parent.parent
+        config_out = DIST / CONFIG_SRC.relative_to(SRC)
+        config_existing = (set(config_out.rglob("*")) if config_out.exists() else set())
+        config_existing = {p for p in config_existing if p.is_file()}
+        config_expected = {output_for_config(s) for s in built if s in config_sources}
+        for orphan in sorted(config_existing - config_expected):
+            orphan.unlink()
+            removed.append(orphan)
+            parent = orphan.parent
+            while parent != config_out:
+                try:
+                    parent.rmdir()  # only succeeds when empty
+                except OSError:
+                    break
+                parent = parent.parent
     return written, removed
 
 
-def check(sources: list[Path], only: str | None = None) -> list[str]:
+def check(sources: list[Path], config_sources: list[Path],
+          only: str | None = None) -> list[str]:
     """Report staleness as a list of problems (empty = up to date)."""
     problems: list[str] = []
     built: dict[Path, str] = {}
@@ -248,16 +311,26 @@ def check(sources: list[Path], only: str | None = None) -> list[str]:
         if only and only not in str(source.relative_to(ROOT)):
             continue
         built[source] = build_file(source)
+    for source in config_sources:
+        if only and only not in str(source.relative_to(ROOT)):
+            continue
+        built[source] = build_config_file(source)
     for source, content in built.items():
-        out = output_for(source)
+        out = output_for_config(source) if source in config_sources else output_for_prompt(source)
         if not out.is_file():
             problems.append(f"missing: {fmt_path(out)}")
         elif out.read_text(encoding="utf-8") != content:
             problems.append(f"stale: {fmt_path(out)} (run python3 build-prompts.py)")
     if not only:
         existing = set(DIST.rglob("*.prompt.md")) if DIST.exists() else set()
-        expected = {output_for(s) for s in built}
+        expected = {output_for_prompt(s) for s in built if s in sources}
         for orphan in sorted(existing - expected):
+            problems.append(f"orphan: {fmt_path(orphan)} (source removed?)")
+        config_out = DIST / CONFIG_SRC.relative_to(SRC)
+        config_existing = (set(config_out.rglob("*")) if config_out.exists() else set())
+        config_existing = {p for p in config_existing if p.is_file()}
+        config_expected = {output_for_config(s) for s in built if s in config_sources}
+        for orphan in sorted(config_existing - config_expected):
             problems.append(f"orphan: {fmt_path(orphan)} (source removed?)")
     return problems
 
@@ -283,9 +356,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        sources = collect_sources()
+        sources = collect_prompt_sources()
+        config_sources = collect_config_sources()
         if args.check:
-            problems = check(sources, only=args.file)
+            problems = check(sources, config_sources, only=args.file)
             if problems:
                 print("dist/ is OUT OF DATE:", file=sys.stderr)
                 for p in problems:
@@ -293,7 +367,7 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
             print("dist/ is up to date.")
             return 0
-        written, removed = build(sources, only=args.file)
+        written, removed = build(sources, config_sources, only=args.file)
         for w in written:
             print(f"wrote {fmt_path(w)}")
         for r in removed:

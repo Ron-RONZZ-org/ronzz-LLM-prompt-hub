@@ -1,0 +1,176 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // ronzz.ORG org-wide opencode config (generated from src/opencode/).
+  // Personal secrets never live here: auth.json (opencode) and the
+  // gitignored .secrets/ files hold keys. {env:HOME} interpolates at load time.
+  "plugin": [
+    "opencode-notify",
+    "./plugins/mcp-daemon.ts",
+    "./plugins/opencode-worktree-enhanced/index.ts"
+  ],
+  "mcp": {
+    "brave-search": {
+      // Shared HTTP daemon started by the mcp-daemon plugin on port 8124.
+      // No per-session instances — all sessions share one connection.
+      "type": "remote",
+      "url": "http://127.0.0.1:8124/mcp",
+      "enabled": true
+    },
+    "context7": {
+      // Local proxy reads the API key from a file (never the config).
+      // Key file: ~/.config/opencode/.secrets/context7-api-key (gitignored).
+      "type": "local",
+      "command": ["node", "{env:HOME}/.config/opencode/context7-mcp-proxy.mjs"],
+      "environment": {
+        "CONTEXT7_API_KEY_FILE": "{env:HOME}/.config/opencode/.secrets/context7-api-key"
+      },
+      "enabled": true,
+      "timeout": 30000
+    },
+    "gortex": {
+      // Gortex: single-binary Go daemon for multi-repo code intelligence.
+      // One daemon for all repos (~64 MiB) vs serena's ~600 MB per instance.
+      // Tree-sitter based, 100+ MCP tools, session isolation, structured memories.
+      // https://github.com/zzet/gortex
+      "type": "local",
+      "command": ["gortex", "mcp"],
+      "enabled": true,
+      "timeout": 30000
+    },
+    "mediawiki-mcp-server": {
+      // Wikibase (wikibase.ronzz.org) read/write access via bot password
+      // (SeedBot@MCP). Config + credentials live outside the repo at
+      // ~/.config/mediawiki-mcp/ronzz-wikibase.json.
+      // https://github.com/ProfessionalWiki/MediaWiki-MCP-Server
+      "type": "local",
+      "command": ["npx", "-y", "@professional-wiki/mediawiki-mcp-server@latest"],
+      "environment": {
+        "CONFIG": "{env:HOME}/.config/mediawiki-mcp/ronzz-wikibase.json"
+      },
+      "enabled": true,
+      "timeout": 30000
+    }
+  },
+  "provider": {
+    "openrouter": {
+      "models": {
+        // Pin DeepSeek V4 Flash to DigitalOcean's endpoint.
+        // allow_fallbacks: false = hard pin; if DigitalOcean is down the request errors.
+        // Set to true to fall back to other providers when DigitalOcean is unavailable.
+        "deepseek/deepseek-v4-flash": {
+          "options": {
+            "provider": {
+              "order": ["DigitalOcean"],
+              "allow_fallbacks": false
+            }
+          }
+        },
+        // Same hard pin for the other deepseek-v4-flash IDs users can select:
+        // the dated checkpoint and the OpenRouter "~" auto-routing alias.
+        "deepseek/deepseek-v4-flash-0731": {
+          "options": {
+            "provider": {
+              "order": ["DigitalOcean"],
+              "allow_fallbacks": false
+            }
+          }
+        },
+        "~deepseek/deepseek-v4-flash-latest": {
+          "options": {
+            "provider": {
+              "order": ["DigitalOcean"],
+              "allow_fallbacks": false
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "experimental": {
+    // Global timeout for MCP requests (ms). Mitigates transient listTools()
+    // failures in opencode serve+attach mode that permanently remove MCP
+    // clients from state.clients with no retry.
+    "mcp_timeout": 30000
+  },
+
+  "permission": {
+    // worktreeCreate spawns fresh opencode sessions — primary agents only
+    "worktreeCreate": "deny",
+    "worktreeNew": "allow",
+    "worktreeDelete": "allow",
+    "worktreeList": "allow",
+    "bash": {
+      // Destructive commands — agent must ask for approval:
+      "git reset --hard*": "ask",         // destroys all uncommitted local work
+      "git push --force*": "ask",          // overwrites remote history
+      "git push -f*": "ask",               // same, short form
+      "git clean -f*": "ask",              // deletes untracked files/folders
+      "git checkout -- *": "ask",          // discards working tree changes
+      // Branch switching — ask (use "git worktree add" instead; multiple agents run concurrently)
+      "git checkout ": "ask",             // switches branch — disrupts other agents
+      "git checkout -b*": "ask",          // creates AND switches to new branch
+      "git checkout -B*": "ask",          // force creates AND switches
+      "git switch *": "ask",              // modern branch switching
+      // Destructive stash operations — ask (modifies working tree shared by all agents)
+      "git stash drop*": "ask",
+      "git stash clear*": "ask",
+      "git stash pop*": "ask",
+      "git stash apply*": "ask",
+      // Worktree operations (safe — isolated dirs, no branch-switching on main)
+      "git worktree add*": "allow",        // creates isolated worktree — safe
+      "git worktree remove*": "ask",       // removes worktree — could affect others
+      "git worktree prune*": "ask",        // prunes worktrees — could affect others
+      "git restore .": "ask",              // same, modern form
+      "git rm -r*": "ask",                 // removes files from both disk and git
+      "git rebase *": "ask",               // rewrites commit history
+      "git filter-branch*": "ask",         // repo-wide history rewrite (nuclear)
+      "git branch -D*": "ask",             // force-deletes branches
+      "docker system prune -af*": "ask",   // nukes all containers, images, networks
+      "docker system prune --all*": "ask", // same, long flag form
+      "docker rm -f *": "ask",             // force-removes containers
+      "docker rmi -f *": "ask",            // force-removes images
+      "docker volume rm -f *": "ask",      // destroys all volumes with data
+      "find . -delete*": "ask",            // bulk deletion via find
+      "find . -exec rm*": "ask",           // same, alternative syntax
+      "sudo *": "ask",                     // any sudo command (escalation)
+      "chmod -R 0*": "ask",                // locks all files in a directory
+      "chown -R*": "ask",                  // bulk ownership change
+      "truncate -s 0*": "ask",             // truncates files to zero bytes
+      "dd if=/dev/zero of=*": "ask",       // zeroes out files or disks
+      "rm -*f*": "ask",                    // classic filesystem nuke (covers -rf, -fr, -f)
+      "pkill*": "ask",                     // kills processes by name/pattern — inherently imprecise
+      "killall*": "ask",                   // same, different tool
+      "kill -9*": "ask",                   // SIGKILL by PID — can't be caught, data-loss risk
+      // Allow rm on tmp dirs without prompting (last-match-wins after the broad rm rules above)
+      "rm * /tmp/**": "allow",
+      "rm * ~/.local/share/opencode/worktree/**": "allow",
+      "rm * ~/.opencode/browser-profile/**": "allow"
+    },
+    "external_directory": {
+      "*": "ask",
+      "/proc/**": "allow", // Read-only runtime introspection (/proc is a kernel interface, not a data dir)
+      "/tmp/**": "allow",
+      "**/.ssh/**": "allow",
+      "~/.local/**": "allow",
+      "~/.opencode/**": "allow",
+      "~/.config/**": "allow",
+      "~/kodo/**": "allow",
+      "~/shared-ronzz-nextcloud/**": "allow",
+      "~/tmp": "allow",
+      "~/tmp/**": "allow"
+    },
+    "edit": {
+      "/proc/**": "deny",
+      "*": "allow"
+    }
+  },
+
+  "default_agent": "copilot",
+  // Default model for all agents — DigitalOcean direct, bypassing OpenRouter
+  // (DigitalOcean OAuth is stored per-user in auth.json).
+  "model": "deepseek/deepseek-v4-flash",
+  // Lightweight tasks (title generation, etc.) — use opencode's free model
+  // instead of auto-deriving a small model from the main provider's pool.
+  "small_model": "opencode/deepseek-v4-flash-free"
+}

@@ -1,0 +1,7 @@
+# Node deps (installed into dist/opencode/ by users who symlink ~/.config/opencode)
+node_modules/
+package-lock.json
+bun.lock
+
+# Personal secrets (per-user, never committed — see src/fundamentals/credential-policy.md)
+.secrets/

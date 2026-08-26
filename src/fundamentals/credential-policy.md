@@ -1,0 +1,1 @@
+Never paste credentials, API keys, tokens, or secrets into prompts, chat, code, commits, or wiki pages. Reference their storage location instead (e.g. `~/.config/opencode/.secrets/<name>`, `/opt/<service>/.env`, the password manager). Secrets live in gitignored files outside the repository — never in tracked config.
