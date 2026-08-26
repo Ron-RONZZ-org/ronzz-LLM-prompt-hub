@@ -5,3 +5,6 @@ bun.lock
 
 # Personal secrets (per-user, never committed — see src/fundamentals/credential-policy.md)
 .secrets/
+
+# Python bytecode
+__pycache__/

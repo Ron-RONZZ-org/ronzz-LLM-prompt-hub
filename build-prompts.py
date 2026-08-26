@@ -21,6 +21,11 @@ be symlinked as `~/.config/opencode`. Markdown there is include-expanded (no
 generated header — agent files must start with frontmatter); other files are
 copied verbatim.
 
+HTML comments (<!-- … -->) in any source file are for contributors only: they
+are stripped pre-expansion from every tree and never reach dist/ (fenced
+`<!-- -->` examples are preserved). The only comment in dist/ is the generated
+prompt-tree header — a no-edit-here reminder for humans browsing the outputs.
+
 Usage:
     python3 build-prompts.py            rebuild all prompts into dist/
     python3 build-prompts.py --check    exit 1 if any dist/ file is stale
@@ -48,6 +53,10 @@ CONFIG_SRC = SRC / "opencode"
 INCLUDE_DIRECTIVE_RE = re.compile(r"\{\{include:([^{}]*)\}\}")
 # {{!include:path/without/extension}} — literal text (escape hatch, rendered as-is)
 LITERAL_DIRECTIVE_RE = re.compile(r"\{\{!include:[^{}]*\}\}")
+
+# HTML comments in source files are for contributors; they never reach dist/.
+# Stripped pre-expansion (text segments only — fenced examples stay intact).
+HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 
 MASK = "\x00INCL-LIT-{}\x00"
 
@@ -189,13 +198,24 @@ def expand_text(text: str, rel: Path, stack: tuple[Path, ...]) -> str:
     return collapsed
 
 
+def strip_html_comments(text: str) -> str:
+    """Remove HTML comments (<!-- ... -->) from a text segment.
+
+    Comments in source files are for contributors; they must never reach the
+    built output. Applied to text segments only, so `<!-- -->` examples inside
+    fenced code blocks are preserved.
+    """
+    return HTML_COMMENT_RE.sub("", text)
+
+
 def build_file(source: Path) -> str:
     """Expand a source file into its flat prompt content."""
     text = source.read_text(encoding="utf-8")
     parts: list[str] = []
     for kind, seg in split_segments(text):
         if kind == "text":
-            parts.append(expand_text(seg, source.relative_to(ROOT), (source.resolve(),)))
+            parts.append(expand_text(strip_html_comments(seg),
+                                     source.relative_to(ROOT), (source.resolve(),)))
         else:
             parts.append(seg)
     return GENERATED_HEADER.format(source=source.relative_to(ROOT)) + "".join(parts)
@@ -205,9 +225,10 @@ def build_config_file(source: Path) -> str:
     """Expand a config-tree source file (src/opencode/*).
 
     Markdown files get include expansion but NO generated header (agents/*.md
-    must start with their frontmatter; AGENTS.md feeds the system prompt) and
-    HTML comments are stripped — opencode injects AGENTS.md verbatim into the
-    LLM context, and provenance comments must not pollute it.
+    must start with their frontmatter; AGENTS.md feeds the system prompt).
+    HTML comments are stripped pre-expansion, like every other tree — opencode
+    injects AGENTS.md verbatim into the LLM context, so only instructions may
+    reach it.
     Non-markdown files (opencode.jsonc, plugins, patches) are copied verbatim.
     """
     if source.suffix == ".md":
@@ -215,14 +236,11 @@ def build_config_file(source: Path) -> str:
         parts: list[str] = []
         for kind, seg in split_segments(text):
             if kind == "text":
-                parts.append(expand_text(seg, source.relative_to(ROOT), (source.resolve(),)))
+                parts.append(expand_text(strip_html_comments(seg),
+                                         source.relative_to(ROOT), (source.resolve(),)))
             else:
                 parts.append(seg)
-        out = "".join(parts)
-        # Strip HTML comments (<!-- ... -->) — they would be injected verbatim
-        # into the LLM system prompt by opencode.
-        out = re.sub(r"<!--.*?-->", "", out, flags=re.DOTALL)
-        return re.sub(r"(?:\r?\n){3,}", "\n\n", out)
+        return "".join(parts)
     return source.read_text(encoding="utf-8")
 
 
