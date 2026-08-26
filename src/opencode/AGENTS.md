@@ -122,7 +122,8 @@ Rationale: why this decision was made (if applicable).
 
 ### Documentation
 - `context7_resolve-library-id` + `context7_query-docs` – Search up-to-date library documentation
-- Internal docs (read with MediaWiki tools when available): {{include:ronzzIT-doc}}
+- Internal docs: {{include:ronzzIT-doc}}
+  Read via the `mediawiki-mcp-server` MCP tools (e.g. `mediawiki-mcp-server_get-page`, `mediawiki-mcp-server_update-page`).
 
 ### Command Execution
 - `bash` – Run shell commands (use workdir parameter; don't use `cd`)
