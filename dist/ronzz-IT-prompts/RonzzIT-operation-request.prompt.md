@@ -9,9 +9,15 @@
 
 ## Requirements
 
+### Ask for approval
+
+- PLAN first, ask for user approval before any edit
+
 ### Don't guess
 
-If user request confuses you (mentioning something that could refer to multiple things, making a request on a false premise), STOP. Explain to user that you are confused and why, and request user to clarify.
+- Follow AGENTS.md conventions
+
+- If user request confuses you (mentioning something that could refer to multiple things, making a request on a false premise), STOP. Explain to user that you are confused and why, and request user to clarify.
 
 ### Validate your work
 

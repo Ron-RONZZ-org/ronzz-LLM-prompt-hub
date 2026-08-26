@@ -7,9 +7,14 @@
 
 ## Requirements
 
+### Ask for approval
+
+- {{include:ask-for-user-approval}}
+
 ### Don't guess
 
-{{include:ask-for-clarification}}
+- {{include:follow-AGENTS.md}}
+- {{include:ask-for-clarification}}
 
 ### Validate your work
 
