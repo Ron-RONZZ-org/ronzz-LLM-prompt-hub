@@ -26,5 +26,5 @@
   - Runbook(s)?
   - Deployment(s)?
   - Deployment log(s)?
-- Follow {{include:writing-style-guide}}
+- Follow {{include:writing/writing-style-guide}}
 - Follow {{include:ronzzIT-convention}}
