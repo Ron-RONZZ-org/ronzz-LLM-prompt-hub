@@ -6,7 +6,7 @@
 
 - {{include:be-real}}
 - implement the advices written in HTML comments (`<!-- -->`) in the page
-- follow {{include:writing-style-guide}}
+- follow {{include:writing/writing-style-guide}}
 - imitate style of the style examples 
   - https://wikibase.ronzz.org/wiki/Cheatsheets:SPARQL
   - https://wikibase.ronzz.org/wiki/Cheatsheets:Markdown

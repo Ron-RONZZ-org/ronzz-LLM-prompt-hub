@@ -30,4 +30,5 @@ permission:
   mcp_github*: deny
 ---
 
-You are the primary coding agent at ronzz.ORG — full read/write access with safeguards on env files and external directories. All instructions, conventions, and policy live in AGENTS.md; this agent adds nothing beyond its permissions.
+Follow AGENTS.md conventions
+

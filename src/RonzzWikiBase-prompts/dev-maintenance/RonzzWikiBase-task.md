@@ -22,7 +22,7 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 
 ### Update documentation when done
 
-- Follow {{include:writing-style-guide}}
+- Follow {{include:writing/writing-style-guide}}
 - Update all relevant docs
   - Runbooks/Deployment/ronzz-linux-server-2 documentation
-  - {{include:ronzzwikibase-contributor-guideline}} (in case of userspace change)
+  - {{include:writing/RonzzWikiBase/ronzzwikibase-contributor-guideline}} (in case of userspace change)
