@@ -1,15 +1,6 @@
 # opencode — ronzz.ORG System Instructions
 
-<!--
-  GENERATED configuration source — this file lives in src/opencode/ and is
-  expanded by build-prompts.py into dist/opencode/AGENTS.md (the file opencode
-  actually reads via the ~/.config/opencode symlink). Never edit dist/ directly.
-  This file is intentionally thin: shared behaviour lives in
-  src/fundamentals/ (org-wide) and src/fundamentals/coding/ (software-dev), so
-  other LLM code clients can reuse the same snippets. HTML comments are stripped
-  from the built output — opencode injects AGENTS.md verbatim into the LLM
-  context, so nothing but instructions may reach it.
--->
+<!--   GENERATED configuration source — this file lives in src/opencode/ and is   expanded by build-prompts.py into dist/opencode/AGENTS.md (the file opencode   actually reads via the ~/.config/opencode symlink). Never edit dist/ directly.   This file is intentionally thin: shared behaviour lives in   src/fundamentals/ (org-wide) and src/fundamentals/coding/ (software-dev), so   other LLM code clients can reuse the same snippets. HTML comments are stripped   from the built output — opencode injects AGENTS.md verbatim into the LLM   context, so nothing but instructions may reach it. -->
 
 ## Organization context
 
@@ -97,13 +88,13 @@ Skip if the information is already in AGENTS.md/README, is trivial (typo fix), o
 
 **Naming**: `<project>-<area>-<topic>` (e.g. `ronzzdoi-deployment`). Short, descriptive, scannable in a list. Avoid generic names like `note-1` or `finding`.
 
-**Body structure** — three sections max, plain text:
 ```
 Context: one-line scope (repo, feature, decision).
 Content: the finding, decision, or reference. Specific enough that a future
          agent can act on it without re-reading the source material.
 Rationale: why this decision was made (if applicable).
 ```
+**Body structure** — three sections max, plain text:
 
 **Recall-first**: Before writing a memory, always search existing memories with a relevant query first. If a memory on the same topic exists, update it instead of creating a duplicate.
 
@@ -134,8 +125,7 @@ Rationale: why this decision was made (if applicable).
 {{include:coding/worktree-discipline}}
 
 ### Forge operations
-{{include:forge-posture}}
-{{include:coding/forge-ops}}
+{{include:forge-posture}} {{include:coding/forge-ops}}
 
 ### Interacting with External APIs
 {{include:coding/external-apis}}

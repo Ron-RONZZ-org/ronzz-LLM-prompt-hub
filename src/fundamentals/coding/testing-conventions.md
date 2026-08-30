@@ -10,11 +10,7 @@ gh workflow list
 ### Test Coverage Requirements
 Every feature or fix that touches BOTH the backend and frontend MUST have tests at ALL applicable layers:
 
-| Layer | Tool | Scope | When required |
-|-------|------|-------|---------------|
-| **Backend unit tests** | `pytest` | Handler logic, validation, DB operations, error conditions | Any new/modified Python function, class, or API route |
-| **E2E GUI tests** | Playwright `.mjs` in `tests/` | DOM rendering: tab opens, panel content, form fields, keyboard nav, selection mode | Any new command, UI component, route, or interactive feature |
-| **Component tests** | Vitest in `web/src/__tests__/` | Isolated component behavior: rendering, props, callbacks, validation display | Complex or shared Svelte components (DynamicForm, MultiEntryField, list tabs, dialogs) |
+| Layer | Tool | Scope | When required | |-------|------|-------|---------------| | **Backend unit tests** | `pytest` | Handler logic, validation, DB operations, error conditions | Any new/modified Python function, class, or API route | | **E2E GUI tests** | Playwright `.mjs` in `tests/` | DOM rendering: tab opens, panel content, form fields, keyboard nav, selection mode | Any new command, UI component, route, or interactive feature | | **Component tests** | Vitest in `web/src/__tests__/` | Isolated component behavior: rendering, props, callbacks, validation display | Complex or shared Svelte components (DynamicForm, MultiEntryField, list tabs, dialogs) |
 
 #### Minimum assertion quality for E2E GUI tests
 - **Not**: Just `assert(!text.includes("Error"))` (cheap — only checks the app didn't crash)
@@ -34,10 +30,7 @@ Every feature or fix that touches BOTH the backend and frontend MUST have tests 
 ### Running Tests from Git Worktrees
 - **Never create a `.venv` inside a worktree.** All worktrees share the original checkout's `.venv`.
 - **The same applies to `node_modules`** — worktrees do NOT share `node_modules` with the parent repo. Check `ls node_modules/` first. If empty, use the parent's `node_modules` via `NODE_PATH`, or install inside the worktree if you'll be working there for multiple sessions. `npx` in an empty worktree will try to install packages from scratch — don't let it.
-- **Use the parent checkout's Python** — never bare `pytest`, `uv run pytest`, or any worktree-local Python:
-  ```bash
-  PYTHONPATH=src /path/to/parent/.venv/bin/python -m pytest tests/...
-  ```
+- **Use the parent checkout's Python** — never bare `pytest`, `uv run pytest`, or any worktree-local Python:   ```bash   PYTHONPATH=src /path/to/parent/.venv/bin/python -m pytest tests/...   ```
 - **Do NOT use `uv run pytest`** from a worktree — `uv run` may resolve the wrong virtual environment.
 - **When test collection fails at import time**, check **`conftest.py`'s `autouse=True` fixtures** first. An autouse fixture that imports from sibling modules pulls in the entire module tree at collection time. Fix: make the deep dependency lazy (import inside the function body rather than at module level).
 - **If you install a missing dependency to unblock tests**, check for unintended side effects first. Use `pip install <pkg> --dry-run` to preview what else would be modified. Consider whether the dependency is genuinely required or whether the test fixture should not depend on it in the first place.
@@ -50,20 +43,14 @@ Test the end program as a user would — verify the front-end (GUI/CLI/TUI) work
 #### Reporting
 When reporting back user-simulation test results, use this table format:
 
-| what exact I have done | what results I expect to get | what results I got | what are my conclusions |
-|------------------------|------------------------------|--------------------|-------------------------|
+| what exact I have done | what results I expect to get | what results I got | what are my conclusions | |------------------------|------------------------------|--------------------|-------------------------|
 
 #### Data isolation
 - Do **not** pollute the production database — test on a COPY
 - If test credentials are required, look for `.dev` files
-- **Clone the data directory before any test run.** This guarantees you can restore the original state regardless of what happens during testing:
-  ```bash
-  cp -r ~/.local/share/<app>/ ~/tmp/<app>-backup/
+- **Clone the data directory before any test run.** This guarantees you can restore the original state regardless of what happens during testing:   ```bash   cp -r ~/.local/share/<app>/ ~/tmp/<app>-backup/
   # ... run tests, which modify the live data ...
-  rm -rf ~/.local/share/<app>/
-  mv ~/tmp/<app>-backup/ ~/.local/share/<app>/
-  ```
-  The `~/tmp/` directory (your home, private) is used instead of `/tmp/` (world-readable on some systems).
+  rm -rf ~/.local/share/<app>/   mv ~/tmp/<app>-backup/ ~/.local/share/<app>/   ```   The `~/tmp/` directory (your home, private) is used instead of `/tmp/` (world-readable on some systems).
 - **If the app supports a custom database path** (check CLI flags or config), use a temp file instead — no clone needed.
 
 #### Cleanup
@@ -83,11 +70,7 @@ If in doubt about whether a process is yours to kill, see Maintain Standards.
    - Glob for `**/*e2e*`, `**/*spec*`, `**/*test*`, `**/playwright*`
    - Check common directories: `tests/`, `e2e/`, `cypress/`, `playwright/`
    - Check `package.json` scripts for `test:e2e`, `e2e`, `playwright`, `cypress`
-2. **Check Playwright browsers** — Before attempting installs, check what's cached:
-   ```bash
-   npx playwright install --list
-   ```
-   Globally cached browsers live at `~/.cache/ms-playwright/<browser>-<revision>/`. Point test scripts at the cached binary — no need to re-install.
+2. **Check Playwright browsers** — Before attempting installs, check what's cached:    ```bash    npx playwright install --list    ```    Globally cached browsers live at `~/.cache/ms-playwright/<browser>-<revision>/`. Point test scripts at the cached binary — no need to re-install.
 3. **Pre-warm Vite cache** (Vite projects only) — Vite compiles modules on first request, which can trigger OOM kills on memory-constrained systems. Fetch the page via `curl` to trigger initial compilation before Playwright. Monitor `dmesg -T` for OOM killer messages if the dev server crashes without error logs.
 4. **Assess** — Read found test files. Are they relevant to the change? Do their selectors/locators still match the current UI?
 5. **Run via CI when possible** — If the repo's GitHub mirror has CI with E2E coverage, trigger it and wait for results. If CI is unavailable or the test needs interactive debugging, run locally.
@@ -101,10 +84,9 @@ Before assuming test failures are your fault, snapshot the page and check that l
 4. Re-run the test
 
 #### Capture Browser Console Errors
-Add a handler and log errors during test runs:
 ```js
 page.on("pageerror", (err) => console.log("  [BROWSER ERROR]", err.message));
 ```
-Console errors (especially `TypeError: Cannot read properties of undefined`) often indicate real code bugs, not test problems. Fix them even if tests pass. Note: this only catches unhandled exceptions, not `console.warn`/`console.error` calls inside try/catch — add a `page.on("console", ...)` handler for those if needed.
+Add a handler and log errors during test runs: Console errors (especially `TypeError: Cannot read properties of undefined`) often indicate real code bugs, not test problems. Fix them even if tests pass. Note: this only catches unhandled exceptions, not `console.warn`/`console.error` calls inside try/catch — add a `page.on("console", ...)` handler for those if needed.
 
 **Read the full Playwright error output before debugging.** When a locator fails, the error message often identifies the OBSCURING element directly (e.g. `"<div class=\"modal-overlay\">…</div> intercepts pointer events"`). Investigate WHAT is obscuring the element before debugging WHY the expected element didn't appear. A leftover modal from a prior test is a common cause; dismissing it may be the entire fix.
