@@ -18,7 +18,7 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 
 - PLAN first, ask for user approval before any edit
 
-- offer to deploy to production server when CI all green,  again ASK for user approval 
+- offer to deploy to production server when CI all green,  again ASK for user approval
 
 - Follow AGENTS.md conventions
 
@@ -32,5 +32,5 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 
 - Update all relevant docs
   - Runbooks/Deployment/ronzz-linux-server-2 documentation
-  - [RonzzWikiBase contributor guideline](https://wikibase.ronzz.org/Help:Contributing) and relevant subpages 
+  - [RonzzWikiBase contributor guideline](https://wikibase.ronzz.org/Help:Contributing) and relevant subpages
  (in case of userspace change)

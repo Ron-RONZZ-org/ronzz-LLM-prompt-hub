@@ -15,7 +15,7 @@ In the context of `RonzzInt`, this means common usages that ronzz.ORG members wi
 
 ## Requirements:
 
-- style examples: 
+- style examples:
   - https://wikibase.ronzz.org/wiki/Help:Contributing/code
   - https://wikibase.ronzz.org/wiki/Help:Contributing/richMediaContent
 

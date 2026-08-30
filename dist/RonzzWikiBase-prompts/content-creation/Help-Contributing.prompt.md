@@ -15,7 +15,6 @@ In the context of Help:Contributing, this means common usages that editors will 
 
 ## writing style requirements:
 
-- style examples: 
+- style examples:
   - https://wikibase.ronzz.org/wiki/Help:Contributing/code
   - https://wikibase.ronzz.org/wiki/Help:Contributing/richMediaContent
-

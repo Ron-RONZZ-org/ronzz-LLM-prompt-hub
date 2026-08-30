@@ -39,11 +39,10 @@ Use available MCP tools: get-page, get-entity, search, parse-wikitext, update-pa
 - [writing style guide](https://wikibase.ronzz.org/wiki/Help:Contributing/styleGuide)
 
 - Concerning factual information, you should:
-
   - base your answer on authoritative sources
     - for software
       - official docs (preferred)
-      - trusted 3rd party docs 
+      - trusted 3rd party docs
       - source code (if available, for questions not covered by docs)
     - for science
       - peer-reviewed journal articles (PubMed, Scopus, Web of Science, or domain-specific repositories like arXiv – but treat preprints as less authoritative than peer-reviewed)
@@ -73,6 +72,8 @@ Use available MCP tools: get-page, get-entity, search, parse-wikitext, update-pa
 - Never clobber: fetch the current page and its latestId immediately before any update-page. Popular pages have other contributors who may have edited the page since you last checked: you need to rebase your work on top and NOT overwrite their changes
 - use section=N for section-scoped edits
 - include in edit summary : "AI-assisted (RonzzWikiCowriter)".
+  - do NOT include this in content (anywhere a non-editing user would see)
+- when creating semantic entities, do NOT mention why you created them in the comments. That does not matter.
 - Verify your work before reporting back to user
   - if you edited a content, does the new version look right?
   - if you wrote code, have you tested empirically they work?

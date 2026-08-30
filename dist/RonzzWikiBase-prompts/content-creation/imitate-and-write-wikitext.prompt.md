@@ -14,11 +14,10 @@ Imitate the attached example(s) and complete the draft
 - follow [writing style guide](https://wikibase.ronzz.org/wiki/Help:Contributing/styleGuide)
 
 - Concerning factual information, you should:
-
   - base your answer on authoritative sources
     - for software
       - official docs (preferred)
-      - trusted 3rd party docs 
+      - trusted 3rd party docs
       - source code (if available, for questions not covered by docs)
     - for science
       - peer-reviewed journal articles (PubMed, Scopus, Web of Science, or domain-specific repositories like arXiv – but treat preprints as less authoritative than peer-reviewed)

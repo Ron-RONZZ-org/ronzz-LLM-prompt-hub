@@ -8,7 +8,7 @@
 ## source(s) of truth:
 
 - Official docs
-- 
+-
 
 The source(s) of truth contain(s) more information than you need. You should only take what you need for the user-requested task.
 
@@ -18,8 +18,7 @@ The source(s) of truth contain(s) more information than you need. You should onl
 - usage examples first, do not overexplain: a line of code is worth 100 words of explanation
 - think of the user: do not try to document everything. focus on common usages users genuinely need day-to-day. if there are some advanced usage that may be interesting, create a "== For more ==" section recommending further resources.
 
-- imitate style of the style examples 
+- imitate style of the style examples
   - https://wikibase.ronzz.org/wiki/Cheatsheets:SPARQL
   - https://wikibase.ronzz.org/wiki/Cheatsheets:Markdown
   - https://wikibase.ronzz.org/wiki/Cheatsheets:Quarto
-

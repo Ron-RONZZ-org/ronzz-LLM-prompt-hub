@@ -9,7 +9,7 @@
 
 - when possible, use "bluegray" theme
 - this uml will be rendered by the "Diagrams" MediaWiki extension on a live MediaWiki instance
-  - therefore, respond with a code block with plantuml code wrapped between <uml></uml> 
+  - therefore, respond with a code block with plantuml code wrapped between <uml></uml>
   - be self-contained or use [stlib](https://plantuml.com/stdlib): PlantUML runs in its SANDBOX security profile: !include of local files and URLs is disabled.
 - - escape literal HTML/double brackets with `~`, the PlantUML escape character.
   - e.g., write `~<b>Hello World~</b>` to render literal `<b>Hello World</b>`, `~[[Wiki Home]]` to render literal `[[Wiki Home]]`

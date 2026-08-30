@@ -29,6 +29,8 @@ python3 build-prompts.py -f some-prompt.md    # rebuild only matching source fil
 
 After editing any source `.md` file, **rebuild** so `dist/` reflects the change. Every generated prompt carries a header saying so; `--check` is the enforcement tool (wire it into a `pre-commit` hook or GitHub Action if this folder becomes a git repo).
 
+The build **auto-formats** markdown before expansion, so contributors don't have to: trailing whitespace is stripped, blank-line runs collapse to a single blank line, and (in prompt files) list nesting is normalized to 2-space steps while stray indentation on plain paragraphs is dedented. Fenced code blocks, blockquotes and YAML frontmatter are preserved; `src/opencode/` markdown keeps its indentation byte-for-byte (frontmatter and minified lines there are semantically meaningful).
+
 The opencode config tree (`dist/opencode/`) is generated too, but carries **no** generated header (agent files must start with their frontmatter, and `AGENTS.md` feeds the model's system prompt). The files keep their exact names so they can be symlinked directly.
 
 ## Consumption

@@ -26,6 +26,14 @@ are stripped pre-expansion from every tree and never reach dist/ (fenced
 `<!-- -->` examples are preserved). The only comment in dist/ is the generated
 prompt-tree header — a no-edit-here reminder for humans browsing the outputs.
 
+Markdown is auto-formatted when a source file is read, before include
+expansion: trailing whitespace is stripped, blank-line runs collapse to a
+single blank line, and (prompt tree only) list nesting is normalized to
+2-space steps while stray leading whitespace on non-structural lines is
+dedented. Fenced code blocks and YAML frontmatter are preserved verbatim.
+`src/opencode/` markdown keeps its indentation byte-for-byte: YAML
+frontmatter and minified lines there are semantically meaningful.
+
 Usage:
     python3 build-prompts.py            rebuild all prompts into dist/
     python3 build-prompts.py --check    exit 1 if any dist/ file is stale
@@ -57,6 +65,13 @@ LITERAL_DIRECTIVE_RE = re.compile(r"\{\{!include:[^{}]*\}\}")
 # HTML comments in source files are for contributors; they never reach dist/.
 # Stripped pre-expansion (text segments only — fenced examples stay intact).
 HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+
+# YAML frontmatter block (--- ... ---) — preserved verbatim, never formatted.
+FRONTMATTER_RE = re.compile(r"\A---\n.*?\n---\n", re.DOTALL)
+# Markdown list item: optional leading whitespace, bullet (-, *, +) or ordered
+# marker (1., 1)), then whitespace. `\d+[.)]` mirrors CommonMark, so e.g. a
+# paragraph starting "2026. ..." is treated as an ordered item, as it renders.
+LIST_ITEM_RE = re.compile(r"^(\s*)([-*+]|\d+[.)])(\s+)")
 
 MASK = "\x00INCL-LIT-{}\x00"
 
@@ -120,6 +135,108 @@ def split_segments(text: str) -> list[tuple[str, str]]:
     return segments
 
 
+def _normalize_text_segment(seg: str, fix_indent: bool) -> str:
+    """Normalize one text segment (contains no code fences).
+
+    - strips trailing whitespace on every line
+    - drops blank lines at the segment start/end and collapses runs of
+      consecutive blank lines to a single blank line
+    - with fix_indent, normalizes indentation:
+        * nested list items are re-indented to 2-space steps (dedenting a
+          uniformly indented top-level list to column 0)
+        * wrapped content of a list item is re-indented to the item's
+          content column (item indent + 2)
+        * blockquotes keep their '>' nesting but are dedented to column 0
+        * any other line with stray leading whitespace (plain paragraphs,
+          headings) is dedented — e.g. 4-space-indented paragraphs that
+          CommonMark would render as indented code blocks
+    """
+    out: list[str] = []
+    indent_stack: list[tuple[int, int]] = []  # (item indent, content column) per open level
+    in_content = False            # inside a list item's wrapped content
+    content_indent = 0            # indent of that content (item indent + 2)
+    prev_blank = True
+    for raw in seg.splitlines():
+        line = raw.rstrip()
+        if not line.strip():
+            if prev_blank:
+                continue
+            prev_blank = True
+            out.append("")
+            continue
+        prev_blank = False
+        if fix_indent:
+            if line.lstrip().startswith(">"):      # blockquote (incl. '> >')
+                line = line.lstrip()
+            else:
+                m = LIST_ITEM_RE.match(line)
+                if m:
+                    indent = len(m.group(1))
+                    # A new item is a CHILD of the current level only when
+                    # indented at or past its content column (CommonMark
+                    # rule); anything between parent indent and content
+                    # column is a sibling, not a child.
+                    while indent_stack and indent < indent_stack[-1][0]:
+                        indent_stack.pop()
+                    if not indent_stack:
+                        indent_stack.append((indent, indent + 2))
+                    elif indent == indent_stack[-1][0]:
+                        pass  # sibling of the top level
+                    elif indent >= indent_stack[-1][1]:
+                        indent_stack.append((indent, indent + 2))
+                    level = len(indent_stack) - 1
+                    new_indent = level * 2
+                    line = " " * new_indent + line[indent:]
+                    in_content = True
+                    content_indent = new_indent + 2
+                elif in_content and line[:1].isspace():
+                    # wrapped content of the current list item
+                    line = " " * content_indent + line.lstrip()
+                else:
+                    # plain structural line: drop stray leading whitespace
+                    line = line.lstrip()
+                    in_content = False
+        out.append(line)
+    return "".join(l + "\n" for l in out)
+
+
+def normalize_markdown(text: str, fix_indent: bool = True) -> str:
+    """Auto-format markdown source before include expansion.
+
+    Runs on the raw content of every markdown file when it is read, so prompt
+    files, include fragments and config-tree markdown are all cleaned before
+    compilation. See _normalize_text_segment for the per-segment rules;
+    additionally:
+
+    - fenced code blocks keep their content byte-for-byte except trailing
+      whitespace stripping
+    - a YAML frontmatter block (--- ... ---) is preserved verbatim
+    - a blank line is kept between a text segment and a following code fence
+    - the result always ends with exactly one newline
+
+    Config-tree markdown (src/opencode/) is built with fix_indent=False:
+    its indentation is semantically meaningful (YAML frontmatter, minified
+    lines) and must not be touched.
+    """
+    frontmatter = ""
+    fm = FRONTMATTER_RE.match(text)
+    if fm:
+        frontmatter = fm.group(0)
+        text = text[fm.end():]
+    parts: list[str] = []
+    segments = split_segments(text)
+    for i, (kind, seg) in enumerate(segments):
+        if kind == "code":
+            parts.append("".join(l.rstrip() + "\n" for l in seg.splitlines()))
+            continue
+        normalized = _normalize_text_segment(seg, fix_indent)
+        next_is_code = i + 1 < len(segments) and segments[i + 1][0] == "code"
+        if next_is_code and normalized and not normalized.endswith("\n\n"):
+            normalized += "\n"  # keep a blank line before the code fence
+        parts.append(normalized)
+    return (frontmatter + "".join(parts)).rstrip("\n") + "\n"
+
+
 def normalize_include_path(path: str, from_rel: Path, from_line: int) -> str:
     """Validate an include path and return it as '<dirs>/<name>' (no .md)."""
     path = path.strip()
@@ -161,7 +278,11 @@ def expand_include(path: str, from_rel: Path, from_line: int,
     if target in stack:
         cycle = " -> ".join(fmt_path(p) for p in (*stack, target))
         raise BuildError(f"{from_rel}:{from_line}: include cycle: {cycle}")
-    text = target.read_text(encoding="utf-8")
+    # Fragments are normalized for whitespace only (fix_indent=False): their
+    # indentation is often relative to the include site — e.g. included inside
+    # a list item (`- {{include:...}}`) — so it carries nesting semantics and
+    # must be preserved byte-for-byte.
+    text = normalize_markdown(target.read_text(encoding="utf-8"), fix_indent=False)
     return expand_text(text, target.relative_to(ROOT), (*stack, target))
 
 
@@ -210,7 +331,7 @@ def strip_html_comments(text: str) -> str:
 
 def build_file(source: Path) -> str:
     """Expand a source file into its flat prompt content."""
-    text = source.read_text(encoding="utf-8")
+    text = normalize_markdown(source.read_text(encoding="utf-8"))
     parts: list[str] = []
     for kind, seg in split_segments(text):
         if kind == "text":
@@ -232,7 +353,8 @@ def build_config_file(source: Path) -> str:
     Non-markdown files (opencode.jsonc, plugins, patches) are copied verbatim.
     """
     if source.suffix == ".md":
-        text = source.read_text(encoding="utf-8")
+        text = normalize_markdown(source.read_text(encoding="utf-8"),
+                                  fix_indent=False)
         parts: list[str] = []
         for kind, seg in split_segments(text):
             if kind == "text":
