@@ -90,7 +90,10 @@ It is a secret: never commit it (see `src/fundamentals/credential-policy.md`).
 `github.com/Ron-RONZZ-org/ronzz-LLM-prompt-hub`; `.github/workflows/sync-owui.yml`
 runs the sync on every push to `main` (using the repository secret
 `OWUI_API_KEY`). Pushing to Forgejo therefore updates the instance within a
-minute.
+minute. The workflow **rebuilds `dist/` from `src/` first**, so a commit that
+forgot to run `build-prompts.py` still publishes the right content — it only
+emits a warning, since the committed `dist/` (which `dist/opencode/` consumers
+symlink) would have drifted.
 
 ## Contributor conventions
 

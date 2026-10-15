@@ -27,8 +27,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Verify dist/ is committed and up to date
-        run: python3 build-prompts.py --check
+      - name: Warn if dist/ was committed stale
+        # Non-fatal: the next step rebuilds dist/ anyway. This annotation just
+        # flags that the *committed* dist/ (which dist/opencode/ consumers
+        # symlink) drifted from src/.
+        run: |
+          python3 build-prompts.py --check || \
+            echo "::warning title=dist/ is stale::dist/ did not match src/ in this commit — run 'python3 build-prompts.py' and commit. The workflow rebuilds it before syncing, so Open WebUI is still updated."
+
+      - name: Rebuild dist/ (in case it was not built before committing)
+        run: python3 build-prompts.py
 
       - name: Sync to Open WebUI
         env:
