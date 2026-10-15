@@ -9,9 +9,6 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 - [RonzzWikiBase CLI](https://wikibase.ronzz.org/wiki/RonzzIT:Runbook/WikibaseCLI)
 - [RonzzWikiBase deployment](https://wikibase.ronzz.org/wiki/RonzzIT:Deployment/Wikibase)
 
-## User request
-
-
 ## Requirements
 
 - {{include:ask-for-user-approval}}
@@ -22,7 +19,10 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 
 ### Update documentation when done
 
-- Follow {{include:writing/writing-style-guide}}
+- Follow {{include:writing/RonzzWikiBase/writing-style-guide}}
 - Update all relevant docs
   - Runbooks/Deployment/ronzz-linux-server-2 documentation
   - {{include:writing/RonzzWikiBase/ronzzwikibase-contributor-guideline}} (in case of userspace change)
+
+## User request
+

@@ -9,7 +9,7 @@
 
 -
 
-The source(s) of truth contain(s) more information than you need. You should only take what you need for the user-requested task.
+The source(s) of truth contain(s) more information than you need. You should only take what you need for the user-requested task. Your sources-of-truth have their own writing styles. Take their content, but not their writing style, which may actually be bad.
 
 In the context of Help:Contributing, this means common usages that editors will use on a daily basis. The source(s) of truth can be included in the end in a `== See also ==` section as links if appropriate.
 

@@ -8,7 +8,7 @@ Imitate the attached example(s) and complete the draft
 
 ## REQUIREMENTS
 
-- follow {{include:writing/writing-style-guide}}
-- {{include:be-real}}
+- follow {{include:writing/RonzzWikiBase/writing-style-guide}}
+
 - {{include:format/wikitext-snippet-response}}
 

@@ -18,5 +18,5 @@ After any structural or UI change, update the relevant documentation to match th
 3. **Verify** — run `rg` to check for stale references to old names, paths, or patterns. A mention of a deleted command or renamed module is a bug.
 
 For ronzz.ORG internal documentation, follow:
-- {{include:writing/writing-style-guide}}
+- {{include:writing/RonzzWikiBase/writing-style-guide}}
 - {{include:ronzzIT-convention}}

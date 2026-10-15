@@ -107,7 +107,7 @@ Use Gortex MCP tools for code understanding:
 - `gortex_search` operation:`"files"` – Find files by name
 - `gortex_read` operation:`"file"` – Read a file
 
-The source(s) of truth contain(s) more information than you need. You should only take what you need for the user-requested task.
+The source(s) of truth contain(s) more information than you need. You should only take what you need for the user-requested task. Your sources-of-truth have their own writing styles. Take their content, but not their writing style, which may actually be bad.
 
 ### File & Directory Operations
 Use built-in tools:

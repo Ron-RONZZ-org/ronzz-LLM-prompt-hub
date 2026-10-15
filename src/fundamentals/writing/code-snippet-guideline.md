@@ -1,0 +1,76 @@
+### In genreral, demonstrate CLI commands in code blocks instead of listing options
+
+```
+<syntaxhighlight lang="bash" copy>
+ssh user@host                         # log in as user on host
+ssh -p 2222 user@host                 # non-standard port
+ssh user@host command                 # run one command instead of spawning a shell
+ssh user@host 'command 1; command 2'  # several commands: quote and separate commands by ;
+ssh -t user@host tmux attach          # -t: force a TTY, for interactive programs. Opposite is -T
+ssh -J user1@proxy:2222 user2@host    # -J: proxy jump, connects to host as user2, via the intermediate (proxy) machine on port 2222*
+</syntaxhighlight>
+```
+
+is better than
+
+```
+<syntaxhighlight lang="bash" copy>
+ssh user@host                         # log in as user on host
+</syntaxhighlight>
+
+{| class="wikitable"
+! Flag !! Effect
+|-
+| <syntaxhighlight lang="bash" inline>-p port</syntaxhighlight> || connect to a port other than 22
+|-
+| <syntaxhighlight lang="bash" inline>-i key</syntaxhighlight> || authenticate with a specific private key
+|-
+| <syntaxhighlight lang="bash" inline>-o OPT=value</syntaxhighlight> || set any ssh_config option on the command line
+|}
+```
+
+**EXCEPTION**: for flags that simply modifies command behaviour but does not change the command structure/arguments, use a table of options for clarity and simplicity
+
+Good example:
+
+```
+'''grep''' — search inside files:
+
+<syntaxhighlight lang="bash" copy>
+grep [options] pattern file   # print matching lines
+</syntaxhighlight>
+
+{| class="wikitable"
+! Option !! Effect
+|-
+| <code>-i</code> || case-insensitive
+|-
+| <code>-n</code> || include line numbers
+|-
+| <code>-v</code> || invert: lines that do NOT match
+|-
+| <code>-r</code> || search a directory recursively
+|-
+| <code>-l</code> || only filenames with matches
+|-
+| <code>-c</code> || count matching lines
+|-
+| <code>-E</code> || extended regex, e.g. <code>grep -E 'a|b' file</code>
+|}
+```
+
+since `-i`only modifies the grep match criteria but not the functionality (grep always does text match), an option table is simple and clear and preferred.
+
+
+### use right tag for snippets
+
+- `<pre></pre>` for command outputs
+- `<syntaxhighlight lang="xxx" copy></syntaxhighlight>` for code snippets
+- `<code></code>` for inline code
+  - `<code><nowiki></nowiki></code>` if wikitext escape required
+
+### use standard dummies in sample code snippets
+
+- files: file1.txt, file1.md, filex.abc
+- text: old_text, new_text, some_text
+- user: user, user1, user2

@@ -4,4 +4,4 @@
 
 ## SOURCE OF TRUTH
 
-{{include:good-sources-of-truth}}
+{{include:be-real}}

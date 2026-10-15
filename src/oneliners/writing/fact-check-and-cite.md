@@ -9,4 +9,4 @@ The target article is written from author's memory and some facts may be unrelia
 
 ## SOURCE OF TRUTH
 
-{{include:good-sources-of-truth}}
+{{include:be-real}}

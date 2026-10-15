@@ -1,0 +1,7 @@
+Reflect: have you encountered any difficulty in this session due to
+ 
+ - MCP tool limitations/bugs
+ - inaccurate/incomplete system/user prompts
+ - another factor?
+
+ What can we do to make future sessions more efficient?

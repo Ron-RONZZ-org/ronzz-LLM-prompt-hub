@@ -1,3 +1,0 @@
-- official docs
-- scientific papers
-- articles from reputable websites of active editorial supervision

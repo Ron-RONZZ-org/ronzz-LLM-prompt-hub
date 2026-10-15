@@ -12,8 +12,6 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 - [RonzzWikiBase CLI](https://wikibase.ronzz.org/wiki/RonzzIT:Runbook/WikibaseCLI)
 - [RonzzWikiBase deployment](https://wikibase.ronzz.org/wiki/RonzzIT:Deployment/Wikibase)
 
-## User request
-
 ## Requirements
 
 - PLAN first, ask for user approval before any edit
@@ -34,3 +32,5 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
   - Runbooks/Deployment/ronzz-linux-server-2 documentation
   - [RonzzWikiBase contributor guideline](https://wikibase.ronzz.org/Help:Contributing) and relevant subpages
  (in case of userspace change)
+
+## User request

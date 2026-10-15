@@ -11,5 +11,5 @@ Update deployment docs to document the latest change
 
 ## requirements
 
-- Follow {{include:writing/writing-style-guide}}
+- Follow {{include:writing/RonzzWikiBase/writing-style-guide}}
 - Follow {{include:ronzzIT-convention}}
