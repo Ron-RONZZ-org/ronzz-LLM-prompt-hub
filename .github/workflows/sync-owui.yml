@@ -1,0 +1,37 @@
+name: Sync prompts to Open WebUI
+
+# The repo's source of truth is forgejo.ronzz.org; this GitHub repository is a
+# push mirror. Pushing to main here (i.e. after the mirror syncs) reconciles
+# Open WebUI with dist/: system prompts -> custom Models, everything else ->
+# slash-command Prompts.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: sync-owui
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify dist/ is committed and up to date
+        run: python3 build-prompts.py --check
+
+      - name: Sync to Open WebUI
+        env:
+          OWUI_URL: https://llm.ronzz.org
+          OWUI_API_KEY: ${{ secrets.OWUI_API_KEY }}
+        run: python3 sync-owui.py --no-build

@@ -4,7 +4,7 @@ Home for the team's AI prompts, organised by user scenario — plus the organisa
 
 ## Layout
 
-| Path | What it is | |---|---| | `src/fundamentals/` | Shared behaviour fragments + org policy (`org-context.md`, `credential-policy.md`, `forge-posture.md`, …). Define each rule here, once. Not standalone prompts. | | `src/fundamentals/coding/` | Software-development snippets (git, worktree, forge ops, testing, …) — reusable by any LLM code client, not just opencode. | | `src/<scenario>-prompts/` | Scenario prompts (`Help-Contributing.md`, system prompts, …). The files people actually work with. | | `src/opencode/` | **Sources for the opencode agent config**: `AGENTS.md`, `agents/copilot.md`, `opencode.jsonc`, plugins, proxy. Built (with the same `{{include:}}` mechanism) into `dist/opencode/`. | | `dist/` | **Generated** flat prompts (`*.prompt.md`) **and** the generated opencode config tree (`opencode/`). Never hand-edit — rebuilt with `build-prompts.py`. | | `build-prompts.py` | The build script (pure stdlib Python, no dependencies). | | `README.md` | This file. | | `AGENTS.md` | Repo conventions for agents/contributors working in this repo. |
+| Path | What it is | |---|---| | `src/fundamentals/` | Shared behaviour fragments + org policy (`org-context.md`, `credential-policy.md`, `forge-posture.md`, …). Define each rule here, once. Not standalone prompts. | | `src/fundamentals/coding/` | Software-development snippets (git, worktree, forge ops, testing, …) — reusable by any LLM code client, not just opencode. | | `src/<scenario>-prompts/` | Scenario prompts (`Help-Contributing.md`, system prompts, …). The files people actually work with. | | `src/system-prompt/` | **System prompts** for Open WebUI custom Models. Each file's YAML frontmatter declares the model (`name`, `description`, `tags`, `base_model`, `tool_ids`); the body is the system prompt. | | `src/opencode/` | **Sources for the opencode agent config**: `AGENTS.md`, `agents/copilot.md`, `opencode.jsonc`, plugins, proxy. Built (with the same `{{include:}}` mechanism) into `dist/opencode/`. | | `dist/` | **Generated** flat prompts (`*.prompt.md`) **and** the generated opencode config tree (`opencode/`). Never hand-edit — rebuilt with `build-prompts.py`. | | `build-prompts.py` | The build script (pure stdlib Python, no dependencies). | | `sync-owui.py` | Pushes `dist/` to Open WebUI — see [Open WebUI](#open-webui-llmronzzorg) below. | | `README.md` | This file. | | `AGENTS.md` | Repo conventions for agents/contributors working in this repo. |
 
 ## Writing prompts
 
@@ -61,9 +61,36 @@ mkdir -p ~/.config/mediawiki-mcp
 
 Personal overrides (providers, your own MCP servers, model choices) go in a project-level `.opencode/opencode.jsonc`, which opencode merges over the global config. Secrets never belong in this repo — see `src/fundamentals/credential-policy.md`.
 
-### Open WebUI (llm.ronzz.org) — open question
+### Open WebUI (llm.ronzz.org)
 
-Whether the same snippet-based approach can power an Open WebUI prompt/model collection is **not yet decided**. Open WebUI has no include mechanism and prompts are attached per-chat/model, so the design space differs from the opencode config tree. Tracked as a future extension of this repo; contributions welcome.
+`sync-owui.py` pushes `dist/` to the ronzz.ORG Open WebUI instance ("Veramiko",
+`llm.ronzz.org`). The mapping is by location under `dist/`:
+
+| Source | Open WebUI |
+| --- | --- |
+| `dist/system-prompt/*.prompt.md` (i.e. `src/system-prompt/`) | a custom **Model**; its YAML frontmatter sets `name`, `description`, `tags`, `base_model`, `tool_ids`, and the body becomes the system prompt (code interpreter + web search enabled by default) |
+| every other `dist/**/*.prompt.md` | a **Prompt** — the `/slash` command inserted into the chat composer |
+
+```bash
+OWUI_API_KEY=sk-… python3 sync-owui.py --dry-run   # preview the changes
+OWUI_API_KEY=sk-… python3 sync-owui.py             # rebuild dist/ and apply
+```
+
+Every item the sync writes is tagged `meta.managed_by = "ronzz-LLM-prompt-hub"`.
+Managed items are updated in place, and **hard-deleted** when their source is
+removed from the repo. Hand-made items are never deleted; an item whose
+id/command collides with a repo item is *adopted* (updated and tagged), never
+duplicated. `--no-prune` (add/update only) and `--no-build` are also available.
+
+`OWUI_API_KEY` is an **admin** API key — enable it once at *Admin → Settings →
+Authentication → Enable API Keys*, then copy the key from *Account → API Keys*.
+It is a secret: never commit it (see `src/fundamentals/credential-policy.md`).
+
+**Automation.** The repo is push-mirrored to
+`github.com/Ron-RONZZ-org/ronzz-LLM-prompt-hub`; `.github/workflows/sync-owui.yml`
+runs the sync on every push to `main` (using the repository secret
+`OWUI_API_KEY`). Pushing to Forgejo therefore updates the instance within a
+minute.
 
 ## Contributor conventions
 
