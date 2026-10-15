@@ -4,11 +4,9 @@ Convert text to formatted wikitext. Respond uniquely with the converted wikitext
 
 ## REQUIREMENTS
 
-- if text not in English, translate into English
-
 {{include:writing/katex-math-requirements}}
 
-{{include:writing/British-grammar}}
+{{include:writing/English}}
 
 ## Example text
 

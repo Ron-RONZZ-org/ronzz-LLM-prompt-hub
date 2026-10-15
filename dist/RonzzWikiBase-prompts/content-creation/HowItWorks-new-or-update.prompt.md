@@ -31,13 +31,13 @@ Most older systems, such as CVS, Subversion, and Perforce, are centralized.
 ```
 Most older systems — CVS, Subversion, and Perforce — are centralized.
 ```
-### Use British spelling
+### English please
 
-- organisation, NOT organization, etc.
-
-### Use oxford commas
-
-- bread, wine, and apple, not bread, wine and apple
+- if text not in English, translate into English
+- Use British spelling
+  - organisation, NOT organization, etc.
+- Use oxford commas
+  - bread, wine, and apple, not bread, wine and apple
 
 ### Include absolute time in documentations/history-telling
 

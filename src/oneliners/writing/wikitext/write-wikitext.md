@@ -6,7 +6,7 @@ Respond uniquely with a wikitext snippet according to the topic prompt.
 
 {{include:writing/katex-math-requirements}}
 
-{{include:writing/British-grammar}}
+{{include:writing/English}}
 
 ## Example text
 

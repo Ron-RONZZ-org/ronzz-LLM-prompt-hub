@@ -30,7 +30,7 @@ BAD:
 $$\Phi(\mathbf r)
 =-G\int\frac{\rho(\mathbf r')}{|\mathbf r-\mathbf r'|}d^3r'$$
 ```
-- Use $\vec u$ for vectors, not simply $u$ for clarity
+- Use $\vec u$ for vectors and $\mathbf{M}$ for matrices, not simply $u$ or $M$ for clarity
 
 - Use ${}$
 

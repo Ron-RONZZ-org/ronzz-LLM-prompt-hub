@@ -7,8 +7,6 @@ Convert text to formatted wikitext. Respond uniquely with the converted wikitext
 
 ## REQUIREMENTS
 
-- if text not in English, translate into English
-
 ### Katex math requirements
 
 - Use $...$/$$...$$ delimiters
@@ -32,7 +30,7 @@ BAD:
 $$\Phi(\mathbf r)
 =-G\int\frac{\rho(\mathbf r')}{|\mathbf r-\mathbf r'|}d^3r'$$
 ```
-- Use $\vec u$ for vectors, not simply $u$ for clarity
+- Use $\vec u$ for vectors and $\mathbf{M}$ for matrices, not simply $u$ or $M$ for clarity
 
 - Use ${}$
 
@@ -95,13 +93,13 @@ c_1 = c_2 = \cdots = c_n = 0.
 ```
 - strip any $\boxed$
 
-### Use British spelling
+### English please
 
-- organisation, NOT organization, etc.
-
-### Use oxford commas
-
-- bread, wine, and apple, not bread, wine and apple
+- if text not in English, translate into English
+- Use British spelling
+  - organisation, NOT organization, etc.
+- Use oxford commas
+  - bread, wine, and apple, not bread, wine and apple
 
 ## Example text
 

@@ -12,7 +12,7 @@ Most older systems, such as CVS, Subversion, and Perforce, are centralized.
 Most older systems — CVS, Subversion, and Perforce — are centralized.
 ```
 
-{{include:writing/British-grammar}}
+{{include:writing/English}}
 
 ### Include absolute time in documentations/history-telling
 
