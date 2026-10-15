@@ -2,8 +2,9 @@
 
 This repo is the shared prompt hub for ronzz.ORG. It holds two kinds of content:
 
-- **Prompt sources** (`src/<scenario>-prompts/`, `src/personas/`, `src/oneliners/`, …) — expanded by `build-prompts.py` into flat, copy-paste-ready prompts in `dist/*.prompt.md`.
+- **Prompt sources** (`src/<scenario>-prompts/`, `src/system-prompt/`, `src/oneliners/`, …) — expanded by `build-prompts.py` into flat, copy-paste-ready prompts in `dist/*.prompt.md`.
 - **The opencode config tree** (`src/opencode/`) — expanded into `dist/opencode/`, which users symlink as `~/.config/opencode`. `dist/opencode/AGENTS.md` is the org-wide system instruction for coding agents.
+- **Open WebUI models** (`src/system-prompt/`) — each file becomes a custom Model on `llm.ronzz.org`; its YAML frontmatter declares the model, the body is the system prompt. Pushed by `sync-owui.py` (see `README.md`).
 
 ## Working in this repo
 
