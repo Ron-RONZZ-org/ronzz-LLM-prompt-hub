@@ -1,0 +1,104 @@
+---
+const { placeholder = 'Search prompts…', autofocus = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div class="search" data-base={base}>
+  <label class="visually-hidden" for="search-input">Search prompts</label>
+  <input
+    id="search-input"
+    class="search-input"
+    type="search"
+    name="q"
+    placeholder={placeholder}
+    autocomplete="off"
+    autofocus={autofocus}
+  />
+  <ul id="search-results" class="search-results" hidden></ul>
+  <p id="search-empty" class="search-empty" hidden>No prompts match that search.</p>
+</div>
+
+<script>
+  const root = document.querySelector('.search');
+  if (root) {
+    const input = root.querySelector('#search-input');
+    const list = root.querySelector('#search-results');
+    const empty = root.querySelector('#search-empty');
+    const base = root.dataset.base;
+    let index = null;
+    let pending = null;
+
+    async function loadIndex() {
+      if (!index) {
+        index = await fetch(`${base}/search-index.json`).then((r) => r.json());
+      }
+      return index;
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, (c) => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+      ));
+    }
+
+    function render(query) {
+      const q = query.trim().toLowerCase();
+      list.innerHTML = '';
+      if (!q) {
+        list.hidden = true;
+        empty.hidden = true;
+        return;
+      }
+      const titleHits = [];
+      const bodyHits = [];
+      for (const doc of index) {
+        if (doc.title.toLowerCase().includes(q)) titleHits.push(doc);
+        else if (doc.text.includes(q)) bodyHits.push(doc);
+      }
+      const hits = [...titleHits, ...bodyHits].slice(0, 20);
+      if (!hits.length) {
+        list.hidden = true;
+        empty.hidden = false;
+        return;
+      }
+      empty.hidden = true;
+      for (const hit of hits) {
+        const li = document.createElement('li');
+        const crumb = hit.groups.map((g) => g.replace(/[-_]/g, ' ')).join(' › ');
+        li.innerHTML = `
+          <a href="${base}/prompts/${hit.slug}/">
+            <span class="hit-title">${escapeHtml(hit.title)}</span>
+            ${crumb ? `<span class="hit-crumb">${escapeHtml(crumb)}</span>` : ''}
+            ${hit.kind === 'model' ? '<span class="badge badge-sm">Model</span>' : ''}
+          </a>`;
+        list.appendChild(li);
+      }
+      list.hidden = false;
+    }
+
+    input.addEventListener('input', async () => {
+      await loadIndex();
+      clearTimeout(pending);
+      pending = setTimeout(() => render(input.value), 40);
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        input.value = '';
+        render('');
+        input.blur();
+      }
+      if (event.key === 'ArrowDown' && !list.hidden) {
+        event.preventDefault();
+        list.querySelector('a')?.focus();
+      }
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!root.contains(event.target)) {
+        list.hidden = true;
+        empty.hidden = true;
+      }
+    });
+  }
+</script>

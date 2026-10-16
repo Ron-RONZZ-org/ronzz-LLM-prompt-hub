@@ -1,0 +1,38 @@
+---
+const { text, label = 'Copy prompt' } = Astro.props;
+// Embed the exact copyable text as JSON. Escape '<' so a literal "</script>"
+// inside a prompt can never terminate the block early.
+const json = JSON.stringify(text).replace(/</g, '\\u003c');
+---
+
+<button class="copy-btn" type="button" data-copy-target="prompt-raw">{label}</button>
+<script type="application/json" id="prompt-raw" set:html={json}></script>
+
+<script>
+  for (const btn of document.querySelectorAll('.copy-btn')) {
+    btn.addEventListener('click', async () => {
+      const source = document.getElementById(btn.dataset.copyTarget);
+      if (!source) return;
+      const text = JSON.parse(source.textContent || '""');
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+      }
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  }
+</script>

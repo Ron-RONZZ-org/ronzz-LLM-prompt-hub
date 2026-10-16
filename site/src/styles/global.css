@@ -1,0 +1,464 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --muted: #59636e;
+  --border: #d1d9e0;
+  --surface: #f6f8fa;
+  --surface-2: #eef2f6;
+  --accent: #1f6feb;
+  --accent-fg: #ffffff;
+  --radius: 10px;
+  --maxw: 880px;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --fg: #e6edf3;
+    --muted: #9198a1;
+    --border: #30363d;
+    --surface: #161b22;
+    --surface-2: #1c2129;
+    --accent: #4493f8;
+    --accent-fg: #0d1117;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  padding: 0.15em 0.4em;
+  border-radius: 5px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+/* Header ------------------------------------------------------------------ */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--fg);
+  font-weight: 650;
+}
+
+.brand:hover {
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+}
+
+/* Hero -------------------------------------------------------------------- */
+.hero {
+  text-align: center;
+  padding: 3rem 0 2rem;
+}
+
+.hero-title {
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-tagline {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin: 0 auto 1.75rem;
+  max-width: 34rem;
+}
+
+/* Search ------------------------------------------------------------------ */
+.search {
+  position: relative;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1.05rem;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  outline: none;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.search-results {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  max-height: 22rem;
+  overflow-y: auto;
+  text-align: left;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+
+.search-results a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 7px;
+  color: var(--fg);
+}
+
+.search-results a:hover,
+.search-results a:focus {
+  background: var(--surface);
+  text-decoration: none;
+}
+
+.hit-title {
+  font-weight: 550;
+}
+
+.hit-crumb {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-left: auto;
+}
+
+.search-empty {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.search .search-empty,
+.search .search-results {
+  text-align: left;
+}
+
+/* Tiles ------------------------------------------------------------------- */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.tile {
+  display: block;
+  padding: 1.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--fg);
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.tile:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.tile-icon {
+  font-size: 1.6rem;
+}
+
+.tile h2 {
+  margin: 0.5rem 0 0.35rem;
+  font-size: 1.2rem;
+}
+
+.tile p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Themes / tree ----------------------------------------------------------- */
+.theme-section {
+  margin-top: 2.5rem;
+}
+
+.section-note {
+  color: var(--muted);
+  margin-top: -0.4rem;
+}
+
+.tree {
+  list-style: none;
+  margin: 0.5rem 0;
+  padding-left: 0;
+}
+
+.tree .tree {
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--border);
+}
+
+.tree li {
+  margin: 0.15rem 0;
+}
+
+.tree-dir > details > summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.2rem 0;
+  list-style-position: inside;
+}
+
+.tree-file a {
+  padding: 0.15rem 0;
+}
+
+.badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  vertical-align: middle;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 999px;
+}
+
+.badge-sm {
+  font-size: 0.68rem;
+  padding: 0 0.4rem;
+}
+
+/* Prompt page ------------------------------------------------------------- */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.crumb-sep {
+  color: var(--border);
+}
+
+.crumb-current {
+  color: var(--fg);
+  font-weight: 550;
+}
+
+.prompt-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.prompt-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.prompt-heading h1 {
+  margin: 0;
+  font-size: 1.9rem;
+}
+
+.lede {
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.6rem 0;
+}
+
+.tags li {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 0.1rem 0.6rem;
+}
+
+.prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.action-hint {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.copy-btn {
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+}
+
+.copy-btn:hover {
+  filter: brightness(1.07);
+}
+
+.copy-btn.copied {
+  background: #1a7f37;
+  color: #fff;
+}
+
+/* Prose ------------------------------------------------------------------- */
+.doc {
+  font-size: 1rem;
+}
+
+.doc h1,
+.doc h2 {
+  margin-top: 2rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.doc h3 {
+  margin-top: 1.5rem;
+}
+
+.doc pre {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.doc pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+
+.doc blockquote {
+  margin: 1rem 0;
+  padding: 0.2rem 1rem;
+  color: var(--muted);
+  border-left: 3px solid var(--border);
+}
+
+.doc table {
+  border-collapse: collapse;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+
+.doc th,
+.doc td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+.doc th {
+  background: var(--surface);
+}
+
+.doc img {
+  max-width: 100%;
+}
+
+/* Footer ------------------------------------------------------------------ */
+.site-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.site-footer p {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}

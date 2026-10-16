@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import userguide from '../data/userguide.json';
+---
+
+<Base title="User guide">
+  <article class="doc" set:html={userguide.html} />
+</Base>

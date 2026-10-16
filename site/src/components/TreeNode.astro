@@ -1,0 +1,24 @@
+---
+const { node, base } = Astro.props;
+---
+
+<ul class="tree">
+  {
+    node.dirs.map((dir) => (
+      <li class="tree-dir">
+        <details open>
+          <summary>{dir.label}</summary>
+          <Astro.self node={dir} base={base} />
+        </details>
+      </li>
+    ))
+  }
+  {
+    node.files.map((file) => (
+      <li class="tree-file">
+        <a href={`${base}/prompts/${file.slug}/`}>{file.title}</a>
+        {file.kind === 'model' && <span class="badge badge-sm">Model</span>}
+      </li>
+    ))
+  }
+</ul>
