@@ -50,9 +50,9 @@ const tree = buildTree(prompts.filter((p) => p.kind === 'prompt'));
   {
     models.length > 0 && (
       <section class="theme-section">
-        <h2>Assistants (Models)</h2>
+        <h2>System prompts</h2>
         <p class="section-note">
-          Specialised assistants with a built-in role — open them in Open WebUI.
+          available in Veramiko as models
         </p>
         <ul class="tree">
           {models.map((model) => (
