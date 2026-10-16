@@ -87,7 +87,8 @@ run of non-alphanumeric characters collapsed to `-`. For example,
 
 Prompts often carry fill-in markers such as `{{TOPIC}}` or `{{article}}`. They
 are literal text for the user to replace — the build leaves them untouched.
-Use a distinctive marker so it cannot be confused with content.
+Open WebUI's own `{{variable}}` placeholders are supported too (the user fills
+them in). Use a distinctive marker so it cannot be confused with content.
 
 ## Building
 
@@ -132,13 +133,22 @@ symlinked directly.
 ```bash
 OWUI_API_KEY=sk-… python3 sync-owui.py --dry-run   # preview the changes
 OWUI_API_KEY=sk-… python3 sync-owui.py             # rebuild dist/ and apply
+
+# the admin key is kept locally and gitignored:
+OWUI_API_KEY=$(cat .secrets/owui-api-key) python3 sync-owui.py --dry-run
 ```
+
+Deployment reference: [RonzzIT:Deployment/OpenWebUI → Prompt hub sync](https://wikibase.ronzz.org/wiki/RonzzIT:Deployment/OpenWebUI#Prompt_hub_sync_(ronzz-LLM-prompt-hub)).
 
 Every item the sync writes is tagged `meta.managed_by = "ronzz-LLM-prompt-hub"`.
 Managed items are updated in place, and **hard-deleted** when their source is
-removed from the repo. Hand-made items are never deleted; an item whose
-id/command collides with a repo item is *adopted* (updated and tagged), never
-duplicated. `--no-prune` (add/update only) and `--no-build` are also available.
+removed — so **delete a prompt by deleting its source file**. Hand-made items
+are never deleted; an item whose id/command collides with a repo item is
+*adopted* (updated and tagged), never duplicated. `--no-prune` (add/update only)
+and `--no-build` are also available.
+
+**Do not create prompts or models by hand in the Admin UI** — the sync only
+manages what it published, so a hand-made item is never updated or removed.
 
 `OWUI_API_KEY` is an **admin** API key — enable it once at *Admin → Settings →
 Authentication → Enable API Keys*, then copy the key from *Account → API Keys*.
@@ -155,7 +165,7 @@ On every push to `main` the workflow:
 3. runs the sync against `llm.ronzz.org` using the repository secret
    `OWUI_API_KEY`.
 
-Pushing to Forgejo therefore updates the instance within a minute. What this
+Pushing to Forgejo therefore updates the instance within ~2 minutes. What this
 means when you write a prompt:
 
 - **Frontmatter must stay flat** — the sync parses it with a minimal reader, so
@@ -169,7 +179,7 @@ means when you write a prompt:
 
 `dist/` is also rendered into a browsable, searchable **prompt store** and
 published to GitHub Pages from the push mirror:
-<https://ron-ronzz-org.github.io/ronzz-LLM-prompt-hub/>.
+<https://prompts.ronzz.org/>.
 
 - **Generator** — `site/` is an [Astro](https://astro.build) project.
   `site/scripts/prepare-content.mjs` reads `dist/**/*.prompt.md` (plus
@@ -189,8 +199,11 @@ published to GitHub Pages from the push mirror:
   cd site && npm install && npm run build   # writes ../_site
   cd site && npm run dev                    # dev server, live reload
   ```
-- **Custom domain** — set `site` to the domain and `base` to `/` in
-  `site/astro.config.mjs`, then point the domain at Pages in the repo settings.
+- **Domain** — served at <https://prompts.ronzz.org>. `site` and `base` are set
+  in `site/astro.config.mjs`, the domain is declared in `site/public/CNAME`, and
+  the same domain must be set in the repo's Pages settings. DNS is a Cloudflare
+  `CNAME` for `prompts` → `ron-ronzz-org.github.io` (grey cloud, so GitHub can
+  issue its own TLS certificate) — see `RonzzIT:Runbook/Cloudflare`.
 
 ## Contributor conventions
 

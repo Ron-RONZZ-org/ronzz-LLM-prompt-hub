@@ -8,8 +8,8 @@ it to your task, and paste it into your AI assistant.
 
 ## What's here
 
-- A **searchable online prompt store** — every prompt grouped by theme, with a
-  one-click copy button.
+- A **searchable [online prompt store](https://prompts.ronzz.org)** — every prompt
+  grouped by theme, with a one-click copy button.
 - **Ready-to-use task prompts** for common tasks: proofread this, fact-check and
   cite, rewrite in my style, draft a wiki page, and many more.
 - **Specialised AI system prompts**, such as *Veramiko Science* for

@@ -11,10 +11,13 @@ You do not need to know anything about programming to use these prompts.
 ## What you need
 
 An AI assistant to paste the prompt into. At ronzz.ORG that is
-**[Veramiko](https://llm.ronzz.org)** 
+**[Veramiko](https://llm.ronzz.org)** — but the prompts are plain text and work
+in any assistant (ChatGPT, Claude, Gemini, …).
 
-but the
-prompts are plain text and work in any assistant (ChatGPT, Claude, Gemini, …).
+## Prompt store
+
+Browse and search every prompt at **[prompts.ronzz.org](https://prompts.ronzz.org)** —
+grouped by theme, with a one-click copy button.
 
 ## Veramiko
 
@@ -32,14 +35,14 @@ git clone https://forgejo.ronzz.org/ronzz-org/ronzz-LLM-prompt-hub.git ~/ronzz-L
 ln -s ~/ronzz-LLM-prompt-hub/dist/opencode ~/.config/opencode
 ```
 
-For the command prompts, see [Generic client](#Generic client)
+For the command prompts, see [Generic client](#generic-client).
 
 ## Generic client
 
 Every prompt is plain text, so you can use it anywhere:
 
-1. Open the prompt — from the **online prompt store** (search or browse by
-   theme) or from the matching file in this repository.
+1. Open the prompt — from the **[online prompt store](https://prompts.ronzz.org)**
+   (search or browse by theme) or from the matching file in this repository.
 2. **Copy** the whole prompt.
 3. Paste it into your AI assistant, replace the fill-in markers, and send.
 
@@ -51,7 +54,7 @@ Replace the marker **and** its brackets with your own content. If a prompt says
 "the attached document", attach the file to your message before sending. Leave
 the rest of the prompt as it is — that wording is what makes it work.
 
-## Advices on AI use
+## Advice on AI use
 
 - **Be specific.** The more context you give, the better the answer.
 - **Give it the material.** If a prompt asks for a text or a document, provide
