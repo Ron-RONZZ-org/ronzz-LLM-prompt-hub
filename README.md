@@ -102,3 +102,104 @@ symlink) would have drifted.
 - keep `src/fundamentals/` entries generic; no scenario-specific claims
 - don't put credentials in prompts — reference their storage location instead
 - when changing the opencode tree (`src/opencode/`), rebuild and verify:   `python3 build-prompts.py --check`
+
+## Prompt hub: adding prompts and models {#prompt_hub_adding_prompts_and_models}
+
+## Veramiko auto-sync
+
+This repository is synced by CI on its Github mirror to Veramiko as custom Models and slash-command prompts.
+
+Deployment facts:
+
+[RonzzIT:Deployment/OpenWebUI](https://wikibase.ronzz.org/wiki/RonzzIT:Deployment/OpenWebUI#Prompt_hub_sync_(ronzz-LLM-prompt-hub))
+
+### Where to put a prompt {#where_to_put_a_prompt}
+
+Work in the repo\'s `src/` tree. `build-prompts.py` expands
+`{{include:…}}` directives into `dist/`, and the sync publishes `dist/`:
+
+  Location                   Becomes in Open WebUI
+  -------------------------- ----------------------------------------------------------------
+  `src/system-prompt/*.md`   a custom **Model** (system prompt + metadata)
+  any other `src/**/*.md`    a **Prompt** --- a `/slash` command
+  `src/fundamentals/**`      nothing --- reusable fragments, pulled in with `{{include:…}}`
+  `src/opencode/**`          nothing --- the opencode config tree
+
+The model id / prompt command is the **file name**, lower-cased with
+runs of non-alphanumerics turned into `-`:
+`src/oneliners/writing/proofread.md` → `/proofread`;
+`src/system-prompt/veramiko-science.md` → model `veramiko-science`.
+Commands are flat (a nested file still yields a flat command) and must
+be unique across the repo --- the sync fails loudly on a collision.
+
+### Slash-command prompts {#slash_command_prompts}
+
+Plain markdown. The text is what gets inserted when a user types
+`/name`. Open WebUI\'s own `{{variable}}` placeholders are supported
+(the user fills them in).
+
+``` markdown
+## TASK
+
+Proofread the article. Preserve the author's language and writing style.
+
+## Article
+
+{{article}}
+```
+
+### System prompts → custom Models {#system_prompts_custom_models}
+
+A file under `src/system-prompt/` becomes a custom Model: the body
+(after the frontmatter) is its system prompt, and the YAML frontmatter
+declares the metadata.
+
+  Frontmatter key       Default                 Meaning
+  --------------------- ----------------------- -----------------------------------------------------------------------------------------------
+  `name`                the file name           display name in the model picker
+  `description`         none                    one-line description shown under the name
+  `tags`                `[]`                    list, e.g. `[Science, Research]` --- groups the model in the picker
+  `base_model`          `deepseek-flash`        the upstream model the custom model wraps
+  `tool_ids`            `[]`                    MCP tool servers to attach, e.g. `[server:mcp:mediawiki-mcp]` (the ids shown in the Admin UI)
+  `profile_image_url`   `/static/favicon.png`   avatar
+
+Every generated model has the **code interpreter** and **web search**
+switched on by default. The frontmatter is metadata only --- it is
+stripped from the system prompt; unknown keys are ignored.
+
+Example --- `src/system-prompt/veramiko-science.md`:
+
+``` markdown
+---
+name: Veramiko Science
+description: Scientific research assistant — literature review, analysis, drafting, and citation.
+tags: [Science, Research]
+base_model: deepseek-flash
+---
+
+You are "Veramiko", a scientific research assistant.
+```
+
+### Publish
+
+After editing the repo:
+
+``` bash
+python3 build-prompts.py            # rebuild dist/
+python3 build-prompts.py --check    # exit 0 = dist/ consistent with src/
+git add -A && git commit -m "feat: …" && git push
+```
+
+CI rebuilds `dist/` itself, so a forgotten build only raises a warning
+--- it does not block publication. The instance is updated within \~2
+minutes of the push. **Delete** a prompt by deleting its source file;
+the next sync removes it. **Preview** the changes first with:
+
+``` bash
+OWUI_API_KEY=$(cat .secrets/owui-api-key) python3 sync-owui.py --dry-run
+```
+
+**Do not** create a prompt or model by hand in the Admin UI: the sync
+only manages what it published (items tagged `meta.managed_by`), so a
+hand-made item is never updated or removed --- and if its name matches a
+repo item, the sync adopts (overwrites) it.
