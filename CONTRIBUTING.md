@@ -6,7 +6,7 @@ Just want to *use* the prompts? See **[USERGUIDE.md](USERGUIDE.md)** instead.
 
 ## Repository layout
 
-| Path | What it is |
+| Path | Content |
 | --- | --- |
 | `src/fundamentals/` | Shared behaviour fragments + org policy (`org-context.md`, `credential-policy.md`, `forge-posture.md`, …). Define each rule here, once. Not standalone prompts. |
 | `src/fundamentals/coding/` | Software-development snippets (git, worktree, forge ops, testing, …) — reusable by any LLM code client, not just opencode. |
@@ -40,11 +40,7 @@ All fundamental style directives (e.g. "do not guess") live as `md` snippets in
 - To show a *literal* `{{include:…}}` in a prompt (meta-prompts!), write
   `{{!include:…}}` — the `!` escapes it.
 - **Never copy-paste a rule out of `src/fundamentals/` into a scenario file.**
-  Include it, so the rule has a single source of truth.
-
-The opencode config tree (`src/opencode/`) uses the same directives: e.g.
-`src/opencode/AGENTS.md` includes `{{include:org-context}}`, so the organisation
-context is written once and reused everywhere.
+  Include it, so the rule has a single source of truth instead of a million orphaned duplicates.
 
 ### System prompts → Open WebUI Models
 
@@ -122,35 +118,6 @@ feeds the model's system prompt). The files keep their exact names so they can b
 symlinked directly.
 
 ## Publishing
-
-### opencode (recommended desktop coding client)
-
-`dist/opencode/` **is** a complete opencode config directory (`AGENTS.md`,
-`agents/`, `opencode.jsonc`, `plugins/`). Link your global config to it — every
-`git pull` of this repo updates your agent config:
-
-```bash
-# one-time setup — everyone at ronzz.ORG is on Linux
-git clone https://forgejo.ronzz.org/ronzz-org/ronzz-LLM-prompt-hub.git ~/ronzz-LLM-prompt-hub
-ln -s ~/ronzz-LLM-prompt-hub/dist/opencode ~/.config/opencode
-
-# per-user bits (gitignored, never committed):
-mkdir -p ~/.config/opencode/.secrets
-#   brave-api-key        — Brave Search API key (mcp-daemon plugin reads it)
-#   context7-api-key     — Context7 API key (context7-mcp-proxy.mjs reads it)
-
-# plugin dependencies (only if you use the worktree/notify plugins):
-cd ~/.config/opencode && npm install   # creates node_modules/, gitignored
-
-# mediawiki MCP credentials (SeedBot@MCP bot password):
-mkdir -p ~/.config/mediawiki-mcp
-#   ~/.config/mediawiki-mcp/ronzz-wikibase.json — see RonzzIT:Runbook/WikiWriterMCP
-```
-
-Personal overrides (providers, your own MCP servers, model choices) go in a
-project-level `.opencode/opencode.jsonc`, which opencode merges over the global
-config. Secrets never belong in this repo — see
-`src/fundamentals/credential-policy.md`.
 
 ### Open WebUI (`llm.ronzz.org`) {#publishing-open-webui}
 

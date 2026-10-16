@@ -11,28 +11,30 @@ You do not need to know anything about programming to use these prompts.
 ## What you need
 
 An AI assistant to paste the prompt into. At ronzz.ORG that is
-**[Open WebUI](https://llm.ronzz.org)** (also reachable as "Veramiko"), but the
+**[Veramiko](https://llm.ronzz.org)** 
+
+but the
 prompts are plain text and work in any assistant (ChatGPT, Claude, Gemini, …).
 
-## The easiest way: Open WebUI
+## Veramiko
 
-1. Sign in at **https://llm.ronzz.org**.
-2. Start a new chat.
-3. Type **`/`** in the message box — a list of the library's prompts appears.
-   Keep typing to filter, then pick one.
-4. The prompt is inserted into the message box. **Replace the fill-in markers**
-   (see below) and add anything else you want the assistant to know.
-5. Press send.
+If you use [Veramiko](https://wikibase.ronzz.org/wiki/RonzzInt:Veramiko/101), prompts from this repo are readily available there. Simply type `/` in a chat to list the prompts.
 
-Some prompts come as **Models** instead — specialised assistants with a built-in
-role. Switch to one from the model picker at the top of the chat:
+## Opencode (recommended desktop coding client)
 
-| Model | What it is for |
-| --- | --- |
-| **Veramiko Science** | Scientific research: literature review, analysis, drafting, citations. |
-| **RonzzWikiCowriter** | Writing and editing pages on the ronzz wiki (wikibase.ronzz.org). |
+`dist/opencode/` **is** a complete opencode config directory (`AGENTS.md`,
+`agents/`, `opencode.jsonc`, `plugins/`). Link your global config to it — every
+`git pull` of this repo updates your agent config:
 
-## The portable way: copy and paste
+```bash
+# one-time setup — everyone at ronzz.ORG is on Linux
+git clone https://forgejo.ronzz.org/ronzz-org/ronzz-LLM-prompt-hub.git ~/ronzz-LLM-prompt-hub
+ln -s ~/ronzz-LLM-prompt-hub/dist/opencode ~/.config/opencode
+```
+
+For the command prompts, see [Generic client](#Generic client)
+
+## Generic client
 
 Every prompt is plain text, so you can use it anywhere:
 
@@ -43,17 +45,13 @@ Every prompt is plain text, so you can use it anywhere:
 
 ## Filling in the markers
 
-Prompts contain markers in double curly brackets, such as:
-
-- `{{TOPIC}}` — the subject you want to work on
-- `{{article}}` — where your text should go
-- `{{TARGET}}` — what the assistant should act on
+Prompts contain markers in double curly brackets, such as `{{TOPIC}}`:
 
 Replace the marker **and** its brackets with your own content. If a prompt says
 "the attached document", attach the file to your message before sending. Leave
 the rest of the prompt as it is — that wording is what makes it work.
 
-## Getting good results
+## Advices on AI use
 
 - **Be specific.** The more context you give, the better the answer.
 - **Give it the material.** If a prompt asks for a text or a document, provide
@@ -62,19 +60,11 @@ the rest of the prompt as it is — that wording is what makes it work.
   ("make it shorter", "keep my style", "add sources").
 - **Check the facts.** AI assistants can be confidently wrong. Prompts that
   need sources will say so; verify anything important.
-- **Stay in your voice.** Prompts such as *proofread* or *rewrite* deliberately
-  preserve your own writing style — say so if a change feels wrong.
-
-## Finding the right prompt
-
-- **Online prompt store** — a searchable website listing every prompt, grouped
-  by theme, with a one-click copy button.
-- **Open WebUI** — type `/` in the chat box to list the slash commands.
-- **This repository** — browse the folders under `src/` (each file is the
-  source of one prompt).
 
 ## Getting help
 
-- Can't find a prompt for your task, or one gives poor results? Ask the
-  ronzz.ORG IT team, or see the wiki: https://wikibase.ronzz.org/wiki/RonzzIT:Main
+Raise an issue on the repo. If you are part of the Ronzz.ORG community, you can also contact the IT team.
+
+## Contributing
+
 - Want to add or improve a prompt? See **[CONTRIBUTING.md](CONTRIBUTING.md)**.
