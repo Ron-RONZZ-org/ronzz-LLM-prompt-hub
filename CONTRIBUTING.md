@@ -198,6 +198,33 @@ means when you write a prompt:
 - The **committed `dist/`** still matters: `dist/opencode/` consumers symlink it,
   so run the build and commit the result even though CI rebuilds anyway.
 
+### Prompt store website (GitHub Pages)
+
+`dist/` is also rendered into a browsable, searchable **prompt store** and
+published to GitHub Pages from the push mirror:
+<https://ron-ronzz-org.github.io/ronzz-LLM-prompt-hub/>.
+
+- **Generator** — `site/` is an [Astro](https://astro.build) project.
+  `site/scripts/prepare-content.mjs` reads `dist/**/*.prompt.md` (plus
+  `USERGUIDE.md` and `CONTRIBUTING.md`), strips the generated header and YAML
+  frontmatter — the same normalisation `sync-owui.py` applies — and emits
+  `site/src/data/*.json` plus a client-side `search-index.json`. Astro then
+  renders the home page (title, search box, tiles), `/userguide`,
+  `/contributing`, `/themes` (a tree of every prompt), and one page per prompt
+  (`/prompts/<path>`) with a **Copy** button that yields exactly the text
+  Open WebUI receives.
+- **Deployment** — `.github/workflows/pages.yml` rebuilds `dist/`, runs
+  `npm ci && npm run build` inside `site/`, and deploys `_site/` with
+  `actions/deploy-pages`. The repository must have Pages set to build from
+  **GitHub Actions** (Settings → Pages → Source).
+- **Local preview** —
+  ```bash
+  cd site && npm install && npm run build   # writes ../_site
+  cd site && npm run dev                    # dev server, live reload
+  ```
+- **Custom domain** — set `site` to the domain and `base` to `/` in
+  `site/astro.config.mjs`, then point the domain at Pages in the repo settings.
+
 ## Contributor conventions
 
 - NEVER edit `dist/`; edit the source, then rebuild.

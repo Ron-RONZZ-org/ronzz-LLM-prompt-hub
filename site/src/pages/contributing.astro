@@ -1,0 +1,8 @@
+---
+import Base from '../layouts/Base.astro';
+import contributing from '../data/contributing.json';
+---
+
+<Base title="Contributing">
+  <article class="doc" set:html={contributing.html} />
+</Base>

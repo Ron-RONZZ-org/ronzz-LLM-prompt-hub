@@ -1,0 +1,6 @@
+node_modules/
+.astro/
+
+# Generated from ../../dist and the root markdown docs by prepare-content.mjs
+src/data/
+public/search-index.json

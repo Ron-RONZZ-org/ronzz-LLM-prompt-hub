@@ -1,0 +1,43 @@
+---
+const { title = null, description = null } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const fullTitle = title
+  ? `${title} — ronzz.ORG prompt store`
+  : 'ronzz.ORG prompt store';
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href={`${base}/`}>
+        <img src={`${base}/favicon.svg`} alt="" width="24" height="24" />
+        <span>Ronzz.org central prompt store</span>
+      </a>
+      <nav class="site-nav">
+        <a href={`${base}/themes/`}>Browse by theme</a>
+        <a href={`${base}/userguide/`}>User guide</a>
+        <a href="https://llm.ronzz.org" rel="noopener">Open WebUI ↗</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        Maintained by the ronzz.ORG team. Prompts are open source —
+        <a href="https://github.com/Ron-RONZZ-org/ronzz-LLM-prompt-hub" rel="noopener">view on GitHub</a>.
+      </p>
+    </footer>
+  </body>
+</html>

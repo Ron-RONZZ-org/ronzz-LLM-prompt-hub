@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import SearchBox from '../components/SearchBox.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base>
+  <section class="hero">
+    <h1 class="hero-title">Ronzz.org central prompt store</h1>
+    <p class="hero-tagline">
+      Ready-made AI prompts for the ronzz.ORG team — search, copy, and paste.
+    </p>
+    <SearchBox placeholder="Search prompts by title or content…" autofocus={true} />
+  </section>
+
+  <section class="tiles" aria-label="Explore">
+    <a class="tile" href={`${base}/userguide/`}>
+      <span class="tile-icon" aria-hidden="true">📖</span>
+      <h2>User guide</h2>
+      <p>New to prompts? Learn what they are and how to use one — step by step.</p>
+    </a>
+    <a class="tile" href={`${base}/themes/`}>
+      <span class="tile-icon" aria-hidden="true">🗂️</span>
+      <h2>Browse by theme</h2>
+      <p>See every prompt, grouped by theme and task, in one tree.</p>
+    </a>
+  </section>
+</Base>

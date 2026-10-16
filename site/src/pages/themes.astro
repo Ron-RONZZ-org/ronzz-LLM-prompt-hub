@@ -1,0 +1,73 @@
+---
+import Base from '../layouts/Base.astro';
+import SearchBox from '../components/SearchBox.astro';
+import TreeNode from '../components/TreeNode.astro';
+import prompts from '../data/prompts.json';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function humanize(segment) {
+  return segment
+    .replace(/[_-]+/g, ' ')
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/^\w/, (c) => c.toUpperCase());
+}
+
+function buildTree(items) {
+  const root = { dirs: new Map(), files: [] };
+  for (const item of items) {
+    let node = root;
+    for (const segment of item.groups) {
+      if (!node.dirs.has(segment)) {
+        node.dirs.set(segment, { dirs: new Map(), files: [] });
+      }
+      node = node.dirs.get(segment);
+    }
+    node.files.push(item);
+  }
+  const plain = (node) => ({
+    dirs: [...node.dirs.entries()].map(([segment, child]) => ({
+      label: humanize(segment),
+      ...plain(child),
+    })),
+    files: [...node.files].sort((a, b) => a.title.localeCompare(b.title)),
+  });
+  return plain(root);
+}
+
+const models = prompts.filter((p) => p.kind === 'model');
+const tree = buildTree(prompts.filter((p) => p.kind === 'prompt'));
+---
+
+<Base title="Browse by theme">
+  <h1>Browse by theme</h1>
+  <p class="lede">
+    Every prompt in the library, grouped by theme and task. {prompts.length} in total.
+  </p>
+
+  <SearchBox placeholder="Filter prompts…" />
+
+  {
+    models.length > 0 && (
+      <section class="theme-section">
+        <h2>Assistants (Models)</h2>
+        <p class="section-note">
+          Specialised assistants with a built-in role — open them in Open WebUI.
+        </p>
+        <ul class="tree">
+          {models.map((model) => (
+            <li class="tree-file">
+              <a href={`${base}/prompts/${model.slug}/`}>{model.title}</a>
+              <span class="badge badge-sm">Model</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="theme-section">
+    <h2>Prompts</h2>
+    <TreeNode node={tree} base={base} />
+  </section>
+</Base>
