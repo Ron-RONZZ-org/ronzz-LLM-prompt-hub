@@ -195,10 +195,12 @@ published to GitHub Pages from the push mirror:
   `npm ci && npm run build` inside `site/`, and deploys `_site/` with
   `actions/deploy-pages`. The repository must have Pages set to build from
   **GitHub Actions** (Settings → Pages → Source).
-- **Local preview** —
+- **Local preview** — requires Node 24.18.0 (pinned in `.nvmrc`; npm refuses
+  other versions via `engine-strict`):
   ```bash
-  cd site && npm install && npm run build   # writes ../_site
-  cd site && npm run dev                    # dev server, live reload
+  nvm use                               # reads .nvmrc
+  cd site && npm ci && npm run build    # writes ../_site
+  cd site && npm run dev                # dev server, live reload
   ```
 - **Domain** — served at <https://prompts.ronzz.org>. `site` and `base` are set
   in `site/astro.config.mjs`, the domain is declared in `site/public/CNAME`, and
