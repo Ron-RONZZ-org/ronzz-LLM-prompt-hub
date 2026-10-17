@@ -155,7 +155,7 @@ Most laws of nature are stated as rules about how quantities change, so differen
 ```
 (full of useless ramble and metacomments)
 
-### show complete derivation
+### show derivation
 
 - multiplication/division of both sides, algebraic manipulation, etc.
 
@@ -167,14 +167,19 @@ Most laws of nature are stated as rules about how quantities change, so differen
 
 - discuss differential equations in general in a page (definition/classification/general solution strategies: algebraic manipulation/numerical solution), then link to separate pages discussing ordinary differential equations and partial differential equations (definitions), which then links to pages discussing first order ordinary differential equation (general form, specific solution methods unique to 1st order ODE), 2nd order ...
 
-### pure algebra > real-world example
+### definition > example
 
-- always begin discussion with abstract general-case
-- then provide a concrete real-world example easy enough to understand without prior knowledge on the subject
+- always begin discussion with abstract general-case definitions
+- then provide concrete examples
 
 ### Do NOT duplicate
 
 - When a topic is already treated in a separate article, simply link to that article. No extra explanation.
+
+### Good examples to imitate
+
+- https://wikibase.ronzz.org/wiki/Ring_(mathematical_concept)
+- https://wikibase.ronzz.org/wiki/Vector_space
 
 ### imitate style of the style examples
 
