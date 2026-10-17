@@ -17,7 +17,8 @@ const { prompt } = Astro.props;
 function humanize(segment) {
   return segment
     .replace(/[_-]+/g, ' ')
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/\s+/g, ' ')
+    .trim()
     .replace(/^\w/, (c) => c.toUpperCase());
 }
 
@@ -60,10 +61,66 @@ const crumbs = prompt.groups.map((segment) => ({
     <div class="prompt-actions">
       <CopyButton text={prompt.raw} />
       {prompt.kind !== 'model' && (
-        <span class="action-hint">or type <code>/{prompt.stem.replace(/[^A-Za-z0-9_-]+/g, '-').toLowerCase()}</code> in Open WebUI</span>
+        <span class="action-hint">or type <code>/{prompt.stem.replace(/[^A-Za-z0-9_-]+/g, '-').toLowerCase()}</code> on llm.ronzz.org</span>
       )}
     </div>
   </header>
 
-  <article class="doc prompt-body" set:html={prompt.html} />
+  <section class="prompt-display" aria-label="Prompt">
+    <div class="prompt-tabs" role="tablist" aria-label="Prompt view">
+      <button
+        class="prompt-tab"
+        type="button"
+        role="tab"
+        id="tab-rendered"
+        aria-controls="panel-rendered"
+        aria-selected="true"
+      >
+        Rendered
+      </button>
+      <button
+        class="prompt-tab"
+        type="button"
+        role="tab"
+        id="tab-source"
+        aria-controls="panel-source"
+        aria-selected="false"
+        tabindex="-1"
+      >
+        Source
+      </button>
+    </div>
+    <div class="prompt-box" id="panel-rendered" role="tabpanel" aria-labelledby="tab-rendered">
+      <article class="doc prompt-body" set:html={prompt.html} />
+    </div>
+    <div class="prompt-box" id="panel-source" role="tabpanel" aria-labelledby="tab-source" hidden>
+      <pre class="prompt-source">{prompt.raw}</pre>
+    </div>
+  </section>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll('.prompt-tab'));
+    const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+
+    function selectTab(tab) {
+      tabs.forEach((other, index) => {
+        const active = other === tab;
+        other.setAttribute('aria-selected', String(active));
+        other.tabIndex = active ? 0 : -1;
+        if (panels[index]) panels[index].hidden = !active;
+      });
+      tab.focus();
+    }
+
+    for (const tab of tabs) {
+      tab.addEventListener('click', () => selectTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        const step = event.key === 'ArrowRight' ? 1 : -1;
+        const next = (tabs.indexOf(tab) + step + tabs.length) % tabs.length;
+        selectTab(tabs[next]);
+      });
+    }
+  </script>
 </Base>

@@ -390,6 +390,65 @@ code {
   color: #fff;
 }
 
+/* Prompt display ---------------------------------------------------------- */
+.prompt-display {
+  margin-top: 1.5rem;
+}
+
+.prompt-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.prompt-tab {
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 550;
+  padding: 0.3rem 0.85rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.prompt-tab:hover {
+  color: var(--fg);
+}
+
+.prompt-tab[aria-selected="true"] {
+  color: var(--accent-fg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.prompt-tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.prompt-box {
+  padding: 1.25rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.prompt-box .doc > :first-child {
+  margin-top: 0;
+}
+
+.prompt-source {
+  margin: 0;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 /* Prose ------------------------------------------------------------------- */
 .doc {
   font-size: 1rem;

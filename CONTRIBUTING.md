@@ -188,7 +188,8 @@ published to GitHub Pages from the push mirror:
   `site/src/data/*.json` plus a client-side `search-index.json`. Astro then
   renders the home page (title, search box, tiles), `/userguide`,
   `/contributing`, `/themes` (a tree of every prompt), and one page per prompt
-  (`/prompts/<path>`) with a **Copy** button that yields exactly the text
+  (`/prompts/<path>`) with the prompt shown in a bordered box, a
+  **Rendered/Source** toggle, and a **Copy** button that yields exactly the text
   Open WebUI receives.
 - **Deployment** — `.github/workflows/pages.yml` rebuilds `dist/`, runs
   `npm ci && npm run build` inside `site/`, and deploys `_site/` with
