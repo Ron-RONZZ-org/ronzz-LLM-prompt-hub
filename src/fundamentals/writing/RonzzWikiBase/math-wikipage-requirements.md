@@ -1,6 +1,6 @@
 ### IMPORTANT: think of reader
 
-- primary wikireader: non-math-major undergraduates
+- primary reader: non-math-major engineers looking to consolidate their math
 - academic register
 - concise language
 - minimise technical jargons

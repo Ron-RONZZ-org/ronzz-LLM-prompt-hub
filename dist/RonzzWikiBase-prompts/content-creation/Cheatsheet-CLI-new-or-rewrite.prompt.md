@@ -3,7 +3,7 @@
 
 ## Task
 
--
+- {{task}}
 
 ## Requirements
 
