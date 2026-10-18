@@ -80,27 +80,3 @@ c_1 = c_2 = \cdots = c_n = 0.
 ```
 - strip any $\boxed$
 
-- list conditions before each case, and list special cases first in a cases block:
-
-GOOD:
-```
-$$
-a'_{k,j}=
-\begin{cases}
-k=i &: \alpha u_j+\beta v_j,\\[4pt]
-k\ne i &: a_{k,j}.
-\end{cases}
-$$
-```
-
-BAD:
-
-```
-$$
-a'_{k,j}=
-\begin{cases}
-a_{k,j}, & k\ne i,\\[4pt]
-\alpha u_j+\beta v_j, & k=i.
-\end{cases}
-$$
-```
