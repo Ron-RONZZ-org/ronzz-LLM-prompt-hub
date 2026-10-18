@@ -5,14 +5,11 @@
 
 - Add a section on {{page#section}}
 
-  - topic: {{section topic}}
-
-## References
-
-- textbooks on libretext, ck12, openstax
-- other academic content/reputable sources
+  - topic: {{section_topic}}
 
 ## Requirements
+
+- imitate style of existing content on the page
 
 ### Katex math requirements
 
@@ -208,4 +205,7 @@ Most laws of nature are stated as rules about how quantities change, so differen
 - https://wikibase.ronzz.org/wiki/Ring_(mathematical_concept)
 - https://wikibase.ronzz.org/wiki/Vector_space
 
-- imitate style of existing content on the page
+## References
+
+- textbooks on libretext, ck12, openstax
+- other academic content/reputable sources

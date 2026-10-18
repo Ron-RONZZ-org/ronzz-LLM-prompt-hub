@@ -1,15 +1,9 @@
-## Task
-
-- Add a section on {{page}} about {{section topic}}
+{{include:writing/RonzzWikiBase/add-section}}
+{{include:writing/cheatsheet-guideline}}
 
 ## source(s) of truth:
 
 - Official docs
-- 
 
 {{include:source-of-truth}}
 
-## Requirements
-
-{{include:writing/cheatsheet-guideline}}
-- imitate style of existing content on the page
