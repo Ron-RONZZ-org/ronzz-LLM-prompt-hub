@@ -9,6 +9,14 @@ We are working on the RonzzWikiBase MediaWiki instance : Deployed at https://wik
 - [RonzzWikiBase CLI](https://wikibase.ronzz.org/wiki/RonzzIT:Runbook/WikibaseCLI)
 - [RonzzWikiBase deployment](https://wikibase.ronzz.org/wiki/RonzzIT:Deployment/Wikibase)
 
+## ssh access to prod server
+
+```
+ssh ronzz-linux-server-2
+```
+
+Explain your intention/action plan and ask for user permission before you modify anything on prod.
+
 ## Requirements
 
 - {{include:ask-for-user-approval}}
