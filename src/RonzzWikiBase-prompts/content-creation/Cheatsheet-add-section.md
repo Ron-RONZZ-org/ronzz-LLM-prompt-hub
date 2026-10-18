@@ -1,6 +1,6 @@
 ## Task
 
-- Add a section on
+- Add a section on {{page}} about {{section topic}}
 
 ## source(s) of truth:
 

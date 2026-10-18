@@ -1,6 +1,6 @@
 ## Task
 
--
+- {{task}}
 
 ## Requirements
 

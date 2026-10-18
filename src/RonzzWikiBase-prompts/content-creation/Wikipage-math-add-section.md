@@ -1,6 +1,6 @@
 ## Task
 
--
+- Add a section on {{page}} about {{section topic}}
 
 ## References
 
@@ -11,4 +11,4 @@
 
 {{include:writing/katex-math-requirements}}
 {{include:writing/RonzzWikiBase/math-wikipage-requirements}}
-
+- imitate style of existing content on the page
