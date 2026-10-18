@@ -85,10 +85,10 @@ run of non-alphanumeric characters collapsed to `-`. For example,
 
 ### Placeholders
 
-Prompts often carry fill-in markers such as `{{TOPIC}}` or `{{article}}`. They
-are literal text for the user to replace — the build leaves them untouched.
-Open WebUI's own `{{variable}}` placeholders are supported too (the user fills
-them in). Use a distinctive marker so it cannot be confused with content.
+Prompts can carry fill-in markers such as `{{TOPIC}}` or `{{article}}`. They
+are passed through by `build-prompts.py` as literal text for the user/end-client to replace. 
+
+See the [official OpenWeb UI guide](https://docs.openwebui.com/features/workspace/prompts/#variables) for usage.
 
 ## Building
 
