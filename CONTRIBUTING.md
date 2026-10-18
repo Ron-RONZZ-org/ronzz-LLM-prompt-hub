@@ -85,10 +85,12 @@ run of non-alphanumeric characters collapsed to `-`. For example,
 
 ### Placeholders
 
-Prompts can carry fill-in markers such as `{{TOPIC}}` or `{{article}}`. They
-are passed through by `build-prompts.py` as literal text for the user/end-client to replace. 
+Prompts can carry fill-in markers such as `{{article}}` or `{{article_topic}}`. They
+are passed through by `build-prompts.py` as literal text for the user/end-client to replace.
 
 See the [official OpenWeb UI guide](https://docs.openwebui.com/features/workspace/prompts/#variables) for usage.
+
+> `{{article topic}}` does not work. No spaces allowed in variables (upstream Open WebUI constraint).
 
 ## Building
 
