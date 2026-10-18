@@ -364,7 +364,7 @@ gh workflow list   # only in a repo with a GitHub mirror
 Rationale: every minute of heavy compute you run locally is a minute this machine is at OOM risk and unavailable for other sessions. GitHub runners are free for public repos and cheap for private ones — use them.
 
 ### Deployment
-offer to deploy to production server when CI all green,  again ASK for user approval
+offer to deploy to production server when CI all green. Reminder: ASK for user approval
 
 ### Pre-existing Issues
 - Evaluate by two dimensions:

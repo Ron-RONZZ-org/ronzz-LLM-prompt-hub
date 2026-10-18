@@ -1,6 +1,8 @@
 ## Task
 
-- Add a section on {{page}} about {{section topic}}
+- Add a section on {{page#section}}
+
+  - topic: {{section topic}}
 
 ## References
 
