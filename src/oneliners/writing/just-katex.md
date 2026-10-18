@@ -8,4 +8,4 @@ Respond uniquely with the requested katex content.
 
 - No word padding or extra explanation.
 
-## Text
+## Prompt

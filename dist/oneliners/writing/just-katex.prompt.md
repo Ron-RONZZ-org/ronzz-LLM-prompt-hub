@@ -95,4 +95,4 @@ c_1 = c_2 = \cdots = c_n = 0.
 
 - No word padding or extra explanation.
 
-## Text
+## Prompt
