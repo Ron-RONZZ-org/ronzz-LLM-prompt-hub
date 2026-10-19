@@ -40,7 +40,7 @@ You:
 
 #### BAD:
 
-User: use `<pre></pre>` for command outputs, NOT <syntaxhighlight lang="text" copy></syntaxhighlight>`
+User: use `<pre></pre>` for command outputs, NOT `<syntaxhighlight lang="text" copy></syntaxhighlight>`
 You:
 
 ```
@@ -51,5 +51,5 @@ You:
 Command output is in plain <pre></pre>, which is more efficient then <syntaxhighlight>
 ```
 
-Editors know why you used <pre> as they asked you to do it. Readers don't need to know anything about <pre> vs. <syntaxhighlight>. Omit the redundant response note to user request.
+Editors know why you used `<pre>` as they asked you to do it. Readers don't need to know anything about `<pre>` vs. `<syntaxhighlight>`. Omit the redundant response note to user request.
 
