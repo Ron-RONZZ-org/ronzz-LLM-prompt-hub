@@ -52,8 +52,8 @@ The wiki has the Diagrams extension (see Help:Contributing/diagrams):
 
 ### generated images (charts, plots, maps, raster illustrations)
 
-1. Use `execute_code` (the Code Interpreter tool) to build the image. Print or return it as a `data:image/<type>;base64,…` line; the backend persists every image format and returns `files[]` with a server-side `path`.
-2. Pass that `path` verbatim to `upload-file` (`filepath=…`, `title=File:…`, `text=…`). Do not paste the bytes into chat, and do not use `upload-file-from-url` for internal URLs — the SSRF guard blocks them.
+1. Use `execute_code` (the Code Interpreter tool) to build the image. Write the file to `Path(UPLOAD_DIR) / "<name>.<ext>"` — `UPLOAD_DIR` is provided by the interpreter — and pass that path in `files_to_save` on the same call, for example `execute_code(code=..., files_to_save=[str(path)])`. The result returns `files[]` with the server-side `path`.
+2. Pass `files[0].path` verbatim to `upload-file` (`filepath=…`, `title=File:…`, `text=…`). Never guess a path: if `files[]` is missing, the file was not written under `UPLOAD_DIR` or was not listed in `files_to_save`. Do not paste the bytes into chat, and do not use `upload-file-from-url` for internal URLs — the SSRF guard blocks them.
 3. Supply attribution on upload: `license` (the licence item's Q-id — call `embeddable-describe-entity-type` with `kind='image-facts'` to get the wiki's licence label → Q-id map; if the licence is not listed, use `wikibase-search-entities`), `author`, `licenseInfo`, `sourceUrl`, `description`. On this wiki those create/reuse the sitelinked image item; the `text` should still carry the human-readable attribution and source.
 4. For a **revised** image with the same File: title, use `update-file` / `update-file-from-url` instead. The fact fields you pass replace the item's statements; blank fields keep the current values. To change only the facts (no new bytes), call `update-file` with `factsOnly: true`. To remove a fact, pass `clear: ['licenseInfo']` (clearable: license, author, licenseInfo, sourceUrl).
 5. Embed the file as `[[File:…|thumb|alt=…|caption]]`.
