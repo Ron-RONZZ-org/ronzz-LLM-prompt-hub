@@ -7,3 +7,6 @@ gh workflow list   # only in a repo with a GitHub mirror
 | Runtime | What to do | |---------|-----------| | **<30s** (format check, single-package unit test, interactive debug) | Fine to run locally | | **>30s** (full build, integration tests, E2E, multi-package suite) | Use the mirror's CI (`gh workflow run <name> -f scope=...`) or **propose new CI for user approval** if none exists |
 
 Rationale: every minute of heavy compute you run locally is a minute this machine is at OOM risk and unavailable for other sessions. GitHub runners are free for public repos and cheap for private ones — use them.
+
+If project not on Github, request user permission for pushing a mirror to Github to make use of Github actions, do NOT silently resort to running on local machine.
+
