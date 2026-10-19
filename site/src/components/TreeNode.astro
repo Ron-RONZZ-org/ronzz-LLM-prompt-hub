@@ -17,7 +17,7 @@ const { node, base } = Astro.props;
     node.files.map((file) => (
       <li class="tree-file">
         <a href={`${base}/prompts/${file.slug}/`}>{file.title}</a>
-        {file.kind === 'model' && <span class="badge badge-sm">Model</span>}
+        {file.kind === 'model' && <span class="badge badge-sm">System</span>}
       </li>
     ))
   }

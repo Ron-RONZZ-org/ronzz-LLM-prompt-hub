@@ -59,7 +59,7 @@ const tree = buildTree(prompts.filter((p) => p.kind === 'prompt'));
           {models.map((model) => (
             <li class="tree-file">
               <a href={`${base}/prompts/${model.slug}/`}>{model.title}</a>
-              <span class="badge badge-sm">Model</span>
+              <span class="badge badge-sm">System</span>
             </li>
           ))}
         </ul>

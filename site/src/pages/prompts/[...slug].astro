@@ -46,7 +46,7 @@ const crumbs = prompt.groups.map((segment) => ({
   <header class="prompt-header">
     <div class="prompt-heading">
       <h1>{prompt.title}</h1>
-      {prompt.kind === 'model' && <span class="badge">Model</span>}
+      {prompt.kind === 'model' && <span class="badge">System</span>}
     </div>
     {prompt.description && <p class="lede">{prompt.description}</p>}
     {

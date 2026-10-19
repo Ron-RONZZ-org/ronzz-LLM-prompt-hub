@@ -4,6 +4,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const fullTitle = title
   ? `${title} — ronzz.ORG prompt store`
   : 'ronzz.ORG prompt store';
+import SearchBox from '../components/SearchBox.astro';
 import '../styles/global.css';
 ---
 
@@ -22,11 +23,14 @@ import '../styles/global.css';
         <img src={`${base}/favicon.svg`} alt="" width="24" height="24" />
         <span>Ronzz.org central prompt store</span>
       </a>
-      <nav class="site-nav">
-        <a href={`${base}/themes/`}>Browse by theme</a>
-        <a href={`${base}/userguide/`}>User guide</a>
-        <a href="https://llm.ronzz.org" rel="noopener">Veramiko ↗</a>
-      </nav>
+      <div class="site-tools">
+        <nav class="site-nav">
+          <a href={`${base}/themes/`}>Browse by theme</a>
+          <a href={`${base}/userguide/`}>User guide</a>
+          <a href="https://llm.ronzz.org" rel="noopener">Veramiko ↗</a>
+        </nav>
+        <SearchBox placeholder="Search…" compact={true} />
+      </div>
     </header>
 
     <main class="container">
