@@ -70,4 +70,4 @@ Raise an issue on the repo. If you are part of the Ronzz.ORG community, you can 
 
 ## Contributing
 
-- Want to add or improve a prompt? See **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+- Want to add or improve a prompt? See **[CONTRIBUTING.md](https://forgejo.ronzz.org/ronzz-org/ronzz-LLM-prompt-hub/src/branch/main/CONTRIBUTING.md)**.

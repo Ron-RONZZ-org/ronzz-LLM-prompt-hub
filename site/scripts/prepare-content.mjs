@@ -33,8 +33,9 @@ const DIST = join(ROOT, 'dist');
 const DATA = join(SITE, 'src', 'data');
 const PUBLIC = join(SITE, 'public');
 
-// Must match `base` in astro.config.mjs and the repo's GitHub URL.
-const BASE = '/ronzz-LLM-prompt-hub';
+// Must match `base` in astro.config.mjs. The store is served from the domain
+// root (https://prompts.ronzz.org/), so site-internal links start at '/'.
+const BASE = '';
 const REPO_BLOB = 'https://github.com/Ron-RONZZ-org/ronzz-LLM-prompt-hub/blob/main';
 
 // Generated header: one or more leading HTML comments + surrounding whitespace.
