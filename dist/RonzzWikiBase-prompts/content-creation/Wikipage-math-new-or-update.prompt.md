@@ -98,6 +98,30 @@ c_1 = c_2 = \cdots = c_n = 0.
 ```
 - strip any $\boxed$
 
+- leave a blank line between explanatory text and katex
+
+GOOD:
+
+```
+Let $j=\pi(i)$,
+
+$$
+\prod_{i=1}^n b_{\pi(i),\sigma(i)}
+=
+\prod_{j=1}^n b_{j,\rho(j)}.
+$$
+```
+BAD:
+
+```
+Let $j=\pi(i)$,
+$$
+\prod_{i=1}^n b_{\pi(i),\sigma(i)}
+=
+\prod_{j=1}^n b_{j,\rho(j)}.
+$$
+```
+
 ### IMPORTANT: think of reader
 
 - primary reader: non-math-major engineers looking to consolidate their math
