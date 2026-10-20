@@ -14,4 +14,7 @@ it to your task, and paste it into your AI assistant.
   cite, rewrite in my style, draft a wiki page, and many more.
 - **Specialised AI system prompts**, such as *Veramiko Science* for
   research and *RonzzWikiCowriter* for the ronzz wiki.
-- A **recommended shared configuration** for ronzz.ORG coding agents.
+- A **recommended shared configuration** for ronzz.ORG coding agents:
+  [`dist/opencode/`](dist/opencode/) is a complete opencode config directory
+  (system instructions, 15 agents, 55 slash commands, MCP wiring) that you
+  symlink as `~/.config/opencode` — see the [user guide](USERGUIDE.md#opencode-recommended-desktop-coding-client).
