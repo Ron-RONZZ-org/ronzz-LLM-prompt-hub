@@ -43,9 +43,14 @@
       // Wikibase (wikibase.ronzz.org) read/write access via bot password
       // (SeedBot@MCP). Config + credentials live outside the repo at
       // ~/.config/mediawiki-mcp/ronzz-wikibase.json.
-      // https://github.com/ProfessionalWiki/MediaWiki-MCP-Server
+      // Fork of ProfessionalWiki/MediaWiki-MCP-Server with the
+      // EmbeddableContent + WikibaseCitation extension packs (the upstream
+      // package lacks the embeddable-*/wikibase-* tools):
+      // https://github.com/Ron-RONZZ-org/mediawiki-mcp-server
+      // Clone at ~/shared-ronzz-nextcloud/docs/IT/mediawiki-mcp-server and
+      // `npm run build` there after upstream merges.
       "type": "local",
-      "command": ["npx", "-y", "@professional-wiki/mediawiki-mcp-server@latest"],
+      "command": ["node", "{env:HOME}/shared-ronzz-nextcloud/docs/IT/mediawiki-mcp-server/dist/index.js"],
       "environment": {
         "CONFIG": "{env:HOME}/.config/mediawiki-mcp/ronzz-wikibase.json"
       },
