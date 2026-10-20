@@ -1,18 +1,16 @@
 /**
  * mcp-daemon — Start shared MCP daemons for stateless servers.
  *
- * Stateless MCP servers (brave-search, context7) don't need per-session
- * instances — they serve all sessions equally. This plugin starts them
- * as shared HTTP daemons when opencode starts, and registers cleanup
- * on server shutdown.
+ * Stateless MCP servers (brave-search) don't need per-session instances — they
+ * serve all sessions equally. This plugin starts them as shared HTTP daemons
+ * when opencode starts, and registers cleanup on server shutdown.
  *
- * Why this works: brave-search supports `--transport http` natively.
- * Context7 connects directly to `https://mcp.context7.com/mcp` as a
- * remote server via config (no daemon needed).
+ * Why this works: brave-search supports `--transport http` natively. Context7
+ * needs no daemon — its config points at context7-mcp-proxy.mjs, which connects
+ * to https://mcp.context7.com/mcp.
  *
- * Per-session servers like serena are NOT started here — they handle
- * per-project state (workspace, LSP) and need their own instance.
- * Those are cleaned by the cron job at ~/.config/opencode/cleanup-mcp.sh
+ * API keys are read from files under ~/.local/share/opencode/.secrets/ — never
+ * from this config or from the environment.
  */
 import { type Plugin } from "@opencode-ai/plugin"
 import { spawn } from "node:child_process"
@@ -25,6 +23,12 @@ import { join } from "node:path"
  * Resolved at init via os.homedir() — portable across Unix machines.
  */
 const BRAVE_SEARCH_BIN = join(homedir(), ".npm-global", "bin", "brave-search-mcp-server")
+
+/**
+ * API keys live outside every repository, next to opencode's own data.
+ * See src/fundamentals/credential-policy.md.
+ */
+const SECRETS_DIR = join(homedir(), ".local", "share", "opencode", ".secrets")
 
 const DAEMONS: {
 	name: string
@@ -43,7 +47,7 @@ const DAEMONS: {
 			"--host", "127.0.0.1",
 		],
 		env: {
-			BRAVE_API_KEY_FILE: join(homedir(), ".config", "opencode", ".secrets", "brave-api-key"),
+			BRAVE_API_KEY_FILE: join(SECRETS_DIR, "brave-api-key"),
 		},
 	},
 ]

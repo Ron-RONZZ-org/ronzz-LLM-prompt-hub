@@ -26,14 +26,25 @@ If you use [Veramiko](https://wikibase.ronzz.org/wiki/RonzzInt:Veramiko/101), pr
 ## Opencode (recommended desktop coding client)
 
 `dist/opencode/` **is** a complete opencode config directory (`AGENTS.md`,
-`agents/`, `opencode.jsonc`, `plugins/`). Link your global config to it — every
+`agents/`, `commands/`, `opencode.jsonc`, `plugins/`). Link your global config to it — every
 `git pull` of this repo updates your agent config:
 
 ```bash
 # one-time setup — everyone at ronzz.ORG is on Linux
 git clone https://forgejo.ronzz.org/ronzz-org/ronzz-LLM-prompt-hub.git ~/ronzz-LLM-prompt-hub
 ln -s ~/ronzz-LLM-prompt-hub/dist/opencode ~/.config/opencode
+
+# plugin dependencies (opencode-notify, @opencode-ai/plugin) + the notify patch
+cd ~/ronzz-LLM-prompt-hub/dist/opencode && npm install
+
+# API keys: outside every repository, never inside the config tree
+mkdir -p ~/.local/share/opencode/.secrets && chmod 700 ~/.local/share/opencode/.secrets
+# then place brave-api-key and context7-api-key there (mode 600)
 ```
+
+A plain `python3 build-prompts.py` never deletes anything in `dist/opencode/`:
+`node_modules/` and the keys are runtime state, not build output. If a source
+file is removed, the build warns about the leftover and `--prune` deletes it.
 
 For the command prompts, see [Generic client](#generic-client).
 

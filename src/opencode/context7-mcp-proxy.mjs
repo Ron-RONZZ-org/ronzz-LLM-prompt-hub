@@ -17,7 +17,7 @@
  *     "type": "local",
  *     "command": ["node", "{env:HOME}/.config/opencode/context7-mcp-proxy.mjs"],
  *     "environment": {
- *       "CONTEXT7_API_KEY_FILE": "{env:HOME}/.config/opencode/.secrets/context7-api-key"
+ *       "CONTEXT7_API_KEY_FILE": "{env:HOME}/.local/share/opencode/.secrets/context7-api-key"
  *     }
  *   }
  */

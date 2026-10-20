@@ -12,7 +12,7 @@ Just want to *use* the prompts? See **[USERGUIDE.md](USERGUIDE.md)** instead.
 | `src/fundamentals/coding/` | Software-development snippets (git, worktree, forge ops, testing, …) — reusable by any LLM code client, not just opencode. |
 | `src/<scenario>-prompts/` | Scenario prompts (`Help-Contributing.md`, system prompts, …). The files people actually work with. |
 | `src/system-prompt/` | **System prompts** for Open WebUI custom Models. Each file's YAML frontmatter declares the model (`name`, `description`, `tags`, `base_model`, `tool_ids`); the body is the system prompt. |
-| `src/opencode/` | **Sources for the opencode agent config**: `AGENTS.md`, `agents/copilot.md`, `opencode.jsonc`, plugins, proxy. Built (with the same `{{include:}}` mechanism) into `dist/opencode/`. |
+| `src/opencode/` | **Sources for the opencode agent config**: `AGENTS.md`, `agents/` (primary + subagent definitions), `commands/` (slash commands), `opencode.jsonc`, plugins, proxy, `docs/`, and the `AGENTS-gh-cli.md` reference. Built (with the same `{{include:}}` mechanism) into `dist/opencode/`. |
 | `dist/` | **Generated** flat prompts (`*.prompt.md`) **and** the generated opencode config tree (`opencode/`). Never hand-edit — rebuilt with `build-prompts.py`. |
 | `build-prompts.py` | The build script (pure stdlib Python, no dependencies). |
 | `sync-owui.py` | Pushes `dist/` to Open WebUI — see [Publishing](#publishing-open-webui) below. |
