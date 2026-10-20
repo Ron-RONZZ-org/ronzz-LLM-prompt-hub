@@ -63,6 +63,8 @@ CONFIG_SRC = SRC / "opencode"
 # report them. Extend this set when a new runtime artifact appears.
 CONFIG_RUNTIME_ENTRIES = {
     "node_modules", ".secrets", "package-lock.json", "bun.lock", ".DS_Store",
+    # opencode writes its own .gitignore into the config directory on startup
+    ".gitignore",
 }
 
 # {{include:path/without/extension}} — expanded
@@ -534,6 +536,8 @@ def self_test() -> int:
            ".secrets recognised as runtime state")
     expect(is_config_runtime_path(Path("package-lock.json")),
            "lockfile recognised as runtime state")
+    expect(is_config_runtime_path(Path(".gitignore")),
+           "opencode's own .gitignore recognised as runtime state")
     expect(not is_config_runtime_path(Path("agents/copilot.md")),
            "built output not mistaken for runtime state")
 
