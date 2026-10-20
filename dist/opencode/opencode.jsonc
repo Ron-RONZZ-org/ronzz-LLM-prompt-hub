@@ -95,7 +95,8 @@
   },
 
   "permission": {
-    // worktreeCreate spawns fresh opencode sessions — primary agents only
+    // worktreeCreate spawns fresh opencode sessions — gitmaster only
+    // (agents/gitmaster.md overrides this with worktreeCreate: allow)
     "worktreeCreate": "deny",
     "worktreeNew": "allow",
     "worktreeDelete": "allow",
@@ -172,5 +173,15 @@
   "model": "deepseek/deepseek-v4-flash",
   // Lightweight tasks (title generation, etc.) — use opencode's free model
   // instead of auto-deriving a small model from the main provider's pool.
-  "small_model": "opencode/deepseek-v4-flash-free"
+  "small_model": "opencode/deepseek-v4-flash-free",
+  "agent": {
+    // All other agents inherit the global "model" above; only exceptions are
+    // listed here.
+    "githubber": {
+      "model": "github-copilot/claude-haiku-4.5"
+    },
+    "huggingfacer": {
+      "model": "opencode/deepseek-v4-flash-free"
+    }
+  }
 }
