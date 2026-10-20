@@ -57,6 +57,14 @@ DIST = ROOT / "dist"
 # everything else (jsonc, ts, mjs, json, patches) is copied verbatim.
 CONFIG_SRC = SRC / "opencode"
 
+# dist/opencode/ is a LIVE config directory once symlinked as ~/.config/opencode:
+# users install node_modules there and keep API keys in .secrets/. Those are
+# runtime state, not build output — the orphan pruner must never delete or
+# report them. Extend this set when a new runtime artifact appears.
+CONFIG_RUNTIME_ENTRIES = {
+    "node_modules", ".secrets", "package-lock.json", "bun.lock", ".DS_Store",
+}
+
 # {{include:path/without/extension}} — expanded
 INCLUDE_DIRECTIVE_RE = re.compile(r"\{\{include:([^{}]*)\}\}")
 # {{!include:path/without/extension}} — literal text (escape hatch, rendered as-is)
@@ -398,10 +406,44 @@ def output_for_config(source: Path) -> Path:
     return DIST / source.relative_to(SRC)
 
 
+def is_config_runtime_path(rel: Path) -> bool:
+    """True when `rel` (relative to dist/opencode/) is runtime state, not output."""
+    return bool(rel.parts) and rel.parts[0] in CONFIG_RUNTIME_ENTRIES
+
+
+def config_orphan_candidates(out_dir: Path) -> set[Path]:
+    """Files under `out_dir` that were not built — runtime state excluded."""
+    if not out_dir.exists():
+        return set()
+    return {
+        p for p in out_dir.rglob("*")
+        if p.is_file() and not is_config_runtime_path(p.relative_to(out_dir))
+    }
+
+
+def remove_empty_parents(path: Path, stop: Path) -> None:
+    """Remove now-empty directories from `path.parent` up to (not including) `stop`."""
+    parent = path.parent
+    while parent != stop and stop in parent.parents:
+        try:
+            parent.rmdir()  # only succeeds when empty
+        except OSError:
+            return
+        parent = parent.parent
+
+
 def build(sources: list[Path], config_sources: list[Path],
-          only: str | None = None) -> tuple[list[Path], list[Path]]:
+          only: str | None = None,
+          prune: bool = False) -> tuple[list[Path], list[Path], list[Path]]:
+    """Build into dist/.
+
+    Returns (written, removed, orphans_left). Deletion is opt-in (`prune`):
+    without it every orphan is reported in `orphans_left` and left untouched,
+    so no user file can disappear silently.
+    """
     written: list[Path] = []
     removed: list[Path] = []
+    orphans_left: list[Path] = []
     built: dict[Path, str] = {}
     for source in sources:
         if only and only not in str(source.relative_to(ROOT)):
@@ -422,30 +464,22 @@ def build(sources: list[Path], config_sources: list[Path],
         existing = set(DIST.rglob("*.prompt.md")) if DIST.exists() else set()
         expected = {output_for_prompt(s) for s in built if s in sources}
         for orphan in sorted(existing - expected):
+            if not prune:
+                orphans_left.append(orphan)
+                continue
             orphan.unlink()
             removed.append(orphan)
-            parent = orphan.parent
-            while parent != DIST:
-                try:
-                    parent.rmdir()  # only succeeds when empty
-                except OSError:
-                    break
-                parent = parent.parent
+            remove_empty_parents(orphan, DIST)
         config_out = DIST / CONFIG_SRC.relative_to(SRC)
-        config_existing = (set(config_out.rglob("*")) if config_out.exists() else set())
-        config_existing = {p for p in config_existing if p.is_file()}
         config_expected = {output_for_config(s) for s in built if s in config_sources}
-        for orphan in sorted(config_existing - config_expected):
+        for orphan in sorted(config_orphan_candidates(config_out) - config_expected):
+            if not prune:
+                orphans_left.append(orphan)
+                continue
             orphan.unlink()
             removed.append(orphan)
-            parent = orphan.parent
-            while parent != config_out:
-                try:
-                    parent.rmdir()  # only succeeds when empty
-                except OSError:
-                    break
-                parent = parent.parent
-    return written, removed
+            remove_empty_parents(orphan, config_out)
+    return written, removed, orphans_left
 
 
 def check(sources: list[Path], config_sources: list[Path],
@@ -473,12 +507,103 @@ def check(sources: list[Path], config_sources: list[Path],
         for orphan in sorted(existing - expected):
             problems.append(f"orphan: {fmt_path(orphan)} (source removed?)")
         config_out = DIST / CONFIG_SRC.relative_to(SRC)
-        config_existing = (set(config_out.rglob("*")) if config_out.exists() else set())
-        config_existing = {p for p in config_existing if p.is_file()}
         config_expected = {output_for_config(s) for s in built if s in config_sources}
-        for orphan in sorted(config_existing - config_expected):
+        for orphan in sorted(config_orphan_candidates(config_out) - config_expected):
             problems.append(f"orphan: {fmt_path(orphan)} (source removed?)")
     return problems
+
+
+def self_test() -> int:
+    """Exercise the orphan-pruning policy against a throwaway tree and the real dist/.
+
+    Guards the invariant that matters most: a symlinked ~/.config/opencode keeps
+    node_modules/ and .secrets/ inside dist/opencode/, and no build may eat them.
+    """
+    import tempfile
+
+    failures: list[str] = []
+
+    def expect(condition: bool, label: str) -> None:
+        if not condition:
+            failures.append(label)
+
+    # 1. Path classification.
+    expect(is_config_runtime_path(Path("node_modules/pkg/index.js")),
+           "nested node_modules recognised as runtime state")
+    expect(is_config_runtime_path(Path(".secrets/key")),
+           ".secrets recognised as runtime state")
+    expect(is_config_runtime_path(Path("package-lock.json")),
+           "lockfile recognised as runtime state")
+    expect(not is_config_runtime_path(Path("agents/copilot.md")),
+           "built output not mistaken for runtime state")
+
+    # 2. Pruning on a throwaway tree: only orphans are candidates, and they go
+    #    only when the caller prunes.
+    with tempfile.TemporaryDirectory() as tmp:
+        out = Path(tmp) / "opencode"
+        (out / "node_modules" / "pkg").mkdir(parents=True)
+        (out / "node_modules" / "pkg" / "index.js").write_text("x")
+        (out / ".secrets").mkdir()
+        (out / ".secrets" / "key").write_text("k")
+        (out / "package-lock.json").write_text("{}")
+        (out / "agents").mkdir()
+        (out / "agents" / "kept.md").write_text("kept")
+        (out / "stale.md").write_text("stale")
+        (out / "olddir").mkdir()
+        (out / "olddir" / "orphan.md").write_text("orphan")
+
+        expected = {out / "agents" / "kept.md"}
+        candidates = sorted(config_orphan_candidates(out) - expected)
+        expect(candidates == [out / "olddir" / "orphan.md", out / "stale.md"],
+               f"candidates are exactly the built orphans (got {candidates})")
+
+        for orphan in candidates:
+            orphan.unlink()
+            remove_empty_parents(orphan, out)
+        expect(not (out / "stale.md").exists(), "prune removes the orphan")
+        expect(not (out / "olddir").exists(), "prune removes the emptied directory")
+        expect((out / "node_modules" / "pkg" / "index.js").exists(),
+               "prune keeps node_modules")
+        expect((out / ".secrets" / "key").exists(), "prune keeps .secrets")
+        expect((out / "package-lock.json").exists(), "prune keeps the lockfile")
+        expect((out / "agents" / "kept.md").exists(), "prune keeps expected output")
+
+    # 3. Integration: a real non-pruning build neither deletes nor reports the
+    #    runtime probes it finds in dist/opencode/.
+    config_out = DIST / CONFIG_SRC.relative_to(SRC)
+    probes = [config_out / "node_modules" / ".self-test" / "probe.js",
+              config_out / ".secrets" / ".self-test-key"]
+    try:
+        for probe in probes:
+            probe.parent.mkdir(parents=True, exist_ok=True)
+            probe.write_text("probe")
+        _, removed, orphans_left = build(collect_prompt_sources(),
+                                         collect_config_sources(), prune=False)
+        expect(all(probe.exists() for probe in probes),
+               "build left the runtime probes in place")
+        expect(not any(p in probes for p in removed), "build removed no probe")
+        expect(not any(p in probes for p in orphans_left),
+               "build reported no runtime probe as an orphan")
+    finally:
+        for probe in probes:
+            probe.unlink(missing_ok=True)
+        # rmdir (never rmtree) from the deepest level up, so a real .secrets/
+        # directory can never be lost and a pre-existing node_modules stays.
+        for parent in [config_out / "node_modules" / ".self-test",
+                       config_out / "node_modules",
+                       config_out / ".secrets"]:
+            try:
+                parent.rmdir()
+            except OSError:
+                pass  # not empty — it holds the user's own files
+
+    if failures:
+        print("self-test FAILED:", file=sys.stderr)
+        for failure in failures:
+            print(f"  - {failure}", file=sys.stderr)
+        return 1
+    print("self-test OK — runtime state is never pruned.")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -491,15 +616,24 @@ def main(argv: list[str] | None = None) -> int:
             "Examples:\n"
             "  python3 build-prompts.py                rebuild all prompts\n"
             "  python3 build-prompts.py --check        verify dist/ is up to date\n"
+            "  python3 build-prompts.py --prune        also delete orphaned dist/ files\n"
+            "  python3 build-prompts.py --self-test    check the pruning policy\n"
             "  python3 build-prompts.py -f Help        rebuild only matching files\n"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--check", action="store_true",
                         help="verify dist/ is up to date; exit 1 if not")
+    parser.add_argument("--prune", action="store_true",
+                        help="delete dist/ files whose source is gone (default: warn only)")
+    parser.add_argument("--self-test", action="store_true",
+                        help="verify that runtime state in dist/opencode/ is never pruned")
     parser.add_argument("-f", "--file", metavar="SUBSTR", default=None,
                         help="only build source files whose relative path contains SUBSTR")
     args = parser.parse_args(argv)
+
+    if args.self_test:
+        return self_test()
 
     try:
         sources = collect_prompt_sources()
@@ -513,12 +647,19 @@ def main(argv: list[str] | None = None) -> int:
                 return 1
             print("dist/ is up to date.")
             return 0
-        written, removed = build(sources, config_sources, only=args.file)
+        written, removed, orphans_left = build(sources, config_sources,
+                                               only=args.file, prune=args.prune)
         for w in written:
             print(f"wrote {fmt_path(w)}")
         for r in removed:
             print(f"removed {fmt_path(r)}")
-        if not written and not removed:
+        if orphans_left:
+            print("warning: orphaned files left in dist/ (source removed?):",
+                  file=sys.stderr)
+            for orphan in orphans_left:
+                print(f"  - {fmt_path(orphan)}  (run with --prune to delete)",
+                      file=sys.stderr)
+        if not written and not removed and not orphans_left:
             print("nothing to do — dist/ is up to date.")
         return 0
     except BuildError as e:

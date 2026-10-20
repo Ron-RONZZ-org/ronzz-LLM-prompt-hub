@@ -95,14 +95,23 @@ See the [official OpenWeb UI guide](https://docs.openwebui.com/features/workspac
 ## Building
 
 ```bash
-python3 build-prompts.py            # rebuild all prompts into dist/
+python3 build-prompts.py            # rebuild all prompts into dist/ (never deletes)
 python3 build-prompts.py --check    # exit 1 if dist/ is stale (CI / pre-commit)
+python3 build-prompts.py --prune    # also delete dist/ files whose source is gone
+python3 build-prompts.py --self-test  # verify the pruning policy
 python3 build-prompts.py -f some-prompt.md    # rebuild only matching source files
 ```
 
 After editing any source `.md` file, **rebuild** so `dist/` reflects the change.
 Every generated prompt carries a header saying so; `--check` is the enforcement
 tool.
+
+A plain build **never deletes** anything: files in `dist/` with no matching
+source are reported as a warning and left in place; pass `--prune` to remove
+them. `dist/opencode/` is a live config directory once symlinked as
+`~/.config/opencode` — `node_modules/`, `.secrets/` and package lockfiles live
+there and are never treated as build output. `--self-test` asserts that
+invariant (run it after touching the pruner).
 
 The build **auto-formats** markdown before expansion, so contributors don't have
 to: trailing whitespace is stripped, blank-line runs collapse to a single blank
