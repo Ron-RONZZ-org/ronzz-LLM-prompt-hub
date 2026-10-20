@@ -14,8 +14,17 @@
 - - escape literal HTML/double brackets with `~`, the PlantUML escape character.
   - e.g., write `~<b>Hello World~</b>` to render literal `<b>Hello World</b>`, `~[[Wiki Home]]` to render literal `[[Wiki Home]]`
 - comments begin with `\n'`: always start on a newline, no trailing comments
-  - good   ```   'Parsoid   participant "Parsoid Serializer" as Serializer   ```
-  - bad: cause rendertime error   ```   participant "Parsoid Serializer" as Serializer 'parsoid   ```
+  - good
+
+    ```
+    'Parsoid
+    participant "Parsoid Serializer" as Serializer
+    ```
+  - bad: cause rendertime error
+
+    ```
+    participant "Parsoid Serializer" as Serializer 'parsoid
+    ```
 
 - example
 
