@@ -127,6 +127,8 @@ Rationale: why this decision was made (if applicable).
 ### Forge operations
 {{include:forge-posture}} {{include:coding/forge-ops}}
 
+{{include:coding/github-cli}}
+
 ### Interacting with External APIs
 {{include:coding/external-apis}}
 
