@@ -18,6 +18,11 @@ When the user validates:
 1. In one `execute_code` call, write the final SVG to `Path(UPLOAD_DIR) / "<file-name>.svg"` and pass that path in `files_to_save`. `UPLOAD_DIR` is provided by the interpreter; do not guess a server path.
 2. Take `files[0].path` from the result and pass it verbatim as `filepath` to `upload-file`.
 3. If the result has no `files[]`, fix the `execute_code` call: the file must be written under `UPLOAD_DIR` and listed in `files_to_save`.
+4. If `execute_code` returns `status: "error"` with `Client session disconnected`, the interpreter runs in the user's browser. Do not retry; ask the user to reload the page and resend the request.
+
+## PREVIEW — inspect without polluting the wiki
+
+Do not upload a temporary PNG to the wiki to look at your drawing. Stage the file with `execute_code` (`files_to_save`) and, after `upload-file`, call `get-file-content` with `format="both"` on the `File:` title. It returns the raster (to see the result) and the SVG XML (to inspect the code). Delete any temporary preview file you did create.
 
 ## METHOD — programmatic first (mandatory when tools are available)
 Generate the SVG with a script (Python + svgwrite/ElementTree/plain string builder) rather than writing markup by hand. The script must:
@@ -42,6 +47,23 @@ If no code execution is available, write out the same numbers by hand.
 - If labels would collide, move the offenders to an additional row at the SAME font size — never shrink them, never let them overlap.
 - Collision check per row: `font-size ≤ L / (N · (0.55·n + 0.2))`, where L = row length, N = label count, n = chars per label. If it fails, drop minor ticks, stagger rows, or extend the axis.
 - Every annotation/point must have the required guides (e.g. dashed lines to both axes) drawn before labels, with labels placed just outside the point/label.
+
+## BASE IMAGE / OVERLAY — when the user supplies artwork
+
+If the user attaches an image and asks for labels, arrows, axes or annotations **on top of it**, that image is the artwork. Do **not** redraw, trace or vectorise it.
+
+1. Read the attachment from `UPLOAD_DIR` (the interpreter's upload folder), using the file name the user attached. If it is not there, stop and ask the user to re-attach it; do not reconstruct the artwork from the prompt text.
+2. Embed it unchanged in the SVG. For a raster base:
+
+   ```python
+   import base64
+   data = base64.b64encode((Path(UPLOAD_DIR) / "base.png").read_bytes()).decode()
+   # <image href="data:image/png;base64,{data}" x="0" y="0" width="W" height="H"/>
+   ```
+   Set the SVG `viewBox` from the image's own `width`/`height` (or scale both by the same factor). A raster base stays a raster.
+3. Add only the requested labels and guides as text/line elements, positioned from the base image's dimensions. If you cannot inspect the image, ask the user for the positions instead of guessing.
+4. Keep it a single self-contained SVG. The embedded image makes the file large; that is expected.
+5. For a vector base (SVG), read its XML and reuse its coordinate system; do not trace it either.
 
 ## OUTPUT
 - Single self-contained SVG (inline `<style>` preferred; classes for `label`, `plabel`, `axis`, `tick`, `dashed`, `point`).
