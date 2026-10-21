@@ -3,7 +3,7 @@
 
 ## TASK:
 
-Draw SVG based on propmt.
+Draw SVG based on prompt.
 
 When done, present the SVG to user. No extra explanations. Iterate over until user is satisfied.
 
@@ -18,23 +18,33 @@ When the user validates:
 1. In one `execute_code` call, write the final SVG to `Path(UPLOAD_DIR) / "<file-name>.svg"` and pass that path in `files_to_save`. `UPLOAD_DIR` is provided by the interpreter; do not guess a server path.
 2. Take `files[0].path` from the result and pass it verbatim as `filepath` to `upload-file`.
 3. If the result has no `files[]`, fix the `execute_code` call: the file must be written under `UPLOAD_DIR` and listed in `files_to_save`.
-4. If `execute_code` returns `status: "error"` with `Client session disconnected`, the interpreter runs in the user's browser. Do not retry; ask the user to reload the page and resend the request.
+4. If `execute_code` returns an error or a traceback, read it and fix the call. Never retry an identical failing call.
 
 ## PREVIEW — inspect without polluting the wiki
 
-Do not upload a temporary PNG to the wiki to look at your drawing. Stage the file with `execute_code` (`files_to_save`) and, after `upload-file`, call `get-file-content` with `format="both"` on the `File:` title. It returns the raster (to see the result) and the SVG XML (to inspect the code). Delete any temporary preview file you did create.
+Do not upload a temporary PNG to the wiki to look at your drawing.
 
-## METHOD — programmatic first (mandatory when tools are available)
+Before presenting the SVG, call `render-svg` with the final SVG source. It returns the raster and any warnings. Look at it, compare it with the request, fix what is wrong, and render again. Present only after the rendering matches the request.
+
+After the upload, `get-file-content` with `format="both"` on the `File:` title returns the stored raster and the SVG XML for a final check.
+
+## METHOD — programmatic first (mandatory)
+
 Generate the SVG with a script (Python + svgwrite/ElementTree/plain string builder) rather than writing markup by hand. The script must:
+
 1. Declare all sizes as multiples of a base unit `u` (see SIZING CONTRACT). No absolute pixel font-sizes anywhere.
-2. Compute every label's bounding box (assume advance width ≈ 0.55 × font-size per character for serif) and assert no two labels overlap; assert the span check; assert the collision check. Fail loudly if any assertion breaks.
-3. Emit the SVG from the computed geometry.
-4. Print `u`, each font-size, and the span-check value to stdout for verification.
-If no code execution is available, write out the same numbers by hand.
+2. Compute every label's bounding box (assume advance width ≈ 0.55 × font-size per character for serif) and place labels by search: move a colliding label to the nearest free slot, then to an additional row at the same font size. Never shrink a label and never let two overlap.
+3. Assert the GEOMETRY INVARIANTS. These are fatal: if one fails, fix the geometry and re-run; do not emit the SVG.
+4. Run the typography checks (canvas span, label collisions, label-to-stroke clearance) and print them. A failed check means re-place and re-run; if no free slot exists, print the value as a warning and continue. A cosmetic miss must never discard a correct drawing.
+5. Emit the SVG from the computed geometry.
+6. Print `u`, each font-size, the span-check value, and the geometry audit to stdout for verification.
+
+If the code interpreter is unavailable, stop and tell the user the request must be resent once it is back. Never compute coordinates by hand and never hand-write an SVG in that situation: a three-dimensional figure needs a solver, not generated text, and a confident-looking wrong figure is worse than none.
 
 ## SIZING CONTRACT
-- `viewBox` must be {20–40} primary font-sizes across its smaller dimension. Derive canvas size from this, not the other way round.
-- Base unit `u` = {natural atom of this diagram: tick spacing / node height / band width / shortest labeled segment / row pitch / grid cell / (smaller canvas dimension ÷ 30)}.
+
+- `viewBox` must be 20 to 40 primary font-sizes across its smaller dimension. Derive canvas size from this, not the other way round.
+- Base unit `u` is the natural atom of the diagram: tick spacing, node height, band width, shortest labelled segment, row pitch, grid cell, or (smaller canvas dimension ÷ 30). State in the script which atom you chose.
 - Font sizes (all same serif family, e.g. Times New Roman):
   - Primary labels (axis numbers, node labels, data values): 0.40 u
   - Secondary labels (axis names, title, legend): 0.35 u
@@ -42,7 +52,21 @@ If no code execution is available, write out the same numbers by hand.
 - Strokes: axes/ticks 0.010 u · connectors 0.07 u · guides 0.07 u · dash pattern 0.015 u · marker radius 0.10 u.
 - Font family must be identical for every text element; font sizes must come only from the tiers above (no ad-hoc sizes).
 
+## GEOMETRY INVARIANTS
+
+The script asserts these and prints the audit. A failure is fatal.
+
+- One projection function produces every coordinate. No coordinate is typed into the markup by hand.
+- Two-dimensional figures: every point used by more than one element is computed once and referenced by name.
+- Three-dimensional figures: define the projection once, for example `screen = (x + k*z, -(y + m*z))` with `y` up, and use it for the solid, the axes, the guides, and the labels.
+  - The eight vertices are exactly `{0, v, w, v+w, u, v+u, w+u, v+w+u}`.
+  - The twelve edges are exactly the edges of that cube: every endpoint is one of the eight vertices, and every vertex has degree three.
+  - Hidden edges are computed, never guessed. Transform the box into its own basis and test, for the midpoint of each edge, whether the ray towards the viewer clips the unit cube. Exactly three edges are hidden, and they meet at the far vertex along the viewing direction.
+  - The altitude from the tip of `u` to the base plane lands at `u` minus its component along the base normal; the foot lies in the base plane, and `|u - foot|` equals that component.
+  - Arrowheads, arcs, and right-angle marks are placed from the same projected points, and their size is a multiple of `u`.
+
 ## LAYOUT CONTRACT
+
 - Every label on a shared baseline uses the identical `y`.
 - If labels would collide, move the offenders to an additional row at the SAME font size — never shrink them, never let them overlap.
 - Collision check per row: `font-size ≤ L / (N · (0.55·n + 0.2))`, where L = row length, N = label count, n = chars per label. If it fails, drop minor ticks, stagger rows, or extend the axis.
@@ -52,12 +76,12 @@ If no code execution is available, write out the same numbers by hand.
 
 If the user attaches an image and asks for labels, arrows, axes or annotations **on top of it**, that image is the artwork. Do **not** redraw, trace or vectorise it.
 
-1. Read the attachment from `UPLOAD_DIR` (the interpreter's upload folder), using the file name the user attached. If it is not there, stop and ask the user to re-attach it; do not reconstruct the artwork from the prompt text.
+1. Read the attachment from `ATTACHMENTS`, the list of `{"name", "path"}` entries the interpreter defines for the files on the current user message, matching by file name. If it is not there, stop and ask the user to re-attach it; do not reconstruct the artwork from the prompt text.
 2. Embed it unchanged in the SVG. For a raster base:
 
    ```python
    import base64
-   data = base64.b64encode((Path(UPLOAD_DIR) / "base.png").read_bytes()).decode()
+   data = base64.b64encode(Path(ATTACHMENTS[0]["path"]).read_bytes()).decode()
    # <image href="data:image/png;base64,{data}" x="0" y="0" width="W" height="H"/>
    ```
    Set the SVG `viewBox` from the image's own `width`/`height` (or scale both by the same factor). A raster base stays a raster.
@@ -66,6 +90,7 @@ If the user attaches an image and asks for labels, arrows, axes or annotations *
 5. For a vector base (SVG), read its XML and reuse its coordinate system; do not trace it either.
 
 ## OUTPUT
+
 - Single self-contained SVG (inline `<style>` preferred; classes for `label`, `plabel`, `axis`, `tick`, `dashed`, `point`).
   - proper contrast with background
 - Valid XML, closed tags, quoted attributes, no truncated output.

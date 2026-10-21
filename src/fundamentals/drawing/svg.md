@@ -1,14 +1,20 @@
-## METHOD — programmatic first (mandatory when tools are available)
+## METHOD — programmatic first (mandatory)
+
 Generate the SVG with a script (Python + svgwrite/ElementTree/plain string builder) rather than writing markup by hand. The script must:
+
 1. Declare all sizes as multiples of a base unit `u` (see SIZING CONTRACT). No absolute pixel font-sizes anywhere.
-2. Compute every label's bounding box (assume advance width ≈ 0.55 × font-size per character for serif) and assert no two labels overlap; assert the span check; assert the collision check. Fail loudly if any assertion breaks.
-3. Emit the SVG from the computed geometry.
-4. Print `u`, each font-size, and the span-check value to stdout for verification.
-If no code execution is available, write out the same numbers by hand.
+2. Compute every label's bounding box (assume advance width ≈ 0.55 × font-size per character for serif) and place labels by search: move a colliding label to the nearest free slot, then to an additional row at the same font size. Never shrink a label and never let two overlap.
+3. Assert the GEOMETRY INVARIANTS. These are fatal: if one fails, fix the geometry and re-run; do not emit the SVG.
+4. Run the typography checks (canvas span, label collisions, label-to-stroke clearance) and print them. A failed check means re-place and re-run; if no free slot exists, print the value as a warning and continue. A cosmetic miss must never discard a correct drawing.
+5. Emit the SVG from the computed geometry.
+6. Print `u`, each font-size, the span-check value, and the geometry audit to stdout for verification.
+
+If the code interpreter is unavailable, stop and tell the user the request must be resent once it is back. Never compute coordinates by hand and never hand-write an SVG in that situation: a three-dimensional figure needs a solver, not generated text, and a confident-looking wrong figure is worse than none.
 
 ## SIZING CONTRACT
-- `viewBox` must be {20–40} primary font-sizes across its smaller dimension. Derive canvas size from this, not the other way round.
-- Base unit `u` = {natural atom of this diagram: tick spacing / node height / band width / shortest labeled segment / row pitch / grid cell / (smaller canvas dimension ÷ 30)}.
+
+- `viewBox` must be 20 to 40 primary font-sizes across its smaller dimension. Derive canvas size from this, not the other way round.
+- Base unit `u` is the natural atom of the diagram: tick spacing, node height, band width, shortest labelled segment, row pitch, grid cell, or (smaller canvas dimension ÷ 30). State in the script which atom you chose.
 - Font sizes (all same serif family, e.g. Times New Roman):
   - Primary labels (axis numbers, node labels, data values): 0.40 u
   - Secondary labels (axis names, title, legend): 0.35 u
@@ -16,23 +22,36 @@ If no code execution is available, write out the same numbers by hand.
 - Strokes: axes/ticks 0.010 u · connectors 0.07 u · guides 0.07 u · dash pattern 0.015 u · marker radius 0.10 u.
 - Font family must be identical for every text element; font sizes must come only from the tiers above (no ad-hoc sizes).
 
+## GEOMETRY INVARIANTS
+
+The script asserts these and prints the audit. A failure is fatal.
+
+- One projection function produces every coordinate. No coordinate is typed into the markup by hand.
+- Two-dimensional figures: every point used by more than one element is computed once and referenced by name.
+- Three-dimensional figures: define the projection once, for example `screen = (x + k*z, -(y + m*z))` with `y` up, and use it for the solid, the axes, the guides, and the labels.
+  - The eight vertices are exactly `{0, v, w, v+w, u, v+u, w+u, v+w+u}`.
+  - The twelve edges are exactly the edges of that cube: every endpoint is one of the eight vertices, and every vertex has degree three.
+  - Hidden edges are computed, never guessed. Transform the box into its own basis and test, for the midpoint of each edge, whether the ray towards the viewer clips the unit cube. Exactly three edges are hidden, and they meet at the far vertex along the viewing direction.
+  - The altitude from the tip of `u` to the base plane lands at `u` minus its component along the base normal; the foot lies in the base plane, and `|u - foot|` equals that component.
+  - Arrowheads, arcs, and right-angle marks are placed from the same projected points, and their size is a multiple of `u`.
+
 ## LAYOUT CONTRACT
+
 - Every label on a shared baseline uses the identical `y`.
 - If labels would collide, move the offenders to an additional row at the SAME font size — never shrink them, never let them overlap.
 - Collision check per row: `font-size ≤ L / (N · (0.55·n + 0.2))`, where L = row length, N = label count, n = chars per label. If it fails, drop minor ticks, stagger rows, or extend the axis.
 - Every annotation/point must have the required guides (e.g. dashed lines to both axes) drawn before labels, with labels placed just outside the point/label.
 
-
 ## BASE IMAGE / OVERLAY — when the user supplies artwork
 
 If the user attaches an image and asks for labels, arrows, axes or annotations **on top of it**, that image is the artwork. Do **not** redraw, trace or vectorise it.
 
-1. Read the attachment from `UPLOAD_DIR` (the interpreter's upload folder), using the file name the user attached. If it is not there, stop and ask the user to re-attach it; do not reconstruct the artwork from the prompt text.
+1. Read the attachment from `ATTACHMENTS`, the list of `{"name", "path"}` entries the interpreter defines for the files on the current user message, matching by file name. If it is not there, stop and ask the user to re-attach it; do not reconstruct the artwork from the prompt text.
 2. Embed it unchanged in the SVG. For a raster base:
 
    ```python
    import base64
-   data = base64.b64encode((Path(UPLOAD_DIR) / "base.png").read_bytes()).decode()
+   data = base64.b64encode(Path(ATTACHMENTS[0]["path"]).read_bytes()).decode()
    # <image href="data:image/png;base64,{data}" x="0" y="0" width="W" height="H"/>
    ```
 
@@ -42,6 +61,7 @@ If the user attaches an image and asks for labels, arrows, axes or annotations *
 5. For a vector base (SVG), read its XML and reuse its coordinate system; do not trace it either.
 
 ## OUTPUT
+
 - Single self-contained SVG (inline `<style>` preferred; classes for `label`, `plabel`, `axis`, `tick`, `dashed`, `point`).
   - proper contrast with background
 - Valid XML, closed tags, quoted attributes, no truncated output.
