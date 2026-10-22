@@ -121,6 +121,22 @@ $$
 \prod_{j=1}^n b_{j,\rho(j)}.
 $$
 ```
+- use
+
+```
+\det\begin{pmatrix}
+a&&b\\
+c&&d
+\end{pmatrix}
+```
+NOT
+
+```
+\begin{vmatrix}
+a&&b\\
+c&&d
+\end{vmatrix}
+```
 
 ### IMPORTANT: think of reader
 
