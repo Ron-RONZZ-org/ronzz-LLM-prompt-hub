@@ -160,6 +160,7 @@ def collect_models() -> dict[str, dict]:
                 "description": frontmatter.get("description"),
                 "tags": [{"name": tag} for tag in frontmatter.get("tags", [])],
                 "toolIds": frontmatter.get("tool_ids", []),
+                "toolFilter": frontmatter.get("tool_filter", []),
                 "defaultFeatureIds": DEFAULT_FEATURE_IDS,
                 "capabilities": CAPABILITIES,
             }
@@ -288,6 +289,8 @@ def model_changed(current: dict, desired: dict) -> bool:
     if _tags_as_names(current_meta.get("tags")) != _tags_as_names(desired_meta["tags"]):
         return True
     if sorted(current_meta.get("toolIds") or []) != sorted(desired_meta["toolIds"]):
+        return True
+    if sorted(current_meta.get("toolFilter") or []) != sorted(desired_meta["toolFilter"]):
         return True
     if sorted(current_meta.get("defaultFeatureIds") or []) != sorted(DEFAULT_FEATURE_IDS):
         return True
