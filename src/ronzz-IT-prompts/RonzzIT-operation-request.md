@@ -1,6 +1,3 @@
-## Task
-
-
 ## Relevant documentation
 
 {{include:ronzzIT-doc}}
@@ -28,3 +25,6 @@
   - Deployment log(s)?
 - Follow {{include:writing/RonzzWikiBase/writing-style-guide}}
 - Follow {{include:ronzzIT-convention}}
+
+## Task
+
