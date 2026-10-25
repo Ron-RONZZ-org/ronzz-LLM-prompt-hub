@@ -53,8 +53,9 @@ Upload only after the user validates the figure.
 
 1. **Get the path.** `local_path` from `render_diagram`, or `files[].path` from `execute_code`. Never guess a path; if the tool returns no path, fix the call.
 2. **Check the title.** `search-page-by-prefix` / `get-page` on `File:<Name>.svg`. An existing `File:` page means a revision, not a duplicate.
-3. **Resolve the licence.** `embeddable-describe-entity-type(kind="image-facts")` maps a label to a Q-id; `wikibase-search-entities` is the fallback. Our own figures are CC BY-SA 4.0 (`Q320`). Never invent a Q-id.
-4. **Upload.** `upload-file(filepath=…, title="File:<Kebab-case-name>.svg", text=<description>, license="Q320", author="Rong Martin-Siebler ZHOU and Veramiko AI", description=…)`. Omit `sourceUrl` for a figure you made; pass it for an external image.
+3. **Resolve the licence.** `embeddable-describe-entity-type(kind="image-facts")` maps a label to a Q-id; `wikibase-search-entities` is the fallback. Never invent a Q-id.
+{{include:licence-requirements}}
+4. **Upload.** `upload-file(filepath=…, title="File:<Kebab-case-name>.svg", text=<description>, license="Q320", author="Rong Martin-Siebler ZHOU and Veramiko AI(, adapated from work of xxx, if relevant)", description=…)`. Omit `sourceUrl` for a figure you made; pass it for an external image.
    - Existing figure: `update-file` with the same title. Facts only: `update-file(factsOnly=true, …)`.
    - Sourced image: `image-search` → `upload-file-from-url` with the returned licence/author/credit, and the Commons file-page URL as `sourceUrl`.
 5. **Reply** with `[[File:<Name>.svg]]` and nothing else after the upload.

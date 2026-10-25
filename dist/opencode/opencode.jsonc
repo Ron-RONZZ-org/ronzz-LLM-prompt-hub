@@ -165,6 +165,7 @@
       "~/.config/**": "allow",
       "~/kodo/**": "allow",
       "~/shared-ronzz-nextcloud/**": "allow",
+      "~/ron-ronzz-nextcloud/0ron-stuff/**": "allow",
       "~/tmp": "allow",
       "~/tmp/**": "allow"
     },
