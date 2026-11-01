@@ -11,3 +11,5 @@ Respond uniquely with the requested standardised katex content.
 {{include:writing/standard-katex-formula-requirements}}
 
 ## Prompt
+
+(DO NOT FORGET TO INCLUDE THE WIKITABLE LISTING SYMBOLS IN THE EQUATION ALONGSIDE EXPLANATION)
