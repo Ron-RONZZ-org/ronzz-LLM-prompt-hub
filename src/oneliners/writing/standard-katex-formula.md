@@ -8,6 +8,6 @@ Respond uniquely with the requested standardised katex content.
 
 - No word padding or extra explanation.
 
-{{include:writing/standard-katex-formula}}
+{{include:writing/standard-katex-formula-requirements}}
 
 ## Prompt
