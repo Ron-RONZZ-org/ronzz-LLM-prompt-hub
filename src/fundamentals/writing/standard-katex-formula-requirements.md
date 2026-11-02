@@ -1,26 +1,31 @@
 - Formula then terms in a centered wikitable (Capitalise first letter of each term: "Proton", not "proton")
+  - call $G$ the "Gravitational constant", not "Newtonian gravitational constant"
 
 GOOD:
 ```wikitext
 $$
-e^- + p \rightarrow n + \nu_e
+\rho_c(t)=\frac{3c^2H^2(t)}{8\pi G}
 $$
 
 <div class="center">
 {| class="wikitable"
 |-
-| $e^-$
-| Electron
+| $\rho_c(t)$
+| Critical density
 |-
-| $p^+$
-| Proton
+| $H(t)=\dot{a}/a$
+| Hubble parameter
 |-
-| $n$
-| Neutron
+| $a(t)$
+| Cosmological scale factor
 |-
-| $\nu_e$
-| Electron neutrino
+| $G$
+| Gravitational constant
+|-
+| $c$
+| Speed of light
 |}
 </div>
+
 $$
 ```
