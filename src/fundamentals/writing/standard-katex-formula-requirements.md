@@ -1,4 +1,4 @@
-- Formula then terms in a centered wikitable
+- Formula then terms in a centered wikitable (Capitalise first letter of each term: "Proton", not "proton")
 
 GOOD:
 ```wikitext
