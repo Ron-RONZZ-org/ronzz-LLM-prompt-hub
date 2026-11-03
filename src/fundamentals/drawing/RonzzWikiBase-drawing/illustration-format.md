@@ -20,4 +20,4 @@ Before choosing a tool, decide the medium:
    upload it as `File:…`.
 
 Then choose the tool from TOOL CHOICE. For the native-tag route, write and
-validate the tag per WIKI DIAGRAMS.
+validate the tag per RONZZWIKIBASE TEXT DIAGRAMS.

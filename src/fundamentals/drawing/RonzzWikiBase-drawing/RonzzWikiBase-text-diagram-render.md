@@ -28,7 +28,7 @@ static export, so prefer `<uml>` unless Mermaid syntax is specifically wanted.
   and URLs is disabled. The bundled stdlib works (`!include <C4/C4_Context>`,
   `!theme bluegray`, …); the diagram must otherwise be self-contained.
 
-{{include:format/plantuml}}
+{{include:drawing/plantuml}}
 
 - A tag that fails to render leaves an error span on the page, so **validate
   before publishing**: call `validate_uml(diagram_type="plantuml", code=…)`

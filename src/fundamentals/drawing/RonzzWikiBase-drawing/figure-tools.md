@@ -8,13 +8,13 @@
 | a software or structure diagram shown in **chat**: class, sequence, activity, state, component, use case, deployment, object, ER, C4, network, mind map | `render_diagram` with the semantic type (`class`, `sequence`, …), or `d2` / `graphviz` for a free-form graph |
 | a timing waveform, a packet layout, an HDL symbol, a cable harness, ASCII art | `wavedrom`, `bytefield`, `symbolator`, `wireviz`, `svgbob` |
 | a quick flowchart shown in **chat**, worth no rendering round trip | a fenced ```` ```mermaid ```` block — the chat UI renders it |
-| a diagram that must live in a **RonzzWikiBase page** (PlantUML, GraphViz, Mscgen, Mermaid) | the matching inline tag — `<uml>`, `<graphviz>`, `<mscgen>`, `<mermaid>` — never an uploaded image (see WIKI DIAGRAMS) |
+| a diagram that must live in a **RonzzWikiBase page** (PlantUML, GraphViz, Mscgen, Mermaid) | the matching inline tag — `<uml>`, `<graphviz>`, `<mscgen>`, `<mermaid>` — never an uploaded image (see RONZZWIKIBASE TEXT DIAGRAMS) |
 | labels, arrows or axes over a supplied image, or a layout no tool produces | hand-authored SVG via `execute_code`, per drawing/svg |
 | you do not know which types exist | `list_diagram_types()` once |
 
 Prefer vector output (`svg`). `render_diagram` renders a chat preview and the
 image you upload for figures the wiki cannot render; a diagram the wiki renders
-from a tag is delivered as wikitext, not as an image (see WIKI DIAGRAMS).
+from a tag is delivered as wikitext, not as an image (see RONZZWIKIBASE TEXT DIAGRAMS).
 `generate_uml` returns base64 and is only for callers that cannot take an image
 block.
 
@@ -57,7 +57,7 @@ The functions in your list carry their connection prefix: `mediawiki-mcp_upload-
 Upload a file only for a figure the wiki cannot render from a tag (TikZ,
 matplotlib, hand-authored SVG, or an asset that must exist as a file). Diagrams
 the wiki renders natively — `<uml>`, `<graphviz>`, `<mscgen>`, `<mermaid>` —
-are written into the page (see WIKI DIAGRAMS).
+are written into the page (see RONZZWIKIBASE TEXT DIAGRAMS).
 
 Upload only after the user validates the figure.
 

@@ -42,7 +42,7 @@ IMPORTANT: Creating a classic wikipage automatically creates corresponding wiki 
 
 ### diagrams — write them in the page text
 
-{{include:format/wiki-diagrams}}
+{{include:drawing/RonzzWikiBase-drawing/RonzzWikiBase-text-diagram-render}}
 
 ### generated images (charts, plots, maps, raster illustrations)
 
