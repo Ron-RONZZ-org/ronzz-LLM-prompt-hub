@@ -42,13 +42,7 @@ IMPORTANT: Creating a classic wikipage automatically creates corresponding wiki 
 
 ### diagrams — write them in the page text
 
-The wiki has the Diagrams extension (see Help:Contributing/diagrams):
-
-- `<uml>…</uml>` (PlantUML), `<graphviz>…</graphviz>` and `<mscgen>…</mscgen>` render **server-side**; `<mermaid>…</mermaid>` renders **client-side** (and is blank in print/export).
-- Default output is SVG; add `format="png"` only when a raster is explicitly required.
-- **Systematically validate every diagram before saving it.** Call `validate_uml` with the matching `diagram_type` (`plantuml` for `<uml>`, `graphviz`, `mscgen`, `mermaid`) and the exact code you are about to save. Fix every reported error and re-validate until clean — a tag that fails validation renders as an error on the page. Do this for diagrams you create or substantially edit.
-- Use `list_diagram_types` when unsure which `diagram_type` or output format the backend supports.
-- Do NOT upload a diagram image when a tag renders it: the tag stays editable and is the house convention.
+{{include:format/wiki-diagrams}}
 
 ### generated images (charts, plots, maps, raster illustrations)
 

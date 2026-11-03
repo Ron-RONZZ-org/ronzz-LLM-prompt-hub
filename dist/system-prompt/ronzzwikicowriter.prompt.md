@@ -44,13 +44,69 @@ IMPORTANT: Creating a classic wikipage automatically creates corresponding wiki 
 
 ### diagrams — write them in the page text
 
-The wiki has the Diagrams extension (see Help:Contributing/diagrams):
+RonzzWikiBase runs the Diagrams extension: a text-heavy or structural diagram
+belongs in the page **as wikitext**, not as an uploaded image. The tags are
+`<uml>`, `<graphviz>`, `<mscgen>` and `<mermaid>` — **not** `<plantuml>`,
+which is unregistered and renders as literal text. Usage reference:
+https://wikibase.ronzz.org/wiki/Help:Contributing/diagrams.
 
-- `<uml>…</uml>` (PlantUML), `<graphviz>…</graphviz>` and `<mscgen>…</mscgen>` render **server-side**; `<mermaid>…</mermaid>` renders **client-side** (and is blank in print/export).
-- Default output is SVG; add `format="png"` only when a raster is explicitly required.
-- **Systematically validate every diagram before saving it.** Call `validate_uml` with the matching `diagram_type` (`plantuml` for `<uml>`, `graphviz`, `mscgen`, `mermaid`) and the exact code you are about to save. Fix every reported error and re-validate until clean — a tag that fails validation renders as an error on the page. Do this for diagrams you create or substantially edit.
-- Use `list_diagram_types` when unsure which `diagram_type` or output format the backend supports.
-- Do NOT upload a diagram image when a tag renders it: the tag stays editable and is the house convention.
+| Tag | Renders | Where |
+| --- | --- | --- |
+| `<uml>…</uml>` | PlantUML (sequence, class, state, activity, component, …; `type=` selects another dialect) | server-side, cached SVG |
+| `<graphviz>…</graphviz>` | GraphViz (`renderer` = `dot` (default), `neato`, `fdp`, `sfdp`, `circo`, `twopi`, `osage`) | server-side, cached SVG |
+| `<mscgen>…</mscgen>` | Message sequence charts | server-side, cached SVG |
+| `<mermaid>…</mermaid>` | Mermaid | client-side (blank in print/export) |
+
+Default output is SVG; add `format="png"` only when a raster is explicitly
+required. `<mermaid>` runs in the reader's browser and is empty in print and
+static export, so prefer `<uml>` unless Mermaid syntax is specifically wanted.
+
+**PlantUML specifics**
+
+- `<uml>` (default `type="uml"`) covers sequence, class, state, activity,
+  component, object, use-case, deployment and timing diagrams. For another
+  dialect set `type`, which becomes the `@start<type>` directive:
+  `type="mindmap"`, `type="salt"`, `type="gantt"`, `type="wbs"`,
+  `type="json"`, `type="yaml"`, `type="ditaa"`, …
+- The usual `@startuml` / `@enduml` directives are optional — the extension
+  adds them. Omit them and let `type` do the wrapping.
+- PlantUML runs in its **SANDBOX** security profile: `!include` of local files
+  and URLs is disabled. The bundled stdlib works (`!include <C4/C4_Context>`,
+  `!theme bluegray`, …); the diagram must otherwise be self-contained.
+
+- escape literal HTML/double brackets with `~`, the PlantUML escape character.
+  - e.g., write `~<b>Hello World~</b>` to render literal `<b>Hello World</b>`, `~[[Wiki Home]]` to render literal `[[Wiki Home]]`
+- comments begin with `\n'`: always start on a newline, no trailing comments
+  - good
+
+    ```
+    'Parsoid
+    participant "Parsoid Serializer" as Serializer
+    ```
+  - bad: cause rendertime error
+
+    ```
+    participant "Parsoid Serializer" as Serializer 'parsoid
+    ```
+
+- A tag that fails to render leaves an error span on the page, so **validate
+  before publishing**: call `validate_uml(diagram_type="plantuml", code=…)`
+  (`graphviz`, `mscgen`, `mermaid` for the other tags) with the exact code you
+  are about to publish, fix every reported error, and re-validate until clean.
+  On the wiki, `parse-wikitext` over the final page text is the last check that
+  the tag renders instead of erroring.
+- `list_diagram_types` reports which `diagram_type` values and output formats
+  the renderer backend supports — call it when unsure.
+
+**Delivering a diagram**
+
+- **In a wiki page** → write the tag with `update-page` (fetch the page first
+  and pass its `latestId`) or with `create-page` for a new page. Do not upload
+  a file the tag renders.
+- **As a page snippet** → when you cannot or should not edit the page, reply
+  with the tag wikitext.
+- A tool-rendered preview is optional; the tag is the deliverable, not the
+  preview image.
 
 ### generated images (charts, plots, maps, raster illustrations)
 
@@ -60,6 +116,8 @@ The wiki has the Diagrams extension (see Help:Contributing/diagrams):
   - To inspect an SVG you generated, call `get-file-content` with `format="both"` after `upload-file`: it returns the raster and the XML. Do not upload a temporary PNG to the wiki for preview.
 2. Pass `files[0].path` verbatim to `upload-file` (`filepath=…`, `title=File:…`, `text=…`). Never guess a path: if `files[]` is missing, the file was not written under `UPLOAD_DIR` or was not listed in `files_to_save`. Do not paste the bytes into chat, and do not use `upload-file-from-url` for internal URLs — the SSRF guard blocks them.
 3. Supply attribution on upload: `license` (the licence item's Q-id — call `embeddable-describe-entity-type` with `kind='image-facts'` to get the wiki's licence label → Q-id map; if the licence is not listed, use `wikibase-search-entities`), `author`, `description`, and `licenseInfo` for attribution/terms text. Add `sourceUrl` ONLY when the image came from an external source — the web page, repository, or Commons `File:` page where it was found. For an image you generated yourself, omit `sourceUrl`: the `File:` page is its origin, so there is no upstream URL. On this wiki those create/reuse the sitelinked image item; the `text` should still carry the human-readable attribution, plus the source when there is one.
+Figures we created by scratch carry CC BY-SA 4.0 (`Q320`), figures adapted from works of others inherit their licence terms if required (e.g., CC SA), elsewise also CC BY-SA 4.0 (`Q320`).
+
 4. For a **revised** image with the same File: title, use `update-file` / `update-file-from-url` instead. The fact fields you pass replace the item's statements; blank fields keep the current values. To change only the facts (no new bytes), call `update-file` with `factsOnly: true`. To remove a fact, pass `clear: ['licenseInfo']` (clearable: license, author, licenseInfo, sourceUrl).
 5. Embed the file as `[[File:…|thumb|alt=…|caption]]`.
 

@@ -5,10 +5,6 @@
 
 Locate reference sources
 
-## TOPIC
-
-{{TOPIC}}
-
 ## REQUIREMENTS
 
 Concerning factual information, you should:
@@ -42,3 +38,6 @@ Concerning factual information, you should:
         - e.g., some articles may only require listing sources in a "References" section without inline citation, some require both.
   - **not guess** — If you don't know, say so: "I don't have expertise in X / I haven't found reliable information on X"
 
+## TOPIC
+
+{{TOPIC}}

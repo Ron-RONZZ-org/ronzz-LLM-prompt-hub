@@ -53,3 +53,6 @@ Command output is in plain <pre></pre>, which is more efficient then <syntaxhigh
 
 Editors know why you used `<pre>` as they asked you to do it. Readers don't need to know anything about `<pre>` vs. `<syntaxhighlight>`. Omit the redundant response note to user request.
 
+### Respect grammatical choices at RonzzWikiBase
+
+- the Universe (always capitalise)

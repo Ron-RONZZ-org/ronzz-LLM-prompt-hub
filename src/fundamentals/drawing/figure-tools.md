@@ -5,13 +5,18 @@
 | a formula or equation shown as text | inline `$…$` / `$$…$$`, no tool |
 | a textbook schematic: free body, rays, circuits, geometry, vectors, chemistry structures or reactions, orbital diagrams, Feynman vertices, an annotated function plot | `render_diagram` with `diagram_type="tikz"` |
 | a plot from numbers, a data attachment, a fit, a spectrum, several series | `execute_code` + matplotlib |
-| a software or structure diagram: class, sequence, activity, state, component, use case, deployment, object, ER, C4, network, mind map | `render_diagram` with the semantic type (`class`, `sequence`, …), or `d2` / `graphviz` for a free-form graph |
+| a software or structure diagram shown in **chat**: class, sequence, activity, state, component, use case, deployment, object, ER, C4, network, mind map | `render_diagram` with the semantic type (`class`, `sequence`, …), or `d2` / `graphviz` for a free-form graph |
 | a timing waveform, a packet layout, an HDL symbol, a cable harness, ASCII art | `wavedrom`, `bytefield`, `symbolator`, `wireviz`, `svgbob` |
-| a quick flowchart worth no rendering round trip | a fenced ```` ```mermaid ```` block — the chat UI renders it |
+| a quick flowchart shown in **chat**, worth no rendering round trip | a fenced ```` ```mermaid ```` block — the chat UI renders it |
+| a diagram that must live in a **RonzzWikiBase page** (PlantUML, GraphViz, Mscgen, Mermaid) | the matching inline tag — `<uml>`, `<graphviz>`, `<mscgen>`, `<mermaid>` — never an uploaded image (see WIKI DIAGRAMS) |
 | labels, arrows or axes over a supplied image, or a layout no tool produces | hand-authored SVG via `execute_code`, per drawing/svg |
 | you do not know which types exist | `list_diagram_types()` once |
 
-Prefer vector output (`svg`). `render_diagram` is for chat and for the wiki; `generate_uml` returns base64 and is only for callers that cannot take an image block.
+Prefer vector output (`svg`). `render_diagram` renders a chat preview and the
+image you upload for figures the wiki cannot render; a diagram the wiki renders
+from a tag is delivered as wikitext, not as an image (see WIKI DIAGRAMS).
+`generate_uml` returns base64 and is only for callers that cannot take an image
+block.
 
 ## Continuing a figure from earlier in the chat
 
@@ -48,6 +53,11 @@ The functions in your list carry their connection prefix: `mediawiki-mcp_upload-
 `render-svg(path=…)` rasterises an SVG from the diagram directory (resvg, no LaTeX) and returns a PNG. Use it when you want to look at a generated figure before presenting it. Do not re-send the SVG XML.
 
 ## Uploading to RonzzWikiBase
+
+Upload a file only for a figure the wiki cannot render from a tag (TikZ,
+matplotlib, hand-authored SVG, or an asset that must exist as a file). Diagrams
+the wiki renders natively — `<uml>`, `<graphviz>`, `<mscgen>`, `<mermaid>` —
+are written into the page (see WIKI DIAGRAMS).
 
 Upload only after the user validates the figure.
 
