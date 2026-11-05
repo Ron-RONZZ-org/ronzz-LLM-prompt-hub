@@ -56,3 +56,4 @@ Editors know why you used `<pre>` as they asked you to do it. Readers don't need
 ### Respect grammatical choices at RonzzWikiBase
 
 - the Universe (always capitalise)
+- 1st,2nd,3rd,4th... instead of first, second, third, fourth,etc.
