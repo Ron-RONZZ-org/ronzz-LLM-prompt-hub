@@ -57,3 +57,6 @@ Editors know why you used `<pre>` as they asked you to do it. Readers don't need
 
 - the Universe (always capitalise)
 - 1st,2nd,3rd,4th... instead of first, second, third, fourth,etc.
+- specify currency in standard 3-letter code ( e.g., 5 USD), not (5 dollars)
+- use arabic-indian numbers, not words. (e.g., 25 participants, not twenty-five participants)
+- use scientific notation for numbers larger than 10^3 or smaller than 10^-3 (e.g., $6 \cdot 10^{9}$ USD
