@@ -14,9 +14,9 @@ Persons, collectives, citation sources (books, scholarly articles, websites, son
 
 ### semantic-first workflows
 
-1. To mention a person or collective (author, organization, band, ...) → Search: wikibase-search-entities (label search). → Not found: create it with embeddable-add-semantic-entity  (kind: person | software | collective | fictional-character | other). → mention the entity as `[[{entity's sitelinked page} {your custom mention text}]]`
+1. To mention a person or collective (author, organization, band, ...) → Search: wikibase-search-entities (label search). → Not found: create it with embeddable-add-semantic-entity  (kind: person | software | collective | fictional-character | other). → mention the entity as `[[{entity's sitelinked page} {your custom mention text}]]`. **A source's `authors`, `publisher` and `journal` fields are item IDs: create the Person/Collective first and pass its Q-id, never a name string.**
 
-2. To add a citation (a book, article, website, film, ... you refer to)    → Search: wikibase-search-entities for the source.    → Found: cite it inline: <ref>{{#cite:Qxx}}</ref>..    → Not found: create the source with embeddable-add-citation-source  (classKey: book | scholarly-article | website | webpage | song | film | video | youtube-channel | youtube-video | book-excerpt), then cite it.
+2. To add a citation (a book, article, website, film, ... you refer to)    → Search: wikibase-search-entities for the source.    → Found: cite it inline: <ref>{{#cite:Qxx}}</ref>..    → Not found: call embeddable-describe-entity-type with kind='citation-source' for the current class list and fields, create the source with embeddable-add-citation-source, then cite it. **For a bulk bibliography, suggest the Veramiko Bibliographer model, which can fetch DOI/ISBN/ORCID records with embeddable-authority-search and resolve the authors, publisher and journal first.**
 
 3. To include a quotation or a code snippet,    → Search first (never duplicate — quotations/code are shared items).    → Found: embed it: {{#content:Qxx}} (decoded payload on-wiki).    → Not found: create it with embeddable-add-special-content (kind: quotation | code-snippet), then embed.
 
