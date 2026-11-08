@@ -13,6 +13,7 @@ This repo is the shared prompt hub for ronzz.ORG. It holds two kinds of content:
 - **Software-dev conventions**: `src/fundamentals/coding/` (git, worktree, forge ops, testing, …) — shared by any LLM code client; keep them client-agnostic.
 - **NEVER edit `dist/`** — edit the source under `src/`, then rebuild: `python3 build-prompts.py`.
 - After any change, run `python3 build-prompts.py --check` to confirm `dist/` is consistent.
+- **Pre-commit hook** — `lefthook.yml` rebuilds (`--prune`) and stages `dist/` with every commit. Enable once per clone with `lefthook install` if the global `core.hooksPath` shim is not already active.
 - **NEVER edit generated site output** — `_site/`, `site/src/data/`, `site/public/search-index.json` are build artifacts; the source is `dist/` + the root markdown docs + `site/src/`.
 - Follow the conventions in `CONTRIBUTING.md` (contributor conventions section).
 

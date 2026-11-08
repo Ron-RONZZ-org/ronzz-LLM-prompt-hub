@@ -1,0 +1,11 @@
+# Rebuild the generated prompts before every commit and stage dist/ with it,
+# so a source edit can never be committed with a stale dist/.
+#
+# The hook is run by lefthook (this machine's global core.hooksPath already
+# points at the lefthook shim). In a fresh clone, run `lefthook install` once.
+pre-commit:
+  commands:
+    build-prompts:
+      run: |
+        python3 build-prompts.py --prune
+        git add -A dist

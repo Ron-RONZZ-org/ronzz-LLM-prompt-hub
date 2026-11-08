@@ -15,6 +15,7 @@ Just want to *use* the prompts? See **[USERGUIDE.md](USERGUIDE.md)** instead.
 | `src/opencode/` | **Sources for the opencode agent config**: `AGENTS.md`, `agents/` (primary + subagent definitions), `commands/` (slash commands), `opencode.jsonc`, plugins, proxy, `docs/`, and the `AGENTS-gh-cli.md` reference. Built (with the same `{{include:}}` mechanism) into `dist/opencode/`. |
 | `dist/` | **Generated** flat prompts (`*.prompt.md`) **and** the generated opencode config tree (`opencode/`). Never hand-edit — rebuilt with `build-prompts.py`. |
 | `build-prompts.py` | The build script (pure stdlib Python, no dependencies). |
+| `lefthook.yml` | Pre-commit hook: rebuilds `dist/` and stages it with the commit. |
 | `sync-owui.py` | Pushes `dist/` to Open WebUI — see [Publishing](#publishing-open-webui) below. |
 | `AGENTS.md` | Repo conventions for agents/contributors. |
 
@@ -112,6 +113,26 @@ them. `dist/opencode/` is a live config directory once symlinked as
 `~/.config/opencode` — `node_modules/`, `.secrets/` and package lockfiles live
 there and are never treated as build output. `--self-test` asserts that
 invariant (run it after touching the pruner).
+
+### Pre-commit hook
+
+`lefthook.yml` defines a pre-commit command that runs
+`python3 build-prompts.py --prune` and then `git add -A dist`, so a source edit
+cannot be committed with a stale `dist/`.
+
+This machine already routes git hooks through the global lefthook shim
+(`core.hooksPath`), so the hook runs as-is. In a fresh clone, enable it once:
+
+```bash
+lefthook install
+```
+
+Then `git commit` rebuilds and stages `dist/` automatically. Skip it only when
+the build is intentionally not run:
+
+```bash
+LEFTHOOK=0 git commit …
+```
 
 The build **auto-formats** markdown before expansion, so contributors don't have
 to: trailing whitespace is stripped, blank-line runs collapse to a single blank
