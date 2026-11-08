@@ -21,7 +21,7 @@ Create citation.
 Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Pediatrics, 2015; DOI 10.1542/peds.2014-3667c):
 
 ```
-<ref>{{#cite:Q2937 }}</ref>
+<ref>{{ #cite:Q2937 }}</ref>
 ```
 ## `Source:` page:
 
