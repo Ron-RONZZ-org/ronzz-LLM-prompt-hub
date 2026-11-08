@@ -120,11 +120,16 @@ invariant (run it after touching the pruner).
 `python3 build-prompts.py --prune` and then `git add -A dist`, so a source edit
 cannot be committed with a stale `dist/`.
 
-This machine already routes git hooks through the global lefthook shim
-(`core.hooksPath`), so the hook runs as-is. In a fresh clone, enable it once:
+Hooks are routed through the machine's global dispatcher (`~/.git-hooks`,
+installed from the `ronzz-dotfiles` repository), which calls
+`lefthook run --no-auto-install` for any repository that has a `lefthook.yml`.
+Nothing is installed per clone on such a machine. Do **not** run
+`lefthook install` there — it refuses custom hooks paths and would try to
+overwrite the global dispatcher. On a machine without the dispatcher:
 
 ```bash
-lefthook install
+git clone https://forgejo.ronzz.org/ronzz-org/ronzz-dotfiles.git ~/kodo/ronzz-dotfiles
+~/kodo/ronzz-dotfiles/install.sh
 ```
 
 Then `git commit` rebuilds and stages `dist/` automatically. Skip it only when

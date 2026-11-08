@@ -1,8 +1,10 @@
 # Rebuild the generated prompts before every commit and stage dist/ with it,
 # so a source edit can never be committed with a stale dist/.
 #
-# The hook is run by lefthook (this machine's global core.hooksPath already
-# points at the lefthook shim). In a fresh clone, run `lefthook install` once.
+# The hook is run by the machine's global git hook dispatcher (~/.git-hooks,
+# from the ronzz-dotfiles repo), which calls `lefthook run --no-auto-install`.
+# Do not run `lefthook install` here: it refuses custom hooks paths and would
+# try to overwrite the global dispatcher.
 pre-commit:
   commands:
     build-prompts:
