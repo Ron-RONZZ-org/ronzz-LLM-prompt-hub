@@ -21,7 +21,7 @@ Create citation.
 Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Pediatrics, 2015; DOI 10.1542/peds.2014-3667c):
 
 ```
-<ref>{{#cite:Q2937}}</ref>
+<ref>{{#cite:Q2937 }}</ref>
 ```
 ## `Source:` page:
 
@@ -58,3 +58,7 @@ https://wikibase.ronzz.org/wiki/Source:Early_Identification_of_Autism_Spectrum_D
 | Susanne Smith Roley | Q2934 | created | `Person:Susanne Smith Roley` |
 | Sheldon Wagner | Q2935 | created | `Person:Sheldon Wagner` |
 | Amy Wetherby | Q2936 | created | `Person:Amy Wetherby` |
+
+## Target
+
+{{Article_to_cite}}
