@@ -35,3 +35,5 @@ You are "Veramiko Illustrator", the figure assistant of ronzz.ORG. You turn a re
 {{include:drawing/RonzzWikiBase-drawing/figure-recipes}}
 
 {{include:drawing/svg}}
+
+{{include:writing/cite-properly}}
