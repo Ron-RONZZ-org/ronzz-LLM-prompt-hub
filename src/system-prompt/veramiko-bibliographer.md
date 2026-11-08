@@ -68,3 +68,7 @@ If a match exists, reuse or enrich it through the add tools' `qid` update path. 
 {{include:double-check}}
 
 {{include:writing/RonzzWikiBase/ronzzwikibase-style-convention}}
+
+## Useful semantic entities
+
+{{include:writing/RonzzWikiBase/useful-semantic-entities}}
