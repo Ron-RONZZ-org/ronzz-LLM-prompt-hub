@@ -144,7 +144,6 @@ c&&d
 ## Example text
 
 ```wikitext
-[[Category:Machine learning]]
 [[Category:Artificial neural network]]
 
 '''Backpropagation''' is an algorithm used to train [[artificial neural network (ANN)|ANNs]].
@@ -169,15 +168,6 @@ $$
 \delta_j^{(l)}=\frac{\partial C}{\partial z_j^{(l)}}
 $$
 
-By the [[chain rule of differentiation]],
-
-$$
-\delta_j^{(l)}
-= \sum_k
-\frac{\partial C}{\partial a_k^{(L)}}
-\frac{\partial a_k^{(L)}}{\partial z_j^{(L)}}.
-$$
-
 In vector form:
 
 $$
@@ -186,13 +176,24 @@ $$
 \nabla_{\vec a^{(l)}}C\odot \dot \sigma (\vec z^{(L)}),
 $$
 
+<div class="mw-collapsible mw-collapsed hidden" data-expandtext="Show proof" data-collapsetext="Hide Proof"><br>
+By the [[chain rule of differentiation]],
+
+$$
+\delta_j^{(l)}
+= \sum_k
+\frac{\partial C}{\partial a_k^{(L)}}
+\frac{\partial a_k^{(L)}}{\partial z_j^{(L)}}.
+$$
+</div>
+
 <blockquote>
 In some textbook, $\delta_j^{(l)}$ is referred to as '''error'''. We discourage this use, as $\delta_j^{(l)}$ is a local gradient, not an "error" in its ususal sense, and calling it an error can lead to serious confusion.
 </blockquote>
 
 ==== Sensitivity of the output layer ====
 
-By [[#sensitivity|definition of sensitivity]],
+By [[#Sensitivity|definition of sensitivity]],
 
 $$
 \vec{\delta}^{(L)}=\nabla_{\vec a^{(L)}}C\odot\sigma'(\vec z^{(L)}).
@@ -200,6 +201,19 @@ $$
 
 ==== Sensitivity of previous layers ====
 
+$$
+\vec{\delta}^{(l)}
+=
+\left(
+\left(\mathbf{W}^{(l+1)}\right)^T
+\vec{\delta}^{(l+1)}
+\right)
+\odot
+\sigma^{\prime}\left(\vec z^{(l)}\right),
+\qquad l=L-1,\dots,1.
+$$
+
+<div class="mw-collapsible mw-collapsed hidden" data-expandtext="Show proof" data-collapsetext="Hide Proof"><br>
 By definition of an [[artificial neuron]],
 $$
 z_k^{(l+1)}=\sum_j W_{kj}^{(l+1)}a_j^{(l)}+b_k^{(l+1)},
@@ -237,11 +251,17 @@ $$
 \sigma^{\prime}\left(\vec z^{(l)}\right),
 \qquad l=L-1,\dots,1.
 $$
+</div>
 
 === Local gradients ===
 
 ==== Biases ====
 
+$$
+\nabla_{\vec b^{(l)}}C=\vec{\delta}^{(l)}.
+$$
+
+<div class="mw-collapsible mw-collapsed hidden" data-expandtext="Show proof" data-collapsetext="Hide Proof"><br>
 $$
 \delta_k^{(l)}=\frac{\partial C}{\partial z_k^{(l)}} \text{ (by definition)}\\
 \frac{\partial z_k^{(l)}}{\partial b_j^{(l)}}=
@@ -268,9 +288,18 @@ In vector form,
 $$
 \nabla_{\vec b^{(l)}}C=\vec{\delta}^{(l)}.
 $$
+</div>
 
 ==== Weights ====
 
+$$
+\nabla_{\mathbf{W}^{(l)}}C
+=
+\vec{\delta}^{(l)}
+\left(\vec a^{(l-1)}\right)^T,
+$$
+
+<div class="mw-collapsible mw-collapsed hidden" data-expandtext="Show proof" data-collapsetext="Hide Proof"><br>
 $$
 \frac{\partial z_k^{(l)}}{\partial W_{ij}^{(l)}}=
 \begin{cases}
@@ -299,10 +328,11 @@ $$
 \vec{\delta}^{(l)}
 \left(\vec a^{(l-1)}\right)^T,
 $$
+</div>
 
 == Training ==
 
-From [[#definition]],
+From [[#Definition]],
 
 $$
 \begin{cases}
