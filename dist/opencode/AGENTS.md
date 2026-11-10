@@ -423,6 +423,8 @@ gh workflow list   # only in a repo with a GitHub mirror
 
 Rationale: every minute of heavy compute you run locally is a minute this machine is at OOM risk and unavailable for other sessions. GitHub runners are free for public repos and cheap for private ones — use them.
 
+If no suitable CI flow, create one.
+
 If project not on Github, request user permission for pushing a mirror to Github to make use of Github actions, do NOT silently resort to running on local machine.
 
 ### Deployment
