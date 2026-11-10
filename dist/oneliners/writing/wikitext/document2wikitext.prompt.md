@@ -146,7 +146,8 @@ c&&d
 ## Example text
 
 ```wikitext
-Orthogonality generalises perpendicularity to an [[inner product space]].
+[[Category:Inner product space]]
+'''Orthogonality''' generalises perpendicularity to an [[inner product space]].
 
 == Mathematical definition ==
 
@@ -154,47 +155,46 @@ Let $V$ be an [[inner product space]].
 
 If for $u,v\in V$
 
-$$\langle u, v \rangle=0$$
+$$\langle \vec u , \vec v  \rangle=0$$
 
-Then $u,v$ are '''orthogonal''' to each other.
+Then $\vec u,\vec v$ are '''orthogonal''' to each other.
 
-$u\bot v$ denotes this orthogonality.
+$\vec u \bot \vec v $ denotes this orthogonality.
 
 == Application ==
 
 === Orthogonal decomposition ===
 
-Given vectors $u,v\in V$ and $v\neq 0$, $u$ can be uniquely decomposed into two pieces: one parallel to $v$ and one orthogonal to $v$. This is called an '''orthogonal decomposition'''.
+Given vectors $\vec u,\vec v \in V$ and $\vec v \neq 0$, $\vec u$ can be uniquely decomposed into two pieces: one parallel to $\vec v$ and one orthogonal to $\vec v$. This is called an '''orthogonal decomposition'''.
 
-In mathmetical terms:
+In mathematical terms:
 
-$$u=u_1+u_2,$$
+$$\vec u=\vec u_ 1+\vec u_ 2,$$
 
-Where $u_1=a v, a \in \mathbb{F}; u_2\bot v$
+Where $\vec u_ 1=a \vec v , a \in \mathbb{F}; \vec u _2\bot \vec v $
 
 '''Derivation:'''
 
 $$
-\because u = u_1 +u_2 \\
-\therefore u_2=u-u_1=u-av \\
-\because u_2 \bot v \\
-\therefore \langle u_2, v \rangle = \langle u- av, v \rangle = \langle u, v \rangle - a \left\| v \right\|^2 = \vec 0 \\
-\text{Solve for }a,a = \frac{\langle u, v \rangle}{\left\| v \right\|^2} \\
-\text{Substitute back into }u_1=av, u_2=u-av, \\
-u=\frac{\langle u, v \rangle}{\| v \|^2} v + \left( u-\frac{\langle u, v \rangle}{\| v \|^2} v \right)
+\because \vec u  = \vec u _1 +\vec u_ 2 \\
+\therefore \vec u _2= \vec u -\vec u_ 1= \vec u -a\vec v \\
+\because \vec u _2 \bot \vec v  \\
+\therefore \langle \vec u _2, \vec v  \rangle = \langle \vec u - a\vec v, \vec v  \rangle = \langle \vec u , \vec v  \rangle - a \left\| \vec v  \right\|^2 = \vec 0 \\
+\text{Solve for }a,a = \frac{\langle \vec u , \vec v  \rangle}{\left\| \vec v  \right\|^2} \\
+\text{Substitute back into }\vec u_ 1=a \vec v, \vec u _2= \vec u -a\vec v, \\
+u=\frac{\langle \vec u , \vec v  \rangle}{\| \vec v  \|^2} \vec v  + \left( \vec u -\frac{\langle \vec u , \vec v  \rangle}{\| \vec v  \|^2} \vec v  \right)
 $$
 
 == Properties ==
 
-=== $\vec 0$ is orthogonal to every vector ===
+=== $\vec 0$ is orthogonal to every $\vec v$ ===
 
 $$
-\forall v \in V, \vec 0 \bot v
+\forall \vec v  \in \vec v , \vec 0 \bot \vec v
 $$
 
-'''Proof''':
-
-Recall [[Vector_space#Mathematical_definition|the properties of a vector space by definition]]. By additive identity,
+{{Hidden proof}}
+Recall [[Vector_space#Mathematical_definition|the properties of a \vec v ector space by definition]]. By additive identity,
 
 $$
 \vec 0 +\vec 0 = \vec 0
@@ -203,33 +203,33 @@ $$
 Therefore,
 
 $$
-\langle \vec 0, u \rangle = \langle \vec 0+\vec 0, u\rangle
+\langle \vec 0, \vec u  \rangle = \langle \vec 0+\vec 0, \vec u \rangle
 $$
 
 Recall the [[inner product|properties of the inner product by definition]], by linearity in the 1st slot,
 
 $$
-\langle \vec 0+\vec 0, u\rangle = \langle\vec 0, u \rangle+\langle \vec 0, u\rangle
+\langle \vec 0+\vec 0, \vec u \rangle = \langle\vec 0, \vec u  \rangle+\langle \vec 0, \vec u \rangle
 $$
 
-Subtracting $\langle \vec 0, u\rangle$ from both sides gives
+Subtracting $\langle \vec 0, \vec u \rangle$ from both sides gives
 
 $$
-\langle \vec 0, u \rangle=0.
+\langle \vec 0, \vec u  \rangle=0.
 $$
+{{End hidden}}
 
 === Generalised Pythagorean theorem ===
 
-''If'' $u,v\in V; u\bot v$, then $\| \cdot \|$ defined by $\| v \|:=\sqrt{\langle v, v \rangle}$ obeys
+''If'' $u,v\in V; \vec u \bot \vec v $, then $\| \cdot \|$ defined by $\| \vec v  \|:=\sqrt{\langle \vec v , \vec v  \rangle}$ obeys
 
-$$\| u+v \|^2 = \| u \|^2 + \| v \|^2.$$
+$$\| \vec u + \vec v  \|^2 = \| \vec u  \|^2 + \| \vec v  \|^2.$$
 
-'''Proof:''':
-
+{{Hidden proof}}
 By definition,
 
 $$
-\| u+v \|^2 = \langle u+v, u+v \rangle
+\| \vec u + \vec v  \|^2 = \langle \vec u + \vec v , \vec u + \vec v  \rangle
 $$
 
 Recall the [[inner product|properties of the inner product by definition]]:
@@ -237,49 +237,42 @@ Recall the [[inner product|properties of the inner product by definition]]:
 By linearity in the 1st slot,
 
 $$
-\langle u+v, u+v \rangle = \langle u, u+v \rangle + \langle v, u+v \rangle
+\langle \vec u + \vec v , \vec u + \vec v  \rangle = \langle \vec u , \vec u + \vec v  \rangle + \langle \vec v , \vec u + \vec v  \rangle
 $$
 
 By conjugate symmetry,
 
 $$
-\langle u, u+v \rangle + \langle u, u+v \rangle = \overline{\langle u+v, u \rangle} + \overline{\langle u+v, v \rangle}
+\langle \vec u , \vec u + \vec v  \rangle + \langle \vec u , \vec u + \vec v  \rangle = \overline{\langle \vec u + \vec v , \vec u  \rangle} + \overline{\langle \vec u + \vec v , \vec v  \rangle}
 $$
 
 Again by linearity in the first slot,
 
 $$
-\overline{\langle u+v, u \rangle} + \overline{\langle u+v, v \rangle}=\overline{\langle u, u \rangle} + \overline{\langle v, u \rangle} + \overline{\langle u, v \rangle} + \overline{\langle v, v \rangle}
+\overline{\langle \vec u + \vec v , \vec u  \rangle} + \overline{\langle \vec u + \vec v , \vec v  \rangle}=\overline{\langle \vec u , \vec u  \rangle} + \overline{\langle \vec v , \vec u  \rangle} + \overline{\langle \vec u , \vec v  \rangle} + \overline{\langle \vec v , \vec v  \rangle}
 $$
 
 Again by conjugate symmetry,
 
 $$
-\overline{\langle u, u \rangle} + \overline{\langle v, u \rangle} + \overline{\langle u, v \rangle} + \overline{\langle v, v \rangle} = \langle u, u \rangle + \langle u, v \rangle + \langle v, u \rangle + \langle v, v \rangle
+\overline{\langle \vec u , \vec u  \rangle} + \overline{\langle \vec v , \vec u  \rangle} + \overline{\langle \vec u , \vec v  \rangle} + \overline{\langle \vec v , \vec v  \rangle} = \langle \vec u , \vec u  \rangle + \langle \vec u , \vec v  \rangle + \langle \vec v , \vec u  \rangle + \langle \vec v , \vec v  \rangle
 $$
 
-since $u,v\in V; u\bot v$:
+since $u,v\in \vec v ; \vec u \bot \vec v $:
 
 $$
-\langle u, v \rangle=0;\langle v, u \rangle=0
+\langle \vec u , \vec v  \rangle=0;\langle \vec v , \vec u  \rangle=0
 $$
 
 By definition
 
 $$
-\langle u, u \rangle=\left\| u \right\|^2;\langle v, v \rangle=\left\| v \right\|^2
+\langle \vec u , \vec u  \rangle=\left\| \vec u  \right\|^2;\langle \vec v , \vec v  \rangle=\left\| \vec v  \right\|^2
 $$
 
 Hence
 
-$$\| u+v \|^2 = \| u \|^2 + \| v \|^2.$$
-
-== Orthogonal vector list ==
-
-A list of '''nonzero''' vectors $(e_1,\ldots,e_m) \in V$ is '''orthogonal''' if
-
-$$
-\langle e_i, e_j \rangle = 0 \Leftarrow 1\le i\neq j \le m
-$$
+$$\| \vec u + \vec v  \|^2 = \| \vec u  \|^2 + \| \vec v  \|^2.$$
+{{End hidden}}
 ```
 
