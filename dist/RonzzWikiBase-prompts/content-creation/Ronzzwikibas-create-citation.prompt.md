@@ -9,7 +9,7 @@ Create citation.
 
 ### Response format
 
-"""
+```md
 ## The source(s)
 
 | Input | Q-id | Action | Classic page title |
@@ -22,14 +22,17 @@ Early Identification of Autism Spectrum Disorder: Recommendations for Practice a
 
 ```
 <ref>{{ #cite:Q2937 }}</ref>
+
 ```
+
 ## `Source:` page:
 
 Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Pediatrics, 2015; DOI 10.1542/peds.2014-3667c):
-
 ```
 https://wikibase.ronzz.org/wiki/Source:Early_Identification_of_Autism_Spectrum_Disorder:_Recommendations_for_Practice_and_Research_(Scholarly_article)
+
 ```
+
 ## Supporting entities created
 
 | Entity | Q-id | Action | Page title |
@@ -37,7 +40,7 @@ https://wikibase.ronzz.org/wiki/Source:Early_Identification_of_Autism_Spectrum_D
 | Pediatrics (journal) | Q2913 | created | `Collective:Pediatrics` |
 | Sheldon Wagner | Q2935 | created | `Person:Sheldon Wagner` |
 | Amy Wetherby | Q2936 | created | `Person:Amy Wetherby` |
+```
+## Content to add to Source:
 
-## Target
-
-{{Article_to_cite}}
+{{Target_to_cite}}
