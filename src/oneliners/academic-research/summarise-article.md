@@ -1,0 +1,53 @@
+## TASK
+
+Summarise article.
+
+## ROAD MAP
+
+- What phenomenons are described? What are the syptoms? Causes? Evidence?
+
+Answer like
+```
+## Phenomenon 1
+
+### Syptom
+
+### Cause
+
+### Evidence 
+
+#### Experiemental evidence
+
+#### Other evidence
+
+## Phenomenon 2
+
+### Syptom
+
+### Cause
+
+### Evidence 
+
+#### Experiemental evidence
+
+#### Other evidence
+...
+```
+- What are related references ?
+
+Answer like
+
+```
+### Topic 1
+
+{APA style ref}
+
+### Topic 2
+{APA style ref}
+
+...
+```
+
+## Requirements
+
+- Answer based on attached article. No hallucination.
