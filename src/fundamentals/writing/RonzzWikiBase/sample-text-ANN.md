@@ -1,1 +1,283 @@
+```wikitext
+[[Category:Machine learning]]
+[[Category:Artificial neural network]]
 
+'''Backpropagation''' is an algorithm used to train [[artificial neural network (ANN)|ANNs]].
+
+== Definition ==
+
+Let $L$ represent the number of layers in the [[artificial neural network (ANN)]], $\vec a^{(0)}$ be the input value.
+
+Let $\mathbf{W}^{(l)}, \vec b^{(l)}$ represents [[artificial neuron|'''weights''' and '''biases''']], $\vec z^{(l)}=\mathbf{W}^{(l)}\vec a^{(l-1)}+\vec b^{(l)}, \vec a^{(l)}=\sigma(\vec z^{(l)})$ pre-activation and activation of layer $l=1,\dots,L$, where $\sigma$ is the [[activation function]].
+
+For a single training example $(\vec x,\vec y)$, where $\vec x,\vec y$ are input/expected output respectively, by definition
+
+$$
+\vec a^{(0)}=\vec x.
+$$
+
+=== Sensitivity ===
+
+Define '''sensitivity''' at layer $l$:
+
+$$
+\delta_j^{(l)}=\frac{\partial C}{\partial z_j^{(l)}}
+$$
+
+By the [[chain rule of differentiation]],
+
+$$
+\delta_j^{(l)}
+= \sum_k
+\frac{\partial C}{\partial a_k^{(L)}}
+\frac{\partial a_k^{(L)}}{\partial z_j^{(L)}}.
+$$
+
+In vector form:
+
+$$
+\vec{\delta}^{(l)}
+=
+\nabla_{\vec a^{(l)}}C\odot \dot \sigma (\vec z^{(L)}),
+$$
+
+<blockquote>
+In some textbook, $\delta_j^{(l)}$ is referred to as '''error'''. We discourage this use, as $\delta_j^{(l)}$ is a local gradient, not an "error" in its ususal sense, and calling it an error can lead to serious confusion.
+</blockquote>
+
+==== Sensitivity of the output layer ====
+
+By [[#sensitivity|definition of sensitivity]],
+
+$$
+\vec{\delta}^{(L)}=\nabla_{\vec a^{(L)}}C\odot\sigma'(\vec z^{(L)}).
+$$
+
+==== Sensitivity of previous layers ====
+
+By definition of an [[artificial neuron]],
+$$
+z_k^{(l+1)}=\sum_j W_{kj}^{(l+1)}a_j^{(l)}+b_k^{(l+1)},
+\qquad
+a_j^{(l)}=\sigma\left(z_j^{(l)}\right).
+$$
+
+Hence by the chain rule,
+
+$$
+\begin{aligned}
+\delta_j^{(l)}
+&=\frac{\partial C}{\partial z_j^{(l)}}\\
+&=\sum_k
+\frac{\partial C}{\partial z_k^{(l+1)}}
+\frac{\partial z_k^{(l+1)}}{\partial a_j^{(l)}}
+\frac{\partial a_j^{(l)}}{\partial z_j^{(l)}}\\
+&=\sum_k
+\delta_k^{(l+1)}
+W_{kj}^{(l+1)}
+\sigma^{\prime}\left(z_j^{(l)}\right).
+\end{aligned}
+$$
+
+In matrix form,
+
+$$
+\vec{\delta}^{(l)}
+=
+\left(
+\left(\mathbf{W}^{(l+1)}\right)^T
+\vec{\delta}^{(l+1)}
+\right)
+\odot
+\sigma^{\prime}\left(\vec z^{(l)}\right),
+\qquad l=L-1,\dots,1.
+$$
+
+=== Local gradients ===
+
+==== Biases ====
+
+$$
+\delta_k^{(l)}=\frac{\partial C}{\partial z_k^{(l)}} \text{ (by definition)}\\
+\frac{\partial z_k^{(l)}}{\partial b_j^{(l)}}=
+\begin{cases}
+1, & k=j,\\
+0, & k\neq j.
+\end{cases}
+$$
+
+By the [[chain rule of differentiation]],
+
+$$
+\frac{\partial C}{\partial b_j^{(l)}}
+=
+\sum_{k=0}^{n_l-1}
+\frac{\partial C}{\partial z_k^{(l)}}
+\frac{\partial z_k^{(l)}}{\partial b_j^{(l)}}
+=
+\delta_j^{(l)}.
+$$
+
+In vector form,
+
+$$
+\nabla_{\vec b^{(l)}}C=\vec{\delta}^{(l)}.
+$$
+
+==== Weights ====
+
+$$
+\frac{\partial z_k^{(l)}}{\partial W_{ij}^{(l)}}=
+\begin{cases}
+a_j^{(l-1)}, & k=i,\\
+0, & k\neq i.
+\end{cases}
+$$
+
+By the [[chain rule of differentiation]],
+
+$$
+\frac{\partial C}{\partial W_{ij}^{(l)}}
+=
+\sum_{k=0}^{n_l-1}
+\frac{\partial C}{\partial z_k^{(l)}}
+\frac{\partial z_k^{(l)}}{\partial W_{ij}^{(l)}}
+=
+\delta_i^{(l)}a_j^{(l-1)}.
+$$
+
+In matrix form,
+
+$$
+\nabla_{\mathbf{W}^{(l)}}C
+=
+\vec{\delta}^{(l)}
+\left(\vec a^{(l-1)}\right)^T,
+$$
+
+== Training ==
+
+From [[#definition]],
+
+$$
+\begin{cases}
+\nabla_{\vec b^{(l)}}C=\vec{\delta}^{(l)},\\
+\nabla_{\mathbf{W}^{(l)}}C=\vec{\delta}^{(l)}\left(\vec a^{(l-1)}\right)^T.
+\end{cases}
+$$
+
+With training dataset $S$ and sample batch $B \in S$,
+
+$$
+\begin{cases}
+\mathbf{W}^{(l)}\leftarrow\mathbf{W}^{(l)}-\frac{\eta}{m}\sum_{x\in B}\nabla_{\mathbf{W}^{(l)}}C_x,\\
+\vec b^{(l)}\leftarrow\vec b^{(l)}-\frac{\eta}{m}\sum_{x\in B}\nabla_{\vec b^{(l)}}C_x.
+\end{cases}
+$$
+
+== Python [[pseudocode]] ==
+
+=== Backpropagation ===
+
+<syntaxhighlight lang="python" copy>
+import numpy as np
+
+
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+
+def sigmoid_prime(z):
+    s = sigmoid(z)
+    return s * (1.0 - s)
+
+
+def feedforward(self, a):
+    """Feedforward input vector a to a_1."""
+    for b, w in zip(self.biases, self.weights):
+        a = sigmoid(np.dot(w, a) + b)   # note: overwrite a each layer
+    return a
+
+
+def backprop(self, x, y):
+    """Return (nabla_b, nabla_w) for a single training example (x, y)."""
+    # --- forward pass (recompute zs and activations, since feedforward
+    #     only returns the final a_1) ---
+    activation = x
+    activations = [x]
+    zs = []
+
+    for b, w in zip(self.biases, self.weights):
+        z = np.dot(w, activation) + b
+        zs.append(z)
+        activation = sigmoid(z)
+        activations.append(activation)
+
+    # --- output layer error (quadratic cost: dC/da = a - y) ---
+    delta = (activations[-1] - y) * sigmoid_prime(zs[-1])
+
+    nabla_b = [np.zeros(b.shape) for b in self.biases]
+    nabla_w = [np.zeros(w.shape) for w in self.weights]
+
+    nabla_b[-1] = delta
+    nabla_w[-1] = np.dot(delta, activations[-2].T)
+
+    # --- backpropagate through hidden layers ---
+    num_layers = len(self.weights) + 1
+    for l in range(2, num_layers):
+        z = zs[-l]
+        sp = sigmoid_prime(z)
+        delta = np.dot(self.weights[-l + 1].T, delta) * sp
+        nabla_b[-l] = delta
+        nabla_w[-l] = np.dot(delta, activations[-l - 1].T)
+
+    return nabla_b, nabla_w
+</syntaxhighlight>
+
+=== Training ===
+
+<syntaxhighlight lang="python" copy>
+import random
+
+def update_mini_batch(self, batch, eta):
+    """One SGD step on mini-batch B: sum per-sample gradients, apply W -= (eta/m) * sum."""
+    nabla_b = [np.zeros(b.shape) for b in self.biases]
+    nabla_w = [np.zeros(w.shape) for w in self.weights]
+
+    m = len(batch)                       # m = |B|  (use actual size; last batch may be short)
+    for x, y in batch:
+        d_nabla_b, d_nabla_w = self.backprop(x, y)   # = (delta^(l), delta^(l) a^(l-1)^T)
+        nabla_b = [nb + dnb for nb, dnb in zip(nabla_b, d_nabla_b)]
+        nabla_w = [nw + dnw for nw, dnw in zip(nabla_w, d_nabla_w)]
+
+    # W^(l) <- W^(l) - (eta/m) * sum_{x in B} grad_W C_x
+    # b^(l) <- b^(l) - (eta/m) * sum_{x in B} grad_b C_x
+    self.weights = [w - (eta / m) * nw for w, nw in zip(self.weights, nabla_w)]
+    self.biases  = [b - (eta / m) * nb for b, nb in zip(self.biases,  nabla_b)]
+
+
+def train(self, training_data, epochs, mini_batch_size, eta, test_data=None):
+    """training_data: iterable of (x, y) examples."""
+    training_data = list(training_data)
+    n = len(training_data)
+
+    for epoch in range(epochs):
+        random.shuffle(training_data)
+        mini_batches = [
+            training_data[k:k + mini_batch_size]
+            for k in range(0, n, mini_batch_size)
+        ]
+        for batch in mini_batches:
+            self.update_mini_batch(batch, eta)
+
+        if test_data is not None:
+            n_test = len(test_data)
+            n_correct = sum(
+                int(np.argmax(self.feedforward(x)) == np.argmax(y))
+                for x, y in test_data
+            )
+            print(f"Epoch {epoch}: {n_correct}/{n_test}")
+        else:
+            print(f"Epoch {epoch} complete")
+</syntaxhighlight>
+```
