@@ -131,6 +131,7 @@ a&&b\\
 c&&d
 \end{vmatrix}
 ```
+- Use $,\,$ instead of $\quad$
 
 - No word padding or extra explanation.
 

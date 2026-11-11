@@ -123,3 +123,4 @@ c&&d
 \end{vmatrix}
 ```
 
+- Use $,\,$ instead of $\quad$

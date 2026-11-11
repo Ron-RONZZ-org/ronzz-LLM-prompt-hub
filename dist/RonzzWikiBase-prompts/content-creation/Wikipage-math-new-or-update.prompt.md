@@ -136,6 +136,7 @@ a&&b\\
 c&&d
 \end{vmatrix}
 ```
+- Use $,\,$ instead of $\quad$
 
 ### IMPORTANT: think of reader
 
