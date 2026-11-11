@@ -85,3 +85,4 @@ The `Help:` pages feature human tools. You should use equivalent MCP tools.
   - specifically: make sure content you have edited is not truncated.
 - follow style convention:
 {{include:writing/RonzzWikiBase/ronzzwikibase-style-convention}}
+{{include:writing/katex-math-requirements}}
