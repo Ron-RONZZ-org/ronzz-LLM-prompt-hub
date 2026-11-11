@@ -247,3 +247,8 @@ Editors know why you used `<pre>` as they asked you to do it. Readers don't need
 - use arabic-indian numbers, not words. (e.g., 25 participants, not twenty-five participants)
 - use scientific notation for numbers larger than 10^3 or smaller than 10^-3 (e.g., $6 \cdot 10^{9}$ USD
 
+### Respect symbolic notations at RonzzWikiBase
+
+- before you write formulas, first study notations on relevant wiki pages (e.g., pages in relevant categories)
+- respect notation convention on those pages to ensure consistency
+
