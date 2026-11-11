@@ -254,6 +254,7 @@ Editors know why you used `<pre>` as they asked you to do it. Readers don't need
 ### `Main:` namespace conventions
 
 - titles/category names: singular, unless conventionally plural
+- use most descriptive categories only: If an article is added to category A, do not add it to B given $A \subset B$.
 
 ### Respect symbolic notations at RonzzWikiBase
 
