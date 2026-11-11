@@ -239,6 +239,10 @@ Command output is in plain <pre></pre>, which is more efficient then <syntaxhigh
 ```
 Editors know why you used `<pre>` as they asked you to do it. Readers don't need to know anything about `<pre>` vs. `<syntaxhighlight>`. Omit the redundant response note to user request.
 
+### Do NOT duplicate
+
+- When a topic is already treated in a separate article, simply link to that article. No extra explanation.
+
 ### Respect grammatical choices at RonzzWikiBase
 
 - the Universe (always capitalise)

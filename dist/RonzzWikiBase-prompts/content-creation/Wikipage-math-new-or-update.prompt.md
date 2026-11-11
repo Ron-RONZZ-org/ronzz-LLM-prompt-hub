@@ -211,10 +211,6 @@ Most laws of nature are stated as rules about how quantities change, so differen
 - always begin discussion with abstract general-case definitions
 - then provide concrete examples
 
-### Do NOT duplicate
-
-- When a topic is already treated in a separate article, simply link to that article. No extra explanation.
-
 ### Good examples to imitate
 
 - https://wikibase.ronzz.org/wiki/Ring_(mathematical_concept)
