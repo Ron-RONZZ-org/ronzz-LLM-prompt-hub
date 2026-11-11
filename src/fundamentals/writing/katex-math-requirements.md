@@ -53,6 +53,7 @@ $$
 \ddot{\mathbf{r}}_m=-GM\frac{\mathbf{r}}{r^3} \text{ (1)/m} \\
 \ddot{\mathbf{r}}_M=+Gm\frac{\mathbf{r}}{r^3} \text{ (2)/M}
 $$
+```
 
 - Use symbolic language whenever possible
 
@@ -73,6 +74,7 @@ GOOD:
 $$
 c_1, c_2, \cdots, c_n = 0.
 $$
+```
 
 BAD:
 ```
@@ -103,7 +105,7 @@ $$
 $$
 ```
 
-- use 
+- use
 
 ```
 \det\begin{pmatrix}

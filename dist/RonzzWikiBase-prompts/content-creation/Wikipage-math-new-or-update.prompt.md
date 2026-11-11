@@ -68,29 +68,28 @@ $$
 \ddot{\mathbf{r}}_m=-GM\frac{\mathbf{r}}{r^3} \text{ (1)/m} \\
 \ddot{\mathbf{r}}_M=+Gm\frac{\mathbf{r}}{r^3} \text{ (2)/M}
 $$
-
+```
 - Use symbolic language whenever possible
 
 GOOD:
+
 ```
 $$\exists a \in B$$
-
 ```
-
 BAD:
+
 ```
 There exists $a$ in $B$
-
 ```
-
 - to emphasise multiple variables all have a value $a$, use , to separate the variables
 
 GOOD:
+
 ```
 $$
 c_1, c_2, \cdots, c_n = 0.
 $$
-
+```
 BAD:
 
 ```
