@@ -140,7 +140,7 @@ c&&d
 - Use oxford commas
   - bread, wine, and apple, not bread, wine and apple
 
-## Example text
+## Style example
 
 ```wikitext
 [[Category:Artificial neural network]]
@@ -451,4 +451,6 @@ def train(self, training_data, epochs, mini_batch_size, eta, test_data=None):
 </syntaxhighlight>
 ```
 
-## topic prompt
+(End style example) DO NOT COPY STYLE EXAMPLE IN YOUR RESPONSE. WRITE ON THE TOPIC BELOW:
+
+## TOPIC

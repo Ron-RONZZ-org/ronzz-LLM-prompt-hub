@@ -12,5 +12,7 @@ Respond uniquely with a wikitext snippet according to the topic prompt.
 
 {{include:writing/RonzzWikiBase/sample-text}}
 
+{{include:writing/technical/end-style-example}}
+
 ## topic prompt
 

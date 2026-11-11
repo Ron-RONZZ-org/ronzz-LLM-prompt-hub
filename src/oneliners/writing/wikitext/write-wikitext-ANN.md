@@ -8,9 +8,11 @@ Respond uniquely with a wikitext snippet according to the topic prompt.
 
 {{include:writing/English}}
 
-## Example text
+## Style example
 
 {{include:writing/RonzzWikiBase/sample-text-ANN}}
 
-## topic prompt
+{{include:writing/technical/end-style-example}}
+
+## TOPIC
 

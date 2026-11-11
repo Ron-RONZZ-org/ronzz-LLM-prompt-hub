@@ -273,4 +273,6 @@ $$\| \vec u + \vec v  \|^2 = \| \vec u  \|^2 + \| \vec v  \|^2.$$
 {{End hidden}}
 ```
 
+(End style example) DO NOT COPY STYLE EXAMPLE IN YOUR RESPONSE. WRITE ON THE TOPIC BELOW:
+
 ## topic prompt
