@@ -1,9 +1,10 @@
-## TASK: make plantuml diagram(s)
+## TASK:
 
-## Topic:
+respond with plantuml diagram(s) code snippet(s).
 
 ## Requirements
 
+- 1 code snippet per diagram
 - when possible, use "bluegray" theme
 - this uml will be rendered by the "Diagrams" MediaWiki extension on a live MediaWiki instance
   - therefore, respond with a code block with plantuml code wrapped between <uml></uml> 
@@ -25,3 +26,7 @@ node "Database" {
 @enduml
 </uml>
 ```
+
+## TOPICS
+
+{{topic}}
