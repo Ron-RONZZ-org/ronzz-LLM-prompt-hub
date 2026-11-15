@@ -137,6 +137,7 @@ c&&d
 
 - Formula then terms in a centered wikitable (Capitalise first letter of each term: "Proton", not "proton")
   - call $G$ the "Gravitational constant", not "Newtonian gravitational constant"
+  - list variables in their base form: (e.g., when $p^2$ appears in the equation, don't list $p^2$ as "squared momentum", but $p$ as momentum.
 
 GOOD:
 
@@ -170,4 +171,4 @@ $$
 
 ## Prompt
 
-(DO NOT FORGET TO INCLUDE THE WIKITABLE LISTING SYMBOLS IN THE EQUATION ALONGSIDE EXPLANATION)
+(DO NOT FORGET TO INCLUDE THE WIKITABLE ENCLOSED in <div class="center"></div> LISTING SYMBOLS IN THE EQUATION ALONGSIDE EXPLANATION)

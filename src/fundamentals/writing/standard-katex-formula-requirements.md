@@ -1,5 +1,6 @@
 - Formula then terms in a centered wikitable (Capitalise first letter of each term: "Proton", not "proton")
   - call $G$ the "Gravitational constant", not "Newtonian gravitational constant"
+  - list variables in their base form: (e.g., when $p^2$ appears in the equation, don't list $p^2$ as "squared momentum", but $p$ as momentum.
 
 GOOD:
 ```wikitext
