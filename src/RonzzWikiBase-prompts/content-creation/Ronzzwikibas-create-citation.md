@@ -35,7 +35,11 @@ https://wikibase.ronzz.org/wiki/Source:Early_Identification_of_Autism_Spectrum_D
 | Pediatrics (journal) | Q2913 | created | `Collective:Pediatrics` |
 | Sheldon Wagner | Q2935 | created | `Person:Sheldon Wagner` |
 | Amy Wetherby | Q2936 | created | `Person:Amy Wetherby` |
+
 ```
+### Access file
+
+If user provided you an access file, attach it to the `Source:` item created.
 
 ## Content to add to Source:
 
