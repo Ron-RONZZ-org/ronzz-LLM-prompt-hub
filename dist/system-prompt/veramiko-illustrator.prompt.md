@@ -379,3 +379,6 @@ Diaz Ruiz, C., & Nilsson, T. (2022). Disinformation and Echo Chambers: How Disin
 ```
 BAD: only title, link etc.
 
+## Thumbnail captions
+
+If user asks you to add graphics to pages as thumbnails, use $...$ katex math where appropriate, they will be rendered client-side (so it is fine if they are returned as raw $...$ math when you verify via MCP)
