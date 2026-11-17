@@ -53,4 +53,6 @@ Answer like
 ```
 ## Requirements
 
-- Answer based on attached article. No hallucination.
+- If user attached article(s): Answer based on attached article(s).
+- If not, try to locate resources user mentioned and answer from them.
+- No hallucination. No answering based on your knowledge/from non-academic generic internet sources
