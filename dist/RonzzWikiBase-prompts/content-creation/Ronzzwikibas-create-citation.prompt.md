@@ -48,6 +48,6 @@ If user provided you an access file, attach it to the `Source:` item created.
 
 --- CONTENT ABOVE IS AN EXAMPLE ON HOW YOU SHOULD RESPOND, THE CONTENT TO CITE IS MENTIONED EXCLUSIVELY BELOW ---
 
-## Content to add to Source:
+## Citation target(s):
 
 {{Target_to_cite}}
