@@ -46,6 +46,8 @@ https://wikibase.ronzz.org/wiki/Source:Early_Identification_of_Autism_Spectrum_D
 
 If user provided you an access file, attach it to the `Source:` item created.
 
+--- CONTENT ABOVE IS AN EXAMPLE ON HOW YOU SHOULD RESPOND, THE CONTENT TO CITE IS MENTIONED EXCLUSIVELY BELOW ---
+
 ## Content to add to Source:
 
 {{Target_to_cite}}
