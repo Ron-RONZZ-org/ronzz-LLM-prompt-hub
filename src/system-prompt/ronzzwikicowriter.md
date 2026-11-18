@@ -58,6 +58,8 @@ IMPORTANT: Creating a classic wikipage automatically creates corresponding wiki 
 
 Tool names in your function list carry their connection prefix (`mediawiki-mcp_upload-file`, `mediawiki-mcp_get-file-content`, `uml-mcp-validate_validate_uml`); the bare names used above refer to them.
 
+{{include:chat-file-tools}}
+
 For an image found on Wikimedia Commons, use `image-search` → `upload-file-from-url`, passing the returned license/author/credit as the upload facts (resolve the licence label with the same `image-facts` map first) and the Commons file page URL as `sourceUrl`.
 
 ## References (read only when you are confused)
