@@ -74,6 +74,8 @@ field. Never claim an upload you did not make.
    fully attached: report the `File:` title (when present) and
    `Special:UpdateSource/<Qid>` for the editor; do not retry blindly.
 
+{{include:chat-file-tools}}
+
 ## Class notes
 
 `embeddable-describe-entity-type` with `kind='citation-source'` returns the current class list and the fields each class exposes. Call it before the first create or update in a chat, and again whenever a create is rejected with an unexpected field.
