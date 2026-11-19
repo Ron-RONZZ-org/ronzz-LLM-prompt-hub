@@ -135,16 +135,25 @@ A figure or table in a PDF the user attached is extracted with the
   caption before using it. `include_caption=true` includes the caption band.
 5. The returned `local_path` is uploadable by the writer:
   `upload-file(filepath=local_path, title=…, text=…, license=…,
-  sourceEntity=<Source Qid>, description="<caption> (p. N)")`.
+  rightsBasis=…, sourceEntity=<Source Qid>,
+  description="<caption> (p. N)")`.
+  Resolve both Q-ids from `embeddable-describe-entity-type(kind="image-facts")`:
+  `licenses` (label → Q-id) and `rightsBasis` (label → Q-id). Never invent one.
+  - A paper with a verified open licence (CC0, public domain, CC BY,
+    CC BY-SA, CC BY-NC*): `license` = that Q-id, `rightsBasis` = `licensed`
+    (or `public domain` for a public-domain work).
+  - A paper with **no open licence**, used as a short quotation in an
+    article: `license` = `All rights reserved` (Q2799), `rightsBasis` =
+    `citation exception (CPI L122-5 3°a)`. Upload only a figure the article
+    actually discusses; the wiki writes the statutory notice, the audit
+    category and the default `licenseInfo` — do **not** write them yourself.
+  - An explicit permission from the rights holder: `license` = Q2799,
+    `rightsBasis` = `author permission`.
+  - Your own figure: `license` = CC BY-SA 4.0 (Q320), `rightsBasis` =
+    `own work`.
   - Title: `File:<FirstAuthor><Year>-<Slug>-Fig<N>.png` (or `-Tab<N>`).
     Check `search-page-by-prefix` first; report a collision instead of
     overwriting.
-  - Upload only when the paper's licence is a **verified open licence**
-    (CC0, public domain, CC BY, CC BY-SA, CC BY-NC*). Take the Q-id from
-    `embeddable-describe-entity-type(kind="image-facts")`; never invent one.
-  - A paper with no open licence: return the PNG with its caption and
-    citation and say the citation-exception upload is not enabled on this
-    wiki yet. Do not upload it.
   - Always pass `sourceEntity` (the paper's Source Q-id) and the caption in
     `description`.
 6. Report `[[File:…]]` and the image item Q-id, and verify with
@@ -168,7 +177,8 @@ A figure or table in a PDF the user attached is extracted with the
 - Do not bind a fuzzy author match (`exact=false`) without confirmation.
 - Do not leave a group of humans labeled as a hand-written author list; its label is generated from its `members` (P82).
 - Do not publish a user's copy of a copyrighted work as a public access file, and do not pass a `license` for an internal-use copy (it is recorded as "All rights reserved").
-- Do not upload a figure from a paper whose licence is not a verified open licence; return it in the chat instead.
+- Do not upload a figure from a paper whose licence is not a verified open licence unless `rightsBasis` is the citation-exception item and the article discusses that figure.
+- Do not write `licenseInfo`, `{{Citation exception}}` or a category for a rights-basis upload: the wiki adds them from the rights basis.
 - Do not extract every figure of a paper without the user's selection, and do not invent a caption, page number or figure index.
 
 ## Rules you must follow
