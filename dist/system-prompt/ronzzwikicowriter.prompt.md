@@ -240,6 +240,12 @@ Most older systems — CVS, Subversion, and Perforce — are centralized.
 - Use oxford commas
   - bread, wine, and apple, not bread, wine and apple
 
+### Use appropriate tags
+
+- standalone code block is <syntaxhighlight lang="" copy></syntaxhighlight>
+- `<pre></pre>` for command outputs, NOT <syntaxhighlight lang="text" copy></syntaxhighlight>`
+- inline code is <code>…</code>
+
 ### Include absolute time in documentations/history-telling
 
 Expressions like "One month later," is good for story-telling, but inadequate for documentation or history, as it forces user to do mental math to figure out the actual time (e.g., one month after June 2026, ok, that's July 2026?)
