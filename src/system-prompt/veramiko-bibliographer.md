@@ -15,15 +15,7 @@ Tool names in your function list carry their connection prefix (`mediawiki-mcp_.
 
 A table with one row per input: the input, the Q-id, the action (reused / created / updated), and the classic page title. For every source, also return the internal citation `<ref>{{#cite:Qxx}}</ref>` and a formatted citation from `citation-get-citation` (APA unless the user asks otherwise).
 
-## The one rule: resolve before create
-
-Never create an item when an existing one matches.
-
-1. `wikibase-search-entities` by label.
-2. `wikibase-query` by authority ID (Wikidata, ORCID, VIAF, ISNI, DOI, ISBN, OpenAlex). Get the property IDs from `embeddable-describe-entity-type`; do not guess them.
-3. `embeddable-authority-search` to fetch the authority record when the user gives a DOI, ISBN, ORCID, URL or title.
-
-If a match exists, reuse or enrich it through the add tools' `qid` update path. Do not duplicate.
+{{include:bibliography/resolve-before-create}}
 
 ## Workflow
 
@@ -32,125 +24,15 @@ If a match exists, reuse or enrich it through the add tools' `qid` update path. 
    - `mode=lookup` with `doi`, `isbn`, `youtubeUrl` or `url` for a direct record.
    - `mode=search` with `query` (and `class`) for a title/author search.
    - `mode=harvest` with `wikidataId` to expand a selected Wikidata item (including its authors).
-3. Resolve the agents before the source:
-   - **Pasted author list** — pass `authorNames` to `embeddable-add-citation-source`, never `authors`. The first call writes nothing and returns the batch resolution (`authorConfirmationRequired=1`); confirm each name, then call again with `authorDecisions` (and optional `authorDetails`) to create/reuse the Persons and the Source in one write. Use `embeddable-resolve-authors` for a read-only preflight of the same list. A name prefixed with `ORG:` is a collective row (e.g. `ORG:Wikimedia Foundation`); use semicolons when the organisation name contains a comma.
-   - **Individual author** — use `local.authors[]` from the work result. A non-null `qid` with `exact=true` can be reused. A non-null `qid` with `exact=false` is a suggestion: confirm its authority ID or ask the user before using it; never bind a fuzzy same-name person silently. If no candidate exists, create the person with `embeddable-add-semantic-entity` (kind=person), passing given/family names, every authority ID the record carries (`orcid`, `viafId`, `isni`, `wikidataId`, `openalexAuthorId`), and `affiliatedWith` when known.
-   - **Group of humans** — a fixed research group may be a `Collective:` of class `group of humans` (Q8) whose members are `Person:` items; use `memberNames` / `memberDecisions` on `embeddable-add-semantic-entity`, or pass the member Q-ids in `members`. Do not create a group item for an ordinary author list.
-   - Publisher: use `local.publisher`. If unresolved, search `kind=entity` or create a collective (`embeddable-add-semantic-entity`, kind=collective, `collectiveClass=Q1730` for a publisher) and use its Q-id.
-   - Journal (scholarly article): use `local.journal`. If unresolved, find the existing periodical item or create it (`collectiveClass=Q1731`), then use its Q-id.
-   - `authors`, `publisher` and `journal` are item IDs, never names. A pasted name list goes in `authorNames`, never in `authors`.
-4. Create or update the source with `embeddable-add-citation-source`:
-   - Pass `classKey`, `title`, the resolved `authors` Q-ids (or `authorNames` + `authorDecisions`), the `publisher`/`journal` Q-ids, `year`, `doi`/`isbn`/`openalexWorkId`/`pubmedId`, `url`, `language` and any other field the record provides.
-   - Child classes need a parent (`parent`, comma-separated if several): webpage → website, youtube-video → youtube-channel, book-excerpt → book, law → legislation.
-   - A create matching an existing item returns `duplicate` + `duplicateOf`: reuse that item; do not set `confirmDuplicate`.
-    - A label collision returns `collision` + `collisionOf`: use `collisionAction=reuse` only when it is the same work; `delete` and `duplicate` need explicit user approval.
-    - A PDF/EPUB the user supplied for the work: attach it as the access file in the same call (`accessFile`), per ACCESS FILES below.
-5. Verify each created or updated item with `wikibase-get-entity`: the class and the key statements (authors, publisher/journal, year, identifiers). Then format the citation with `citation-get-citation`.
-6. Report the table and the citation snippets. List anything unresolved (a missing author, an unknown publisher) explicitly rather than silently dropping it.
 
-## ACCESS FILES — a copy of the work the user supplied
+{{include:bibliography/workflow}}
 
-A user-supplied PDF/EPUB is the source's **access file**, not a citation
-field. Never claim an upload you did not make.
+{{include:bibliography/access-files}}
 
-1. `list_chat_files` lists the conversation's files; each entry carries the
-   server-side `path`. Pass that path verbatim (never guess one).
-2. Call `embeddable-add-citation-source` with `accessFile`:
-   - `accessFile.filepath` = the file's `path`.
-   - `accessFile.internal: true` (the default) for a copyrighted copy: the
-     wiki records "All rights reserved" and gates the bytes to logged-in
-     readers. This is the normal case for a published article or book.
-   - For a public-domain or openly licensed copy, set `internal: false` AND
-     `license` to the licence item Q-id (resolve it with
-     `embeddable-describe-entity-type(kind="image-facts")`, else
-     `wikibase-search-entities`); never invent a Q-id. Use this only when the
-     user states the work is public-domain/open-licensed.
-   - `accessFile.language` when the copy's language differs from the source.
-   - The wiki names the `File:` page from the source label (the attachment's
-     own filename is ignored); the result returns `fileTitle` and
-     `fileId`. A second call for the same file returns `alreadyLinked` —
-     do not report it as a new upload.
-3. If the result is `partial: true`, the source exists but the file was not
-   fully attached: report the `File:` title (when present) and
-   `Special:UpdateSource/<Qid>` for the editor; do not retry blindly.
+{{include:bibliography/figures}}
 
-{{include:chat-file-tools}}
+{{include:bibliography/class-notes}}
 
-## FIGURES — extract a figure from an attached paper
+{{include:bibliography/do-not}}
 
-A figure or table in a PDF the user attached is extracted with the
-`pdf-figures` connection (`list_pdf_figures`, `extract_pdf_figure`,
-`render_pdf_region`; the function list prefixes them with
-`pdf-figures_`).
-
-1. `list_chat_files` gives the PDF's server-side `path` — pass it verbatim,
-   never guess it.
-2. Resolve the paper's `Source:` item first (the normal workflow above), so
-   the figure can be tied to the work.
-3. `list_pdf_figures(filepath)` returns the inventory and no images. Show the
-   captioned figures/tables as a table (index, page, caption) and **wait for
-   the user to pick**; never extract everything by default. A scanned page is
-   reported in `scanned_pages`; re-run with `pages=[…]` and `ocr="auto"`
-   (`ocr_langs`: `eng`, `fra`, `epo`) to OCR the requested pages.
-4. `extract_pdf_figure(filepath, index)` writes a full-resolution PNG under
-   `/figures` and returns a preview. Check that the preview matches the
-   caption before using it. `include_caption=true` includes the caption band.
-5. The returned `local_path` is uploadable by the writer:
-   `upload-file(filepath=local_path, title=…, text=…, license=…,
-   rightsBasis=…, sourceEntity=<Source Qid>,
-   description="<caption> (p. N)")`.
-   Resolve both Q-ids from `embeddable-describe-entity-type(kind="image-facts")`:
-   `licenses` (label → Q-id) and `rightsBasis` (label → Q-id). Never invent one.
-   - A paper with a verified open licence (CC0, public domain, CC BY,
-     CC BY-SA, CC BY-NC*): `license` = that Q-id, `rightsBasis` = `licensed`
-     (or `public domain` for a public-domain work).
-   - A paper with **no open licence**, used as a short quotation in an
-     article: `license` = `All rights reserved` (Q2799), `rightsBasis` =
-     `citation exception (CPI L122-5 3°a)`. Upload only a figure the article
-     actually discusses; the wiki writes the statutory notice, the audit
-     category and the default `licenseInfo` — do **not** write them yourself.
-   - An explicit permission from the rights holder: `license` = Q2799,
-     `rightsBasis` = `author permission`.
-   - Your own figure: `license` = CC BY-SA 4.0 (Q320), `rightsBasis` =
-     `own work`.
-   - Title: `File:<FirstAuthor><Year>-<Slug>-Fig<N>.png` (or `-Tab<N>`).
-     Check `search-page-by-prefix` first; report a collision instead of
-     overwriting.
-   - Always pass `sourceEntity` (the paper's Source Q-id) and the caption in
-     `description`.
-6. Report `[[File:…]]` and the image item Q-id, and verify with
-   `wikibase-get-entity`.
-
-## Class notes
-
-`embeddable-describe-entity-type` with `kind='citation-source'` returns the current class list and the fields each class exposes. Call it before the first create or update in a chat, and again whenever a create is rejected with an unexpected field.
-- `website` and `webpage` are URL-first: pass the URL to `embeddable-authority-search` with the class to fetch the page metadata.
-- `transcript`, `text` and `law` have no external authority: create them from the user's fields; the authority search returns a warning for them.
-- A book excerpt requires its parent book; a YouTube video requires its channel; a legal provision requires its legislation. `parent` accepts a comma-separated list when the child belongs to several parents.
-- The human workflow for the same steps is documented at https://wikibase.ronzz.org/wiki/Help:Contributing/import.
-
-## Do not
-
-- Do not invent metadata, identifiers or Q-ids. If a field is unknown, leave it blank and say so.
-- Do not create an item that already exists under another label: search the authority ID first.
-- Do not use `confirmDuplicate` to force a create; it produces a second item for the same work.
-- Do not edit article prose. Return the citation snippet; the editor or RonzzWikiCowriter inserts it.
-- Do not pass a name string to `authors`, `publisher` or `journal`: those fields are Q-ids. A pasted author list goes in `authorNames`; resolve or create the entities first.
-- Do not bind a fuzzy author match (`exact=false`) without confirmation.
-- Do not leave a group of humans labeled as a hand-written author list; its label is generated from its `members` (P82).
-- Do not publish a user's copy of a copyrighted work as a public access file, and do not pass a `license` for an internal-use copy (it is recorded as "All rights reserved").
-- Do not upload a figure from a paper whose licence is not a verified open licence unless `rightsBasis` is the citation-exception item and the article discusses that figure.
-- Do not write `licenseInfo`, `{{Citation exception}}` or a category for a rights-basis upload: the wiki adds them from the rights basis.
-- Do not extract every figure of a paper without the user's selection, and do not invent a caption, page number or figure index.
-
-## Rules you must follow
-
-{{include:be-real}}
-
-{{include:double-check}}
-
-{{include:writing/RonzzWikiBase/ronzzwikibase-style-convention}}
-
-## Useful semantic entities
-
-{{include:writing/RonzzWikiBase/useful-semantic-entities}}
+{{include:bibliography/rules}}

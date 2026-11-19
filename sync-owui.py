@@ -5,8 +5,8 @@ Mapping
 -------
 * ``dist/system-prompt/**/*.prompt.md`` become Open WebUI **custom Models**.
   Their YAML frontmatter carries the model metadata (``name``, ``description``,
-  ``tags``, ``base_model``, ``tool_ids``); the rest of the file is the model's
-  system prompt.
+  ``tags``, ``base_model``, ``tool_ids``, ``access_groups``); the rest of the
+  file is the model's system prompt.
 * every other ``dist/**/*.prompt.md`` becomes an Open WebUI **Prompt** — the
   ``/slash`` commands inserted into the chat composer. The command is derived
   from the file name.
@@ -56,6 +56,7 @@ DEFAULT_BASE_MODEL = "deepseek-flash"
 DEFAULT_IMAGE = "/static/favicon.png"
 
 # Visible to every logged-in user (principal_type "user" + wildcard id).
+# A model that declares ``access_groups`` replaces this with group grants.
 PUBLIC_READ = [{"principal_type": "user", "principal_id": "*", "permission": "read"}]
 
 # Features switched on by default when the model is opened in the composer.
@@ -174,6 +175,7 @@ def collect_models() -> dict[str, dict]:
                     "access_grants": PUBLIC_READ,
                     "is_active": True,
                 },
+                "access_groups": frontmatter.get("access_groups", []),
                 "source": path.relative_to(ROOT),
             }))
     return _unique(items, "model id")
@@ -254,6 +256,19 @@ class OWUI:
     def list_prompts(self) -> dict[str, dict]:
         return {prompt["command"]: prompt for prompt in self._request("GET", "/api/v1/prompts/")}
 
+    def list_group_ids(self) -> dict[str, str]:
+        """Group name -> id, for resolving ``access_groups`` frontmatter."""
+        groups = self._request("GET", "/api/v1/groups/")
+        result: dict[str, str] = {}
+        for group in groups:
+            name = group.get("name")
+            if not name:
+                continue
+            if name in result:
+                raise SyncError(f"group name {name!r} is ambiguous on {self.base_url}")
+            result[name] = group["id"]
+        return result
+
 
 # --- diffing --------------------------------------------------------------
 
@@ -276,6 +291,40 @@ def _tags_as_names(value) -> list[str]:
     return names
 
 
+def _grant_keys(grants) -> list[tuple]:
+    """Comparable identity of a grant list (the API returns dicts)."""
+    return sorted(
+        (grant.get("principal_type"), grant.get("principal_id"), grant.get("permission"))
+        for grant in (grants or [])
+        if isinstance(grant, dict)
+    )
+
+
+def resolve_model_access(desired: dict[str, dict], client: OWUI) -> None:
+    """Replace PUBLIC_READ with group grants for models that declare access_groups.
+
+    Group names are resolved against the live instance so the repo never carries
+    instance-specific group ids. A missing group is a hard error: silently
+    falling back to public sharing would defeat the gate.
+    """
+    gated = {model_id: entry for model_id, entry in desired.items() if entry["access_groups"]}
+    if not gated:
+        return
+    group_ids = client.list_group_ids()
+    for model_id, entry in gated.items():
+        grants = []
+        for name in entry["access_groups"]:
+            if name not in group_ids:
+                raise SyncError(
+                    f"{entry['source']}: access_groups names unknown group {name!r} — "
+                    f"create it in Open WebUI before syncing"
+                )
+            grants.append(
+                {"principal_type": "group", "principal_id": group_ids[name], "permission": "read"}
+            )
+        entry["form"]["access_grants"] = grants
+
+
 def model_changed(current: dict, desired: dict) -> bool:
     if current.get("name") != desired["name"]:
         return True
@@ -293,6 +342,8 @@ def model_changed(current: dict, desired: dict) -> bool:
     if sorted(current_meta.get("toolFilter") or []) != sorted(desired_meta["toolFilter"]):
         return True
     if sorted(current_meta.get("defaultFeatureIds") or []) != sorted(DEFAULT_FEATURE_IDS):
+        return True
+    if _grant_keys(current.get("access_grants")) != _grant_keys(desired.get("access_grants")):
         return True
     return False
 
@@ -406,6 +457,7 @@ def main(argv: list[str] | None = None) -> int:
 
     client = OWUI(base_url, api_key)
     try:
+        resolve_model_access(desired_models, client)
         print("Models:")
         sync_models(client, desired_models, dry_run=args.dry_run, prune=not args.no_prune)
         print("\nPrompts:")
