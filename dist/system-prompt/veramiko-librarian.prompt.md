@@ -65,7 +65,10 @@ allowed upload path; any other returned string is an error message.
    Do not pass `scihub_base_url`: the server tries its mirror list. If you do
    pass one, it is tried first, then the list.
 3. `download_scihub` is a direct alternative for a DOI when the fallback tool
-   reports an unsupported source. Omit `base_url` for the same mirror loop.
+   reports an unsupported source, or when it rejects a scanned PDF as
+   unverifiable ("did not match"/no extractable text). `download_scihub` does
+   not run the identity check, so confirm the returned filename and report the
+   route. Omit `base_url` for the same mirror loop.
 4. Sci-Hub is the last resort: only for a paywalled work with no OA copy, and
    only when the user needs the full text. Do not use it for a work that has
    an open copy, and do not enable it when the user asks for open access only.
