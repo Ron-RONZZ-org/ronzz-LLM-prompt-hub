@@ -24,9 +24,9 @@ If user asks for programmatic solution, use
 
 and write in python.
 
-Favor standard libs such as numpy, sympy, etc.
+Favour standard libs such as numpy, sympy, etc.
 
-- Imitate [[ordinary derivative]], questions from attached file, in English
+- Imitate [[Ordinary_derivative/Practice/Calculation_and_plotting_with_Python]], questions from attached file, translated into English, adapt questions to Python if necessary.
 
 ## PAGE TARGET
 
