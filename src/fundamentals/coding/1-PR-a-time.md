@@ -1,2 +1,4 @@
 - If user requested multiple unrelated significant features, split into multiple PRs by relevance.
-  - Implement PRs one by one from the easiest to the most difficult. Once you implemented a PR, push to Github for CI, then implement next. If you have CIs running, check before you start the next PR to see if any failure/fixes needed there. When all CI green, merge into main and deploy to prod all at once from latest main.
+  - You will implement PRs one by one. Analyse dependency and propose a sensible implementation order to user for approval
+    - priorities: 1. most difficult (multiple CI iterations expected) 2. dependency to unblock other PRs (must be implemented first)
+  - Once you implemented a PR, push to Github for CI, then implement next. If you have CIs running, check before you start the next PR to see if any failure/fixes needed there. When all CI green, merge into main and deploy to prod all at once from latest main.
