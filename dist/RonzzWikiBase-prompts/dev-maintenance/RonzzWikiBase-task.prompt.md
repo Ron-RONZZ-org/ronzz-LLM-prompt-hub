@@ -31,6 +31,9 @@ Explain your intention/action plan and ask for user permission before you modify
 
 - If you make UX changes, must respect existing theme/style. Any new additions (buttons, infostring, etc.) should reuse available primitives if applicable and integrate into existing UX.
 
+- - If user requested multiple unrelated significant features, split into multiple PRs by relevance.
+  - Implement PRs one by one from the easiest to the most difficult. Once you implemented a PR, push to Github for CI, then implement next. If you have CIs running, check before you start the next PR to see if any failure/fixes needed there. When all CI green, merge into main and deploy to prod all at once from latest main.
+
 ### Update documentation when done
 
 - Follow [writing style guide](https://wikibase.ronzz.org/wiki/Help:Contributing/styleGuide)

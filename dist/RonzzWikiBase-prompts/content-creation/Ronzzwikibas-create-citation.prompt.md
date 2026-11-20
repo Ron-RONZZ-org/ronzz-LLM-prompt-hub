@@ -3,50 +3,36 @@
 
 ## TASK
 
-Create citation.
+Create citations (Source: on RonzzWikiBase).
+**Add article abstract when possible**.
 
 ## REQUIREMENTS
 
 ### Response format
 
 ```md
-## The source(s)
-
-| Input | Q-id | Action | Classic page title |
-|---|---|---|---|
-| Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Pediatrics, 2015; DOI 10.1542/peds.2014-3667c) | **Q2937** | created | `Source:Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Scholarly article)` |
-
-## Citation snippet(s)
-
-Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Pediatrics, 2015; DOI 10.1542/peds.2014-3667c):
+## Article 1 title
 
 ```
-<ref>{{ #cite:Q2937 }}</ref>
+APA style citation
+
+<ref>{{#cite:Qxxxx}}</ref>
 
 ```
 
-## `Source:` page:
-
-Early Identification of Autism Spectrum Disorder: Recommendations for Practice and Research (Pediatrics, 2015; DOI 10.1542/peds.2014-3667c):
 ```
-https://wikibase.ronzz.org/wiki/Source:Early_Identification_of_Autism_Spectrum_Disorder:_Recommendations_for_Practice_and_Research_(Scholarly_article)
+https://wikibase.ronzz.org/wiki/Source:xxx
 
 ```
 
-## Supporting entities created
+## Article 2 title
 
-| Entity | Q-id | Action | Page title |
-|---|---|---|---|
-| Pediatrics (journal) | Q2913 | created | `Collective:Pediatrics` |
-| Sheldon Wagner | Q2935 | created | `Person:Sheldon Wagner` |
-| Amy Wetherby | Q2936 | created | `Person:Amy Wetherby` |
-
+...
 ```
 ### Access file
 
 If user provided you an access file, attach it to the `Source:` item created.
-
---- CONTENT ABOVE IS AN EXAMPLE ON HOW YOU SHOULD RESPOND, THE CONTENT TO CITE IS MENTIONED EXCLUSIVELY BELOW ---
+If not, attempt to fetch with available tools (e.g, paper-search)
 
 ## Citation target(s):
 

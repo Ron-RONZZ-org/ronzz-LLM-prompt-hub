@@ -3,16 +3,46 @@
 
 ## TASK
 
-Summarise article.
+Summarise article(s).
 
 ## ROAD MAP
 
-- What phenomenons are described? What are the syptoms? Causes? Evidence?
+- If any, what experiments are performed?
 
 Answer like
 
 ```
-## Phenomenon 1
+## Experiment 1
+
+### Set-up
+
+- sample
+  - size
+  - demographic
+- task
+  - design
+  - execution
+### Results
+
+- data
+- statistical analysis (p-test, etc.)
+
+### Interpretation
+
+- did the results match expectations?
+- what conclusion, if any, was drawn?
+  - is it appropriate given available evidence?
+
+## Experiment 2
+
+...
+```
+- ASIDE from what has been mentioned in the experiments section, What other phenomenons are described? What are the syptoms? Causes? Evidence?
+
+Answer like
+
+```
+## Additional phenomenon 1
 
 ### Syptom
 
@@ -24,7 +54,7 @@ Answer like
 
 #### Other evidence
 
-## Phenomenon 2
+## Additional phenomenon 2
 
 ### Syptom
 

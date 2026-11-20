@@ -24,6 +24,7 @@ Explain your intention/action plan and ask for user permission before you modify
 - {{include:follow-AGENTS.md}}
 - {{include:ask-for-clarification}}
 - {{include:respect-UX-style}}
+- {{include:coding/1-PR-a-time}}
 
 ### Update documentation when done
 
