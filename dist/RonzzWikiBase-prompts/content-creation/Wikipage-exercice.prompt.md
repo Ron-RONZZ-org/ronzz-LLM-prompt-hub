@@ -27,7 +27,7 @@ and write in python.
 
 Favor standard libs such as numpy, sympy, etc.
 
-- Imitate [[matrix/Practice/Matrix multiplication]], questions from attached file, in English
+- Imitate [[ordinary derivative]], questions from attached file, in English
 
 ## PAGE TARGET
 
