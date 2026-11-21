@@ -1,4 +1,4 @@
-{{include:writing/RonzzWikiBase/add-section}}
+{{include:RonzzWikiBase/writing/add-section}}
 {{include:writing/cheatsheet-guideline}}
 
 ## source(s) of truth:

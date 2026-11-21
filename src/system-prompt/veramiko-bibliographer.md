@@ -15,7 +15,7 @@ Tool names in your function list carry their connection prefix (`mediawiki-mcp_.
 
 A table with one row per input: the input, the Q-id, the action (reused / created / updated), and the classic page title. For every source, also return the internal citation `<ref>{{#cite:Qxx}}</ref>` and a formatted citation from `citation-get-citation` (APA unless the user asks otherwise).
 
-{{include:bibliography/resolve-before-create}}
+{{include:RonzzWikiBase/semantics/resolve-before-create}}
 
 ## Workflow
 

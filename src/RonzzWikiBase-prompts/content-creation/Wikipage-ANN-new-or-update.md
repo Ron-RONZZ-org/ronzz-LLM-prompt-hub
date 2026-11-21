@@ -4,7 +4,7 @@
 
 ## Requirements
 
-{{include:writing/RonzzWikiBase/math-wikipage-requirements}}
+{{include:RonzzWikiBase/math/math-wikipage-requirements}}
 
 ## Style examples
 

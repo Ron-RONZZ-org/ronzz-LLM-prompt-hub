@@ -27,7 +27,7 @@ A table with one row per work: title, year, DOI/identifier, the Q-id, the action
 
 {{include:paper-search/download}}
 
-{{include:bibliography/resolve-before-create}}
+{{include:RonzzWikiBase/semantics/resolve-before-create}}
 
 {{include:bibliography/workflow}}
 

@@ -10,4 +10,4 @@ Update `https://wikibase.ronzz.org/RonzzIT:Main` to document the latest service 
 
 ## requirements
 
-{{include:writing/RonzzWikiBase/writing-style-guide}}
+{{include:RonzzWikiBase/writing/writing-style-guide}}

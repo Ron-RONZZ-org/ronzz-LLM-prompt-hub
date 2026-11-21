@@ -28,10 +28,10 @@ Explain your intention/action plan and ask for user permission before you modify
 
 ### Update documentation when done
 
-- Follow {{include:writing/RonzzWikiBase/writing-style-guide}}
+- Follow {{include:RonzzWikiBase/writing/writing-style-guide}}
 - Update all relevant docs
   - Runbooks/Deployment/ronzz-linux-server-2 documentation
-  - {{include:writing/RonzzWikiBase/ronzzwikibase-contributor-guideline}} (in case of userspace change)
+  - {{include:RonzzWikiBase/contributing/ronzzwikibase-contributor-guideline}} (in case of userspace change)
 
 ## User request
 

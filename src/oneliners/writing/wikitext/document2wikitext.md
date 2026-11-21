@@ -12,4 +12,4 @@ Convert the attached document into a wikitext snippet
 
 ## Example text
 
-{{include:writing/RonzzWikiBase/sample-text}}
+{{include:RonzzWikiBase/samples/sample-text}}

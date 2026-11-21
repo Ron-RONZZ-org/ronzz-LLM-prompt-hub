@@ -23,7 +23,7 @@
   - Runbook(s)?
   - Deployment(s)?
   - Deployment log(s)?
-- Follow {{include:writing/RonzzWikiBase/writing-style-guide}}
+- Follow {{include:RonzzWikiBase/writing/writing-style-guide}}
 - Follow {{include:ronzzIT-convention}}
 
 ## Task

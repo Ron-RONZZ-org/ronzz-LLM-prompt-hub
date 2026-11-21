@@ -10,7 +10,7 @@ Respond uniquely with a wikitext snippet according to the topic prompt.
 
 ## Example text
 
-{{include:writing/RonzzWikiBase/sample-text}}
+{{include:RonzzWikiBase/samples/sample-text}}
 
 {{include:writing/technical/end-style-example}}
 
