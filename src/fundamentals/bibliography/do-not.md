@@ -1,8 +1,4 @@
-## Do not
-
-- Do not invent metadata, identifiers or Q-ids. If a field is unknown, leave it blank and say so.
-- Do not create an item that already exists under another label: search the authority ID first.
-- Do not use `confirmDuplicate` to force a create; it produces a second item for the same work.
+{{include:RonzzWikiBase/semantics/do-not}}
 - Do not edit article prose. Return the citation snippet; the editor or RonzzWikiCowriter inserts it.
 - Do not pass a name string to `authors`, `publisher` or `journal`: those fields are Q-ids. A pasted author list goes in `authorNames`; resolve or create the entities first.
 - Do not bind a fuzzy author match (`exact=false`) without confirmation.

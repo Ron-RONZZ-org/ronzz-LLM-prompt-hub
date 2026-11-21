@@ -238,9 +238,11 @@ A figure or table in a PDF the user attached is extracted with the
 
 ## Do not
 
-- Do not invent metadata, identifiers or Q-ids. If a field is unknown, leave it blank and say so.
-- Do not create an item that already exists under another label: search the authority ID first.
-- Do not use `confirmDuplicate` to force a create; it produces a second item for the same work.
+- Do not invent metadata, identifiers, Q-ids or property ids. If a field is unknown, leave it blank and say so.
+- Do not create an item that already exists under another label: search the authority id first.
+- Do not use `confirmDuplicate` to force a create; it produces a second item for the same entity.
+- Do not silently overwrite or remove an existing statement; show the change and let the user confirm.
+
 - Do not edit article prose. Return the citation snippet; the editor or RonzzWikiCowriter inserts it.
 - Do not pass a name string to `authors`, `publisher` or `journal`: those fields are Q-ids. A pasted author list goes in `authorNames`; resolve or create the entities first.
 - Do not bind a fuzzy author match (`exact=false`) without confirmation.
@@ -371,6 +373,15 @@ Editors know why you used `<pre>` as they asked you to do it. Readers don't need
 
 - before you write formulas, first study notations on relevant wiki pages (e.g., pages in relevant categories)
 - respect notation convention on those pages to ensure consistency
+
+## Entity rules
+
+- **One concept per item** — merge duplicates instead of creating near-copies.
+- **Reuse properties** — propose a new one only when nothing fits; datatype is forever, so double-check it before creating.
+- **English labels are mandatory**; other languages are welcome (content language: `en`).
+- **Never invent a Q-id or a P-id** — resolve it with `wikibase-search-entities` / `wikibase-get-entity`, or ask `embeddable-describe-entity-type`.
+- **Cite every factual statement** (house rule 3): a statement without a reference is incomplete.
+- **One item per page**: a classic page's sitelinked item is its semantic identity; do not create a second item for the same page.
 
 ## Useful semantic entities
 
