@@ -10,5 +10,5 @@
 ## Requirements
 
 {{include:writing/katex-math-requirements}}
-{{include:writing/RonzzWikiBase/math-wikipage-requirements}}
+{{include:RonzzWikiBase/math/math-wikipage-requirements}}
 

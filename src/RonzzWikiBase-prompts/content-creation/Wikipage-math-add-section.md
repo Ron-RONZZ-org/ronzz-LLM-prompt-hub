@@ -1,7 +1,7 @@
 
-{{include:writing/RonzzWikiBase/add-section}}
+{{include:RonzzWikiBase/writing/add-section}}
 {{include:writing/katex-math-requirements}}
-{{include:writing/RonzzWikiBase/math-wikipage-requirements}}
+{{include:RonzzWikiBase/math/math-wikipage-requirements}}
 
 ## References
 

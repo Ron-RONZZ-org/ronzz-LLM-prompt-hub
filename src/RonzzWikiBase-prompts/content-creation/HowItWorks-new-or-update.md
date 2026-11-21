@@ -16,4 +16,4 @@
   - https://wikibase.ronzz.org/wiki/HowItWorks:Docker (primary, imitate style and structure)
   - https://wikibase.ronzz.org/wiki/HowItWorks:MediaWiki 
 - follow style convention:
-{{include:writing/RonzzWikiBase/ronzzwikibase-style-convention}}
+{{include:RonzzWikiBase/writing/ronzzwikibase-style-convention}}

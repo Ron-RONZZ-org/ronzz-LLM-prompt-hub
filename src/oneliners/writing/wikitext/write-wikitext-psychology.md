@@ -8,7 +8,7 @@ Respond uniquely with a wikitext snippet according to the topic prompt.
 
 ## Example text
 
-{{include:writing/RonzzWikiBase/sample-text-psychology}}
+{{include:RonzzWikiBase/samples/sample-text-psychology}}
 
 ## topic prompt
 

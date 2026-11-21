@@ -4,8 +4,8 @@
 
 {{include:double-check}}
 
-{{include:writing/RonzzWikiBase/ronzzwikibase-style-convention}}
+{{include:RonzzWikiBase/writing/ronzzwikibase-style-convention}}
 
 ## Useful semantic entities
 
-{{include:writing/RonzzWikiBase/useful-semantic-entities}}
+{{include:RonzzWikiBase/semantics/useful-semantic-entities}}

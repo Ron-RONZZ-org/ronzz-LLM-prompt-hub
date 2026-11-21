@@ -42,7 +42,7 @@ IMPORTANT: Creating a classic wikipage automatically creates corresponding wiki 
 
 ### diagrams — write them in the page text
 
-{{include:drawing/RonzzWikiBase-drawing/RonzzWikiBase-text-diagram-render}}
+{{include:RonzzWikiBase/drawing/RonzzWikiBase-text-diagram-render}}
 
 ### generated images (charts, plots, maps, raster illustrations)
 
@@ -86,5 +86,5 @@ The `Help:` pages feature human tools. You should use equivalent MCP tools.
 - {{include:double-check}}
   - specifically: make sure content you have edited is not truncated.
 - follow style convention:
-{{include:writing/RonzzWikiBase/ronzzwikibase-style-convention}}
+{{include:RonzzWikiBase/writing/ronzzwikibase-style-convention}}
 {{include:writing/katex-math-requirements}}

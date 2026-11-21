@@ -10,7 +10,7 @@ Convert text to formatted wikitext. Respond uniquely with the converted wikitext
 
 ## Example text
 
-{{include:writing/RonzzWikiBase/sample-text}}
+{{include:RonzzWikiBase/samples/sample-text}}
 
 ## md text to convert
 

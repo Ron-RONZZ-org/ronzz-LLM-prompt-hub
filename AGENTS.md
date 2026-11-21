@@ -11,6 +11,7 @@ This repo is the shared prompt hub for ronzz.ORG. It holds two kinds of content:
 
 - **Organization context & policy**: `src/fundamentals/org-context.md`, `src/fundamentals/credential-policy.md`, `src/fundamentals/forge-posture.md` — extend these, never duplicate their content into a prompt.
 - **Software-dev conventions**: `src/fundamentals/coding/` (git, worktree, forge ops, testing, …) — shared by any LLM code client; keep them client-agnostic.
+- **RonzzWikiBase conventions**: `src/fundamentals/RonzzWikiBase/`, grouped by theme — `semantics/` (entity model, statement rules, page quoting), `samples/`, `writing/` (style), `math/`, `drawing/`, `contributing/`. This is instance-specific: wiki-agnostic writing craft stays in `src/fundamentals/writing/`.
 - **NEVER edit `dist/`** — edit the source under `src/`, then rebuild: `python3 build-prompts.py`.
 - After any change, run `python3 build-prompts.py --check` to confirm `dist/` is consistent.
 - **Pre-commit hook** — `lefthook.yml` rebuilds (`--prune`) and stages `dist/` with every commit. Hooks run through the machine's global dispatcher (`~/.git-hooks`, from the `ronzz-dotfiles` repo), which calls `lefthook run --no-auto-install`; do **not** run `lefthook install` on such a machine. On a machine without the dispatcher, install it once per clone (see `CONTRIBUTING.md`).
