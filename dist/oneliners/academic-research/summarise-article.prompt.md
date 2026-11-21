@@ -9,12 +9,9 @@ Summarise article(s).
 
 - If any, what experiments are performed?
 
-Answer like
+### Experiment 1
 
-```
-## Experiment 1
-
-### Set-up
+#### Set-up
 
 - sample
   - size
@@ -22,10 +19,13 @@ Answer like
 - task
   - design
   - execution
-### Results
+    - explain in detail: what the participants actually did? Under what condition? If multiple tasks were performed, under what order, of what timing?
 
-- data
+### Results (markdown table)
+
+- raw data
 - statistical analysis (p-test, etc.)
+  - if original report underanalysed (missing p-value, $\chi^2$ homogeneity test across experimental cells, etc., calculate programmatically those values from available data, if possible)
 
 ### Interpretation
 
@@ -36,11 +36,11 @@ Answer like
 ## Experiment 2
 
 ...
+
 ```
-- ASIDE from what has been mentioned in the experiments section, What other phenomenons are described? What are the syptoms? Causes? Evidence?
+- ASIDE from what has been mentioned in the experiments section, What other phenomenons are described (if any) ? What are the syptoms? Causes? Evidence?
 
 Answer like
-
 ```
 ## Additional phenomenon 1
 
@@ -66,6 +66,7 @@ Answer like
 
 #### Other evidence
 ...
+
 ```
 - What are related references ?
 
@@ -80,7 +81,9 @@ Answer like
 {APA style ref}
 
 ...
+
 ```
+
 ## Requirements
 
 - If user attached article(s): Answer based on attached article(s).
