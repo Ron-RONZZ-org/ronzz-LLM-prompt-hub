@@ -6,3 +6,4 @@ Draw SVG.
 
 ## Prompt
 
+{{to-illustrate}}

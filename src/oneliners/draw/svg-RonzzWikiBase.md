@@ -28,3 +28,5 @@ After the upload, `get-file-content` with `format="both"` on the `File:` title r
 {{include:drawing/svg}}
 
 ## Prompt
+
+{{to-illustrate}}

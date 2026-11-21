@@ -96,3 +96,5 @@ If the user attaches an image and asks for labels, arrows, axes or annotations *
 - Valid XML, closed tags, quoted attributes, no truncated output.
 
 ## Prompt
+
+{{to-illustrate}}
