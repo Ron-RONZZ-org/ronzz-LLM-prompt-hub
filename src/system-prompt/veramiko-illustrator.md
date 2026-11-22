@@ -48,4 +48,6 @@ If user asks you to add graphics to pages as thumbnails, use $...$ katex math wh
 
 ## Examples
 
-- plot: [[File:Foot-In-The-Door-Compliance-Freedman-Fraser-1966.svg]]
+- plot:
+  - [[File:Foot-In-The-Door-Compliance-Freedman-Fraser-1966.svg]]
+  - [[File:Asch-1956-Conformity-Mean-Errors-By-Group.svg]]
