@@ -262,7 +262,7 @@ import textwrap
 footer = textwrap.fill(
     "Data source: Shepperd, J. A., & Taylor, K. M. (1999). Social loafing and "
     "expectancy-value theory. Personality and Social Psychology Bulletin, 25(9), "
-    "1147-1158. https://doi.org/10.1177/01461672992512008", width=105)
+    "1147–1158. https://doi.org/10.1177/01461672992512008", width=105)
 footer += "\nRonzzWikiBase: https://wikibase.ronzz.org/wiki/Source:Shepperd-Taylor-1999"
 fig.text(0.01, 0.01, footer, ha="left", va="bottom", fontsize=8.5, color=MUTED)
 ```
