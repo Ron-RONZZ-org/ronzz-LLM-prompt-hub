@@ -36,11 +36,10 @@ Summarise article(s).
 ## Experiment 2
 
 ...
-
-```
 - ASIDE from what has been mentioned in the experiments section, What other phenomenons are described (if any) ? What are the syptoms? Causes? Evidence?
 
 Answer like
+
 ```
 ## Additional phenomenon 1
 
@@ -66,7 +65,6 @@ Answer like
 
 #### Other evidence
 ...
-
 ```
 - What are related references ?
 
@@ -81,9 +79,7 @@ Answer like
 {APA style ref}
 
 ...
-
 ```
-
 ## Requirements
 
 - If user attached article(s): Answer based on attached article(s).

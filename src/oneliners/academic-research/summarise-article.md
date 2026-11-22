@@ -33,7 +33,6 @@ Summarise article(s).
 ## Experiment 2
 
 ...
-```
 - ASIDE from what has been mentioned in the experiments section, What other phenomenons are described (if any) ? What are the syptoms? Causes? Evidence?
 
 Answer like
@@ -63,6 +62,7 @@ Answer like
 #### Other evidence
 ...
 ```
+
 - What are related references ?
 
 Answer like
