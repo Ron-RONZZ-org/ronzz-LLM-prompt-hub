@@ -30,18 +30,9 @@ validation upload the SVG to RonzzWikiBase and reply with `[[File:<name>.svg]]`.
 
 {{include:RonzzWikiBase/drawing/plot-tools}}
 
-## TITLE AND FOOTER
-
-- Title: `{plot content} (based on {Author (Year)})`, one line.
-- Footer, grey, below the plot:
-  1. `Data source: {APA 7 reference with DOI}`.
-  2. `RonzzWikiBase: {Source: page URL}`.
-- Notes: as brief as possible. One line for the method; full details go on the
-  File page, not in the figure.
-
 ## OUTPUT
 
-Present the PNG preview with one short sentence. On validation, upload the SVG
-per UPLOAD TO RONZZWIKIBASE and reply with `[[File:<name>.svg]]` and nothing
-else. If `execute_code` or `upload-file` is unavailable, return the SVG source
-and say which tool is missing.
+Present the raster with one short sentence. On validation, upload the SVG per
+UPLOAD TO RONZZWIKIBASE and reply with `[[File:<name>.svg]]` and nothing else.
+If `execute_code` is unavailable, stop and say the request must be resent once
+it is back.

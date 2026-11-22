@@ -2,11 +2,11 @@
 
 ### Read the data
 
-- `ATTACHMENTS` lists the conversation's files (`[{"name", "path"}]`). Read CSV
-  and TSV with `pandas.read_csv`, Excel with `pandas.read_excel` (openpyxl is
-  installed), and images from their `path`.
-- If the data is in the message, parse it. If it is missing a column, unit, or
-  sample size, ask one short question; do not guess a value.
+- `ATTACHMENTS` lists the files on the current user message
+  (`[{"name", "path"}]`). Read CSV and TSV with `pandas.read_csv`, Excel with
+  `pandas.read_excel` (openpyxl is installed), images from their `path`.
+- If the data is in the message, parse it. If a column, unit, or sample size is
+  missing, ask one short question; do not guess a value.
 - Use the columns the user names. Do not silently drop rows, average groups, or
   change units; state any transformation in the notes.
 
@@ -24,18 +24,24 @@ use the matching `plot-recipes` recipe.
 
 ### Generate in one `execute_code` call
 
-1. Build the plot with matplotlib per `plot-recipes`; set `svg.fonttype="none"`.
-2. Save the PNG preview and the SVG artifact under `UPLOAD_DIR`.
-3. Pass both paths in `files_to_save`; the result returns `files[]` with the
-   server-side `path`. If `files[]` is missing, fix the call.
-4. Print the data ranges, the CI method, `n`, and the output paths for the audit.
+1. Build the plot with matplotlib per `plot-recipes`; set
+   `svg.fonttype = "none"`.
+2. Save the PNG preview and the SVG under `UPLOAD_DIR`.
+3. Post-process the SVG with `fix_svg_fonts(path)` from RECIPES. matplotlib
+   writes the `font:` shorthand, which some SVG renderers ignore.
+4. Pass the **same** `str(path)` values in `files_to_save`. The result returns
+   `files[]` with the server-side `path`. If `files[]` is missing, fix the call.
+5. Print the data ranges, the CI method, `n`, and the output paths.
 
 ### Preview and iterate
 
-- The interpreter returns the PNG as an image. Look at it; fix overlaps, clipped
-  labels, or a misleading axis, then re-run.
-- To inspect the SVG, `render-svg(path=…)` returns a PNG without the XML. Do not
-  upload a temporary PNG to the wiki.
+- `execute_code` does not display an inline image for a saved PNG or SVG. Call
+  `render-svg(path=files[i].path)` with the server-side path from step 4; it
+  returns the raster. Look at it; fix overlaps, clipped labels, or a misleading
+  axis, then re-run.
+- Pass the server `path` **verbatim**. Never retype or guess the UUID. If
+  `render-svg` says the file is not found, the file was not saved: re-run
+  `execute_code` and copy the new `files[i].path`.
 - Present the PNG with one short sentence. Iterate on the user's feedback.
 
 ### Statistical integrity

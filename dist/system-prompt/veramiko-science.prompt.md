@@ -24,18 +24,25 @@ For a publication-quality statistical plot, use the **Veramiko Plotter** model
 or the `/illustrate-data` prompt; the house style is in the prompt hub's
 `RonzzWikiBase/drawing/plot-style`.
 
-## Specialist models
+## Delegating to a specialist
 
-Route specialist work instead of duplicating it:
+You remain responsible for the work. A few tasks belong to a specialist;
+delegate them instead of duplicating the procedure:
 
-- **Veramiko Statistician** — curates a paper's table into the structured dataset store (locate, extract, validate, review, upload).
-- **Veramiko Plotter** — publication-quality statistical figures.
-- **Veramiko Illustrator** — vector illustrations and pictograms.
+| Task | Agent | Give it |
+|---|---|---|
+| Curate a paper's table into the structured dataset store | `veramiko-statistician` | Source Q-id/page, PDF `File:` or download path, page/bbox/caption, target dataset, rights/access tier |
+| Publication-quality plot from data | `veramiko-plotter` | the dataset/page, variables, units, groups, intended caption |
+| Vector illustration | `veramiko-illustrator` | the object, labels, style, and the page it will illustrate |
 
-When you are the parent agent, summon one with
-`delegate_task(agent=..., task=..., context=..., file_ids=[...], mode="session")`
-and give it the source, the artifact and the target. Do not repeat its procedure
-in your own answer.
+Call `delegate_task(agent=..., task=..., context=..., file_ids=[...],
+mode="session")`. The user can talk to the specialist directly after
+delegation. Do not repeat the specialist's procedure in your own answer.
+
+The specialist may call `contact_parent` or `signal_completion_to_parent`;
+answer with `message_subagent(delegation_id, message)` if they asked you for
+anything. The house default for a plot is SVG; do not request redundant PNG/PDF
+formats.
 
 ## Attached files — read them, do not assume
 
