@@ -24,7 +24,7 @@ A `Dataset:` page (or the `dataset-upsert` result) with:
 
 ## Locate first
 
-Before touching the PDF, check whether the data already exists in a reusable form:
+Before extracting data manually from PDF/image, check whether the data already exists in a reusable form:
 
 1. the article's supplementary XLSX/CSV/DOCX;
 2. the publisher's XML/HTML table;
@@ -32,7 +32,7 @@ Before touching the PDF, check whether the data already exists in a reusable for
 4. PMC OA / Europe PMC JATS;
 5. OSF, Zenodo, DataCite, Figshare, Dryad, or the authors' repository.
 
-Prefer the structured source; cite its DOI/record. Use the PDF only when no structured source exists. Never re-key a table that is already available as data.
+Prefer the structured source; cite its DOI/record. Extract manually only when no structured source exists.
 
 ## Extract from the PDF
 
@@ -56,33 +56,19 @@ Record the result in `review_status` and the validation report. Do not call a ta
 
 ## Review with the user
 
-Show the parsed table and a short list of flags (missing notes, ambiguous units, merged headers, inconsistent totals). Ask for a decision with `ask_user` when a real choice is needed:
-
-- approve the table as `checked`;
-- correct specific cells (the user supplies the value);
-- reject and say why.
-
-A full cell-by-cell pass is `verified`; a spot-check is `checked`; machine-only is `unreviewed` and must not be published as public data.
+Show the parsed table and a short list of flags (missing notes, ambiguous units, merged headers, inconsistent totals). Ask for a decision with `ask_user` when a real choice is needed.
 
 ## Upload
 
-- If `dataset-upsert` is available, use it: it validates the manifest, writes the `Dataset:` page and Cargo rows, and returns the ids. Do not reimplement it.
-- Otherwise, use the wiki tools: create/update the `Dataset:` page with the generated `#cargo_store` block, create/update the `dataset`/`data table` items and statements, and link the `Source:` page. Follow the field contract from the parent; never write raw SQL.
-- Record the PDF `File:` title and SHA1, the extractor and version, and the review status. The page revision is the audit trail.
+## Subagent protocol
 
-## Talk to the parent
+Other agents may call you as a subagent, in this case,
 
-You are a subagent. The user can talk to you directly in this chat, and the parent may send follow-ups.
-
-- `signal_completion_to_parent(message)` — the normal end of the task. It does **not** wake the parent; the report appears in the parent chat and enters its context on the next turn. Include the page/item ids, row counts, review status and open questions.
-- `contact_parent(message)` — use only when the parent must act or answer before you can continue (missing panel header, rights ambiguity, a target page the parent owns). It wakes the parent. Keep it rare and batch your questions.
-- If the user asks you for more work in this session, continue here and update the dataset; then signal completion again.
-- Contact allowance is limited; after it the user is asked to approve more, approve a custom number, or reject with a correction. If the user rejects, follow the correction and continue.
+- use `contact_parent(message)` when you need clarification or missing data. Group your requests to minimise disturbance to the calling agent.
+- end with `signal_completion_to_parent(message)` containing the `File:` title, the `[[File:…]]`/embed snippet, and any caveat. It does not wake the parent; it enters its context on its next turn.
+- If the user asks for more work after you have called signal_completion_to_parent, signal completion again once you are done and user validates.
 
 ## Rules
 
 - Never fabricate a value, a unit, a footnote, a significance mark, or a citation.
-- Keep the source's uncertainty and missing-value notation; do not silently recode it.
-- Never publish a copyrighted PDF; the access rules are the parent's.
-- State what is machine-extracted, what is human-checked, and what is still uncertain.
 - Prefer a small, correct, queryable table over a large, unverified one.
