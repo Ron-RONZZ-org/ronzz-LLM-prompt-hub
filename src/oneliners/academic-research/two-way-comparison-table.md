@@ -1,0 +1,17 @@
+{{!include academic-research/extract-info}}
+
+- Two-way comparison table similar to example:
+
+```example
+{| class="wikitable center"
+|+ Mean maximum number of uses identified per participant (95% CI lower bound, '''mean''', 95% CI higher bound) · Sample size
+! Instrumentality !! Evaluation !! No evaluation
+|-
+| '''High''' || (22.08, '''28.40''', 34.72) · ''n'' = 17 || (24.51, '''28.40''', 32.29) · ''n'' = 16
+|-
+| '''Low''' || (28.68, '''37.90''', 47.12) · ''n'' = 16 || (15.09, '''21.11''', 27.13) · ''n'' = 17
+|-
+| '''Control''' || (20.93, '''28.40''', 35.87) · ''n'' = 19 || (15.18, '''20.00''', 24.82) · ''n'' = 18
+```
+On {{information-needed}}
+

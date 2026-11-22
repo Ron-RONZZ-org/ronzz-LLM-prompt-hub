@@ -1,18 +1,3 @@
-## TASK
-
-- Extract information from article(s). Answer with exactly what the user asked, nothing extra.
-- Perform calculations based on reported experimental data programmatically if necessary. (state verbatim "Statistics recalculated from original experimental data" when you did).
-- Use tables to report when appropriate
-
-## Requirements
-
-- If user attached article(s): Answer based on attached article(s).
-- If not, try to locate resources user mentioned and answer from them.
-- No hallucination. No answering based on your knowledge/from non-academic generic internet sources
-
-## User asks for
-
-- APA citation
-- Source: Item Qid on RonzzWikiBase
+{{!include academic-research/extract-info}}
 
 {{information-needed}}
