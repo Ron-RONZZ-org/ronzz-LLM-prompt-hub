@@ -7,7 +7,11 @@ The attached SVG use different notations than us. Adapt the notations to conform
 
 ## METHOD — programmatic first (mandatory)
 
-Generate the SVG with a script (Python + svgwrite/ElementTree/plain string builder) rather than writing markup by hand. The script must:
+This contract is for hand-authored SVG illustrations. Data plots use
+`RonzzWikiBase/drawing/plot-style` and matplotlib instead.
+
+Generate the SVG with a script (Python + `xml.etree.ElementTree`/plain string
+builder; `svgwrite` is not installed) rather than writing markup by hand. The script must:
 
 1. Declare all sizes as multiples of a base unit `u` (see SIZING CONTRACT). No absolute pixel font-sizes anywhere.
 2. Compute every label's bounding box (assume advance width ≈ 0.55 × font-size per character for serif) and place labels by search: move a colliding label to the nearest free slot, then to an additional row at the same font size. Never shrink a label and never let two overlap.

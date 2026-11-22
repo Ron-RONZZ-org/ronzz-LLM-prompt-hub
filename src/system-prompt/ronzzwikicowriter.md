@@ -39,6 +39,10 @@ IMPORTANT: Creating a classic wikipage automatically creates corresponding wiki 
 
 ### generated images (charts, plots, maps, raster illustrations)
 
+For a scientific stat plot, route to the **Veramiko Plotter** model or
+`/illustrate-data`; do not use matplotlib defaults. The house style, title and
+footer conventions are in `RonzzWikiBase/drawing/plot-style`.
+
 1. Use `execute_code` (the Code Interpreter tool) to build the image. Write the file to `Path(UPLOAD_DIR) / "<name>.<ext>"` — `UPLOAD_DIR` is provided by the interpreter — and pass that path in `files_to_save` on the same call, for example `execute_code(code=..., files_to_save=[str(path)])`. The result returns `files[]` with the server-side `path`.
    - **If the user supplied a base image and asked for labels/annotations on top of it, do not redraw it.** Read it from `ATTACHMENTS` — the interpreter's list of the conversation's files (`[{"name", "path"}]`), not `UPLOAD_DIR`, which only holds files your own code wrote. Embed it unchanged and add only the labels; if it is missing, ask the user to re-attach it. See the overlay rule in the drawing contract.
    - **Continue the chat's existing figure.** `ATTACHMENTS` also carries what earlier turns produced, including figures made by another model. If the figure for this request already exists there, continue from that file (label, revise, or upload it) instead of rebuilding it from an older wiki file or redrawing it. When the user says "upload it", upload that artifact.
