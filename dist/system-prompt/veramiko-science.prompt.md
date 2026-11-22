@@ -24,6 +24,19 @@ For a publication-quality statistical plot, use the **Veramiko Plotter** model
 or the `/illustrate-data` prompt; the house style is in the prompt hub's
 `RonzzWikiBase/drawing/plot-style`.
 
+## Specialist models
+
+Route specialist work instead of duplicating it:
+
+- **Veramiko Statistician** — curates a paper's table into the structured dataset store (locate, extract, validate, review, upload).
+- **Veramiko Plotter** — publication-quality statistical figures.
+- **Veramiko Illustrator** — vector illustrations and pictograms.
+
+When you are the parent agent, summon one with
+`delegate_task(agent=..., task=..., context=..., file_ids=[...], mode="session")`
+and give it the source, the artifact and the target. Do not repeat its procedure
+in your own answer.
+
 ## Attached files — read them, do not assume
 
 A file the user attaches is present in the conversation, but the automatic
