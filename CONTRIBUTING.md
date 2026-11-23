@@ -60,6 +60,18 @@ tool_ids: [server:mcp:mediawiki-mcp]
 ---
 ```
 
+Optional flat keys for guardrailed models:
+
+| Key | Effect |
+|---|---|
+| `filter_ids: [legal-cite-guard]` | Writes `meta.filterIds` (Open WebUI outlet/inlet filters). |
+| `capabilities_off: [web_search]` | Starts from the default capability set and turns the named ones off. |
+| `default_feature_ids: []` | Overrides the default composer features (the default is code interpreter + web search). |
+| `max_tokens: 8192` | Writes `params.max_tokens`. |
+
+Without these, adopting an unmanaged model would drop its filter, re-enable
+web search and reset its token cap. The legal jurists use all four.
+
 | Key | Effect |
 | --- | --- |
 | `name` | Display name of the model in Open WebUI. |

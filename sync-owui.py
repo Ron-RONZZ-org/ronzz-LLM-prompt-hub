@@ -155,6 +155,19 @@ def collect_models() -> dict[str, dict]:
             model_id = slugify(stem)
             frontmatter, body = read_built(path)
             name = frontmatter.get("name") or stem
+            capabilities = dict(CAPABILITIES)
+            for capability in frontmatter.get("capabilities_off", []):
+                if isinstance(capability, str) and capability in capabilities:
+                    capabilities[capability] = False
+            feature_ids = frontmatter.get("default_feature_ids", DEFAULT_FEATURE_IDS)
+            if not isinstance(feature_ids, list):
+                raise SyncError(f"{path}: default_feature_ids must be an inline list")
+            params: dict = {"system": body}
+            if "max_tokens" in frontmatter:
+                try:
+                    params["max_tokens"] = int(frontmatter["max_tokens"])
+                except (TypeError, ValueError):
+                    raise SyncError(f"{path}: max_tokens must be an integer")
             meta = {
                 "managed_by": MANAGE_TAG,
                 "profile_image_url": frontmatter.get("profile_image_url", DEFAULT_IMAGE),
@@ -162,8 +175,9 @@ def collect_models() -> dict[str, dict]:
                 "tags": [{"name": tag} for tag in frontmatter.get("tags", [])],
                 "toolIds": frontmatter.get("tool_ids", []),
                 "toolFilter": frontmatter.get("tool_filter", []),
-                "defaultFeatureIds": DEFAULT_FEATURE_IDS,
-                "capabilities": CAPABILITIES,
+                "filterIds": frontmatter.get("filter_ids", []),
+                "defaultFeatureIds": feature_ids,
+                "capabilities": capabilities,
             }
             items.append((model_id, {
                 "form": {
@@ -171,7 +185,7 @@ def collect_models() -> dict[str, dict]:
                     "base_model_id": frontmatter.get("base_model") or DEFAULT_BASE_MODEL,
                     "name": name,
                     "meta": meta,
-                    "params": {"system": body},
+                    "params": params,
                     "access_grants": PUBLIC_READ,
                     "is_active": True,
                 },
@@ -341,7 +355,13 @@ def model_changed(current: dict, desired: dict) -> bool:
         return True
     if sorted(current_meta.get("toolFilter") or []) != sorted(desired_meta["toolFilter"]):
         return True
-    if sorted(current_meta.get("defaultFeatureIds") or []) != sorted(DEFAULT_FEATURE_IDS):
+    if sorted(current_meta.get("filterIds") or []) != sorted(desired_meta.get("filterIds") or []):
+        return True
+    if (current_meta.get("capabilities") or {}) != (desired_meta.get("capabilities") or {}):
+        return True
+    if sorted(current_meta.get("defaultFeatureIds") or []) != sorted(desired_meta.get("defaultFeatureIds") or []):
+        return True
+    if (current.get("params") or {}).get("max_tokens") != desired["params"].get("max_tokens"):
         return True
     if _grant_keys(current.get("access_grants")) != _grant_keys(desired.get("access_grants")):
         return True
